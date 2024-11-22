@@ -20,7 +20,7 @@ export async function processBatchController({
     const companies = await yCombinator.getCompaniesInBatch(batch, sessionId);
 
     // Get LinkedIn profile urls for the companies
-    const linkedInProfileUrls = await yCombinator.getCompaniesLinkedInProfileUrls(companies.slice(0, 3));
+    const linkedInProfileUrls = await yCombinator.getCompaniesLinkedInProfileUrls(companies);
 
     const isLoggedIn = await linkedin.checkIfSignedIntoLinkedIn(sessionId);
 
