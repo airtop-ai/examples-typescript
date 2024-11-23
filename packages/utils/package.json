@@ -2,6 +2,7 @@
   "name": "@local/utils",
   "description": "Common utilities for Airtop demos",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "exports": {
     ".": {
@@ -9,7 +10,8 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./api/terminate-session/*.js": "./dist/api/terminate-session/*.js"
+    "./api/terminate-session/*.js": "./dist/api/terminate-session/*.js",
+    "./api/api-key/*.js": "./dist/api/api-key/*.js"
   },
   "author": "",
   "keywords": [],
@@ -20,17 +22,18 @@
     "verify-types": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
-    "loglayer": "4.8.0"
+    "loglayer": "4.8.0",
+    "iron-session": "8.0.4"
   },
   "devDependencies": {
     "zod": "3.23.8",
     "next": "15.0.3",
-    "@airtop/sdk": "0.1.5",
+    "@airtop/sdk": "0.1.6",
     "@local/typescript-config": "workspace:*",
-    "@types/node": "22.9.0",
+    "@types/node": "22.9.3",
     "hash-runner": "2.0.1",
     "tsc-alias": "1.8.10",
-    "typescript": "5.6.3"
+    "typescript": "5.7.2"
   },
   "license": "MIT",
   "optionalDependencies": {

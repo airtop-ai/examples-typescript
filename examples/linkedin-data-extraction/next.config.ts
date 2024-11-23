@@ -1,7 +1,8 @@
-import { exampleListings, registerToHome} from "@internal/home-config";
+import {exampleListings, getHeadersConfig, registerToHome} from "@internal/home-config";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  ...getHeadersConfig(),
   ...registerToHome(exampleListings.LINKEDIN_DATA_EXTRACTION.dirName),
   eslint: {
     // Warning: This allows production builds to successfully complete even if

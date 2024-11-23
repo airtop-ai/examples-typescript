@@ -5,12 +5,16 @@ import type { PropsWithChildren } from "react";
 import "./globals.css";
 import { exampleListings } from "@internal/home-config";
 import { Body } from "@local/ui";
+import { getApiKeyFromCookie, serverEnvs } from "@local/utils";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = exampleListings.LINKEDIN_DATA_EXTRACTION.metadata;
+const exampleDirName = exampleListings.LINKEDIN_DATA_EXTRACTION.dirName;
 
 export default async function RootLayout({ children }: PropsWithChildren) {
+  const currentApiKey = await getApiKeyFromCookie();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -20,7 +24,16 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           type="text/css"
         />
       </head>
-      <Body exampleDirName={exampleListings.YC_BATCH_COMPANY_EMPLOYEES.dirName}>{children}</Body>
+      <Body
+        currentApiKey={currentApiKey}
+        exampleDirName={exampleDirName}
+        apiKeyBarProps={{
+          airtopPortalUrl: serverEnvs.airtopPortalUrl,
+          canRequestNewKey: serverEnvs.enableGetApiKeyFromPortal,
+        }}
+      >
+        {children}
+      </Body>
     </html>
   );
 }

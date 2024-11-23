@@ -34,6 +34,16 @@ It's recommended to have two terminals opened:
 - One that runs `turbo watch build:packages` so that the shared packages are built automatically on changes.
 - Another that runs the example you are working on using `pnpm dev`
 
+## Environment variables
+
+`packages/home-config/.common-env` is copied over as `.env` in each example. The following environment variables are used:
+
+- `SECRET_FOR_DECRYPTING_API_KEYS`: base64-encoded 32-byte random string.
+  Meant to be used with the Airtop Portal to pass encrypted API keys for use with the Get API Key feature. Disabled for local development.
+- `EXAMPLES_SITES_COOKIE_SECRET`: 32-character random string for securing the session cookie. The default value is meant for local development only.
+- `AIRTOP_PORTAL_URL`: URL to the Airtop Portal
+- `NEXT_PUBLIC_AIRTOP_PORTAL_URL`: URL to the Airtop Portal (for client-side)
+
 ## Tools used
 
 Most examples use the following:

@@ -29,14 +29,14 @@ import { useForm } from "react-hook-form";
 export function StartForm() {
   // Get state management functions from the app store
   const setStartResponse = useAppStore((state) => state.setStartResponse);
-  const setApiKey = useAppStore((state) => state.setApiKey);
+  const apiKey = useAppStore((state) => state.apiKey);
   const handleError = useHandleError();
 
   // Initialize form with Zod validation schema
   const form = useForm<StartRequest>({
     resolver: zodResolver(startRequestSchema),
     defaultValues: {
-      apiKey: "",
+      apiKey,
       profileId: "",
     },
   });
@@ -44,8 +44,6 @@ export function StartForm() {
   // Handle form submission
   const onSubmit = useCallback(
     async (data: StartRequest) => {
-      setApiKey(data.apiKey);
-
       try {
         const response = await fetch("/api/start", {
           method: "POST",
@@ -66,7 +64,7 @@ export function StartForm() {
         });
       }
     },
-    [setStartResponse, setApiKey, handleError],
+    [setStartResponse, handleError],
   );
 
   // Prevent form default behavior and handle submission
@@ -81,25 +79,6 @@ export function StartForm() {
   return (
     <Form {...form}>
       <form onSubmit={handleFormSubmit} className="space-y-6">
-        <FormField
-          name="apiKey"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>API Key</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                {startRequestSchema.shape.apiKey.description}.{" "}
-                <a className="text-white" target="_blank" href="https://portal.airtop.ai/api-keys" rel="noreferrer">
-                  Get one here.
-                </a>
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           name="profileId"
           control={form.control}

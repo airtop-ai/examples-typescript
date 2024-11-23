@@ -3,13 +3,25 @@ import { DisplayPromptResponse } from "@/components/views/DisplayPromptResponse"
 import { InitializeView } from "@/components/views/InitializeView";
 import { ShowLiveView } from "@/components/views/ShowLiveView";
 import { useAppStore } from "@/store";
-import { useTerminateSession } from "@local/ui";
+import { ApiKeyRequired, useTerminateSession } from "@local/ui";
 import { useEffect } from "react";
 
-export function MainContent() {
+interface MainContentProps {
+  currentApiKey?: string;
+}
+
+export function MainContent({ currentApiKey }: MainContentProps) {
   // Get API key and response from global state
+  const setApiKey = useAppStore((state) => state.setApiKey);
   const apiKey = useAppStore((state) => state.apiKey);
   const apiResponse = useAppStore((state) => state.response);
+
+  useEffect(() => {
+    // Set the API key from the cookie if it's not already set
+    if (!apiKey && currentApiKey) {
+      setApiKey(currentApiKey);
+    }
+  }, [currentApiKey, apiKey, setApiKey]);
 
   // Hook to handle session termination when needed
   const terminateSession = useTerminateSession({
@@ -35,6 +47,10 @@ export function MainContent() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [apiKey, apiResponse.sessionId, apiResponse.content, terminateSession]);
+
+  if (!apiKey) {
+    return <ApiKeyRequired />;
+  }
 
   // Conditional rendering based on application state:
 

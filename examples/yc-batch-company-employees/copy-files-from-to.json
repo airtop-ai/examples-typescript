@@ -1,4 +1,7 @@
 {
+  "copyFilesSettings": {
+    "whenFileExists": "notify-about-available-change"
+  },
   "copyFiles": [
     {
       "from": "node_modules/@local/ui/assets/public/**/*",
@@ -7,6 +10,10 @@
     {
       "from": "node_modules/@local/ui/assets/app/**/*",
       "to": "src/app"
+    },
+    {
+      "from": "node_modules/@internal/home-config/.common-env",
+      "to": ".env"
     }
   ]
 }
