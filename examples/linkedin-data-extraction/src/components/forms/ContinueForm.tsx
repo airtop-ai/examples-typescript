@@ -34,7 +34,7 @@ export function ContinueForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/continue", {
+      const response = await fetch("api/continue", {
         method: "POST",
         body: JSON.stringify({
           apiKey,

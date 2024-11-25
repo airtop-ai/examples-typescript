@@ -14,6 +14,7 @@ import {
   SelectValue,
   useHandleError,
 } from "@local/ui";
+import { getLogger } from "@local/utils";
 import { useCallback, useState } from "react";
 
 interface BatchSelectorFormProps {
@@ -32,15 +33,17 @@ export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
   const handleError = useHandleError();
 
   const handleBatchSelect = useCallback(async () => {
+    const log = getLogger().withPrefix("[BatchSelectionForm]");
+
     if (!selectedBatch || !sessionId) {
-      console.error("Missing required data:", { selectedBatch, sessionId });
+      log.withMetadata({ selectedBatch, sessionId }).error("Missing required data");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      console.log("Sending request to /api/process-batch");
-      const response = await fetch("/api/process-batch", {
+      log.info("Sending request to api/process-batch");
+      const response = await fetch("api/process-batch", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +62,7 @@ export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
       }
 
       const result = await response.json();
-      console.log("Success response:", result);
+      log.info("Success response:", result);
       setProcessBatchResponse(result);
     } catch (e: any) {
       handleError({

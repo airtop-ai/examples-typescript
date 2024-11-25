@@ -45,7 +45,7 @@ export function StartForm() {
   const onSubmit = useCallback(
     async (data: StartRequest) => {
       try {
-        const response = await fetch("/api/start", {
+        const response = await fetch("api/start", {
           method: "POST",
           body: JSON.stringify(data),
         });
