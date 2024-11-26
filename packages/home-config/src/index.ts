@@ -9,6 +9,7 @@ export interface ExampleListing {
 export enum ExampleSite {
   LINKEDIN_DATA_EXTRACTION = "LINKEDIN_DATA_EXTRACTION",
   YC_BATCH_COMPANY_EMPLOYEES = "YC_BATCH_COMPANY_EMPLOYEES",
+  SIMPLE_INTERACTIONS = "SIMPLE_INTERACTIONS",
 }
 
 export const exampleListings: Record<ExampleSite, ExampleListing> = {
@@ -24,6 +25,13 @@ export const exampleListings: Record<ExampleSite, ExampleListing> = {
     metadata: {
       title: "Airtop: YC Batch Company's Employees's Profiles",
       description: "Extracts employees from YC batch companies",
+    },
+  },
+  [ExampleSite.SIMPLE_INTERACTIONS]: {
+    dirName: "simple-interactions",
+    metadata: {
+      title: "Airtop: Simple Browser Interactions",
+      description: "Simple interactions with the browser",
     },
   },
 };
