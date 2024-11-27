@@ -49,21 +49,19 @@ export class InteractionsService {
       return;
     }
 
+    this.log.info("Terminating session");
     await this.client.sessions.terminate(sessionId);
   }
 
   /**
    * Initializes a new browser session and window.
-   * @param {string} [profileId] - Optional profile ID for session persistence
    * @returns {Promise<{session: any, windowInfo: any}>} Session and window information
    */
-  async initializeSessionAndBrowser(profileId?: string): Promise<{ session: any; windowInfo: any }> {
+  async initializeSessionAndBrowser(): Promise<{ session: any; windowInfo: any }> {
     this.log.info("Creating a new session");
     const createSessionResponse = await this.client.sessions.create({
       configuration: {
         timeoutMinutes: 10,
-        persistProfile: !profileId, // Only persist a new profile if we do not have an existing profileId
-        baseProfileId: profileId,
       },
     });
 
@@ -137,13 +135,6 @@ export class InteractionsService {
     this.log.info("Got response from AI agent, formatting JSON");
 
     const formattedJson = JSON.stringify(JSON.parse(pageQueryResponse.data.modelResponse), null, 2);
-
-    this.log.info("Closing window and terminating session");
-
-    await this.client.windows.close(sessionId, windowId);
-    await this.client.sessions.terminate(sessionId);
-
-    this.log.info("Cleanup completed");
 
     return formattedJson;
   }

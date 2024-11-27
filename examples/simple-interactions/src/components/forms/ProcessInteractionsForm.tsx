@@ -23,7 +23,7 @@ import {
 } from "@local/ui";
 import { getFetchBasePath } from "@local/utils";
 import type React from "react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
 /**
@@ -38,6 +38,7 @@ export function ProcessInteractionsForm() {
   const apiKey = useAppStore((state) => state.apiKey);
   const response = useAppStore((state) => state.response);
   const handleError = useHandleError();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // Initialize form with Zod validation schema
   const form = useForm<ProcessInteractionsRequest>({
@@ -53,6 +54,7 @@ export function ProcessInteractionsForm() {
   // Handle form submission
   const onSubmit = useCallback(async () => {
     try {
+      setIsSubmitting(true);
       const data = form.getValues();
       const response = await fetch(`${getFetchBasePath()}/api/process-interactions`, {
         method: "POST",
@@ -72,6 +74,8 @@ export function ProcessInteractionsForm() {
         error: e,
         consoleLogMessage: "API call failed",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   }, [setProcessInteractionsResponse, handleError, form.getValues]);
 
@@ -97,8 +101,8 @@ export function ProcessInteractionsForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={form.formState.isSubmitting} onClick={onSubmit}>
-          {form.formState.isSubmitting ? <ElapsedTime content="Working..." /> : "Search ticker"}
+        <Button type="submit" disabled={isSubmitting} onClick={onSubmit}>
+          {isSubmitting ? <ElapsedTime content="Working..." /> : "Search ticker"}
         </Button>
       </form>
     </Form>

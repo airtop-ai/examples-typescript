@@ -6,7 +6,6 @@ import type { LogLayer } from "loglayer";
  * Parameters required for the process interactions controller
  * @interface ProcessInteractionsControllerParams
  * @property {string} apiKey - API key for Airtop authentication
- * @property {string} [profileId] - Optional profile ID for session management
  * @property {LogLayer} log - Logger instance for tracking operations
  */
 interface ProcessInteractionsControllerParams {
@@ -47,6 +46,8 @@ export async function processInteractionsController({
     sessionId,
     windowId,
   });
+
+  await service.terminateSession(sessionId);
 
   // Return the extracted content
   return {

@@ -61,7 +61,7 @@ export function MainContent({ currentApiKey }: MainContentProps) {
 
   // 2. Show results if we have content
   if (apiResponse.content) {
-    return <DisplayPromptResponse content={apiResponse.content} profileId={apiResponse.profileId} />;
+    return <DisplayPromptResponse content={apiResponse.content} />;
   }
 
   // 3. Default view - show initialization screen

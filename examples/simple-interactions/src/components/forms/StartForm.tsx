@@ -3,19 +3,7 @@
 import { type StartRequest, type StartResponse, startRequestSchema } from "@/app/api/start/start.validation";
 import { useAppStore } from "@/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Button,
-  ElapsedTime,
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Input,
-  useHandleError,
-} from "@local/ui";
+import { Button, ElapsedTime, Form, useHandleError } from "@local/ui";
 import { getFetchBasePath } from "@local/utils";
 import type React from "react";
 import { useCallback } from "react";
@@ -38,7 +26,6 @@ export function StartForm() {
     resolver: zodResolver(startRequestSchema),
     defaultValues: {
       apiKey,
-      profileId: "",
     },
   });
 
@@ -80,20 +67,6 @@ export function StartForm() {
   return (
     <Form {...form}>
       <form onSubmit={handleFormSubmit} className="space-y-6">
-        <FormField
-          name="profileId"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Profile ID</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>{startRequestSchema.shape.profileId.description}</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button type="submit" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? <ElapsedTime content="Working..." /> : "Start"}
         </Button>

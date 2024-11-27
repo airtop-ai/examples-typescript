@@ -1,4 +1,4 @@
-import { DEFAULT_STOCK_SYMBOL } from "@/consts";
+import { ANIMATION_DELAY, DEFAULT_STOCK_SYMBOL, sleep } from "@/consts";
 import { InteractionsService } from "@/lib/interactions.service";
 import { input } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
@@ -15,11 +15,6 @@ async function cli() {
     required: true,
   });
 
-  const profileId = await input({
-    message: "(optional) Enter a browser profile ID to use:",
-    required: false,
-  });
-
   const service = new InteractionsService({
     apiKey,
     log,
@@ -29,10 +24,13 @@ async function cli() {
   let sessionAndWindow = undefined;
 
   try {
-    sessionAndWindow = await service.initializeSessionAndBrowser(profileId);
+    sessionAndWindow = await service.initializeSessionAndBrowser();
     const { session, windowInfo } = sessionAndWindow;
 
     log.info("Live view URL:", windowInfo.data.liveViewUrl);
+
+    // Give the user a chance to open the live view URL
+    await sleep(ANIMATION_DELAY);
 
     await service.searchForStockPerformance({
       sessionId: session.id,
