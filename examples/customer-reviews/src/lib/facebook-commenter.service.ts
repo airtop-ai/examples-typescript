@@ -189,7 +189,6 @@ export class FacebookCommenterService {
 
     this.log.info("Got response from AI agent, formatting JSON");
     const result = JSON.parse(promptContentResponse.data.modelResponse) as TReviewOutput;
-    this.log.info(result.reply || result.error);
     return result;
   }
 
@@ -210,7 +209,7 @@ export class FacebookCommenterService {
 
     // Like the comment if the review is positive
     if (review.sentiment === "positive") {
-      this.log.info("Clicking Like button:");
+      this.log.info("Clicking Like button...");
       await this.client.windows.click(sessionId, windowId, {
         elementDescription: `The "Like" button near the comment that begins with "${beginOfComment}..."`,
       });

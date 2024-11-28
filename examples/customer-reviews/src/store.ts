@@ -76,7 +76,6 @@ export const useAppStore = create<State & Actions>()(
       set((state) => {
         state.fetching = true;
       });
-      console.log("Fulfill request: ", data);
       const res = await fetch(`${getFetchBasePath()}/api/fulfill`, {
         method: "POST",
         body: JSON.stringify(data),

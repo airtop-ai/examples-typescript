@@ -52,7 +52,7 @@ async function cli() {
 
     // Extract review using the provided session and window IDs
     const review = await service.extractCustomerReview({ sessionId, windowId });
-    log.info(JSON.stringify(review));
+    log.withMetadata(review).info("Result from extracting review");
 
     // Scroll down the page to interact with the comments
     await service.scrollDown({
@@ -62,14 +62,13 @@ async function cli() {
     });
 
     // Reply to customer
-    const action = await service.replyToCustomer({ sessionId, windowId, review });
-    if (action.errors.length) {
-      console.error(action.errors);
-      throw new Error("Error when trying to reply to customer");
+    const { errors } = await service.replyToCustomer({ sessionId, windowId, review });
+    if (errors.length) {
+      log.withError(errors).error("Unable to extract customer review");
+      throw new Error("Unable to extract customer review", { cause: errors });
     }
 
-    // log.info("Task completed successfully");
-    await confirm({ message: "Press enter to finish", default: true });
+    log.info("Task completed successfully");
   } finally {
     if (sessionAndWindow?.session) {
       await service.terminateSession(sessionAndWindow.session.id);

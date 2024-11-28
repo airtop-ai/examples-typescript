@@ -37,10 +37,9 @@ export async function fulfillController({
 
   // Extract review using the provided session and window IDs
   const review = await service.extractCustomerReview({ sessionId, windowId });
-  console.log("Review: ", review);
 
   if (review.error) {
-    log.error(review.error);
+    log.withError(review.error).error("Unable to extract review");
     return {
       accomplished: false,
       error: review.error,
@@ -56,7 +55,6 @@ export async function fulfillController({
 
   // Reply to customer
   const action = await service.replyToCustomer({ sessionId, windowId, review });
-  console.log("Action Errors: ", action.errors);
 
   // Return the extracted content wrapped in the expected response format
   return {

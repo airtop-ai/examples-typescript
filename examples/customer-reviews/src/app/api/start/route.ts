@@ -12,10 +12,7 @@ export const maxDuration = 300;
  */
 export async function POST(request: NextRequest) {
   const log = getLogger().withPrefix("[api/start]");
-
   const data = (await request.json()) as StartRequest;
-  log.warn("=== Start Request");
-  console.log(data);
 
   log.info("Validating request data");
 
@@ -23,8 +20,6 @@ export async function POST(request: NextRequest) {
     startRequestSchema.parse(data);
 
     const controllerResponse = await startController({ log, ...data });
-    console.log("Session Response:");
-    console.log(controllerResponse);
     return NextResponse.json<StartResponse>(controllerResponse);
   } catch (e: any) {
     return NextResponse.json(serializeErrors(e), {

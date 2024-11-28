@@ -28,7 +28,8 @@
       },
       "suspicious": {
         "noImplicitAnyLet": "off",
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noConsoleLog": "error"
       },
       "recommended": true
     }

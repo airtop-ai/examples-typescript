@@ -10,23 +10,15 @@ export const maxDuration = 300;
  */
 export async function POST(request: NextRequest): Promise<NextResponse<FulfillResponse>> {
   const log = getLogger().withPrefix("[api/fulfill]");
-
   const data = (await request.json()) as FulfillRequest;
-  log.warn("=== Fulfill Request");
-  console.log(data);
 
   log.info("Validating request data");
   fulfillRequestSchema.parse(data);
-
-  log.info("Request: ", JSON.stringify(data));
 
   const response = await fulfillController({
     log,
     ...data,
   });
-
-  console.log("Response:");
-  console.log(response);
 
   return NextResponse.json<FulfillResponse>(response);
 }
