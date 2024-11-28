@@ -9,6 +9,7 @@ export interface ExampleListing {
 export enum ExampleSite {
   LINKEDIN_DATA_EXTRACTION = "LINKEDIN_DATA_EXTRACTION",
   YC_BATCH_COMPANY_EMPLOYEES = "YC_BATCH_COMPANY_EMPLOYEES",
+  CUSTOMER_REVIEWS = "CUSTOMER_REVIEWS",
 }
 
 export const exampleListings: Record<ExampleSite, ExampleListing> = {
@@ -24,6 +25,13 @@ export const exampleListings: Record<ExampleSite, ExampleListing> = {
     metadata: {
       title: "Airtop: YC Batch Company's Employees's Profiles",
       description: "Extracts employees from YC batch companies",
+    },
+  },
+  [ExampleSite.CUSTOMER_REVIEWS]: {
+    dirName: "customer-reviews",
+    metadata: {
+      title: "Airtop: Restaurant reviews",
+      description: "Reply to customer reviews",
     },
   },
 };
