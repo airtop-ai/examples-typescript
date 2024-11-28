@@ -77,7 +77,6 @@ async function cli() {
 }
 
 cli().catch((e) => {
-  console.log(chalk.red("An error occurred"));
   console.error(e);
   process.exit(1);
 });
