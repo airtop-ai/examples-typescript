@@ -34,7 +34,7 @@ An API key is required to use this example. You can get one [here](https://porta
 In this directory, to start the web application server, run:
 
 ```bash
-pnpm start
+pnpm dev
 ```
 
 In most cases, you should be able to access the web application at [http://localhost:3000](http://localhost:3000).

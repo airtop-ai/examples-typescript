@@ -22,8 +22,9 @@
   },
   "devDependencies": {
     "@local/typescript-config": "workspace:*",
-    "@types/node": "22.9.3",
+    "@types/node": "22.10.0",
     "hash-runner": "2.0.1",
+    "next": "15.0.3",
     "typescript": "5.7.2"
   },
   "license": "MIT"

@@ -11,7 +11,7 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "cache": false
+      "cache": true
     },
     "build:packages": {
       "dependsOn": ["^build"],

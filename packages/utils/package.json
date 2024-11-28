@@ -11,7 +11,8 @@
       "default": "./dist/index.js"
     },
     "./api/terminate-session/*.js": "./dist/api/terminate-session/*.js",
-    "./api/api-key/*.js": "./dist/api/api-key/*.js"
+    "./api/api-key/*.js": "./dist/api/api-key/*.js",
+    "./cookies.js": "./dist/cookies.js"
   },
   "author": "",
   "keywords": [],
@@ -30,7 +31,7 @@
     "next": "15.0.3",
     "@airtop/sdk": "0.1.6",
     "@local/typescript-config": "workspace:*",
-    "@types/node": "22.9.3",
+    "@types/node": "22.10.0",
     "hash-runner": "2.0.1",
     "tsc-alias": "1.8.10",
     "typescript": "5.7.2"

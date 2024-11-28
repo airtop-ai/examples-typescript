@@ -54,7 +54,6 @@ export function ApiKeyBar({ currentApiKey, canRequestNewKey, airtopPortalUrl, ex
   return (
     <div className="mt-6">
       <ApiKeyForm
-        canRequestNewKey={canRequestNewKey}
         onError={handleOnError}
         onSuccess={handleOnApiKeySet}
         currentApiKey={currentApiKey}

@@ -1,3 +1,5 @@
+import type { Header } from "next/dist/lib/load-custom-routes.js";
+
 export interface ExampleListing {
   dirName: string;
   metadata: {
@@ -10,6 +12,7 @@ export enum ExampleSite {
   LINKEDIN_DATA_EXTRACTION = "LINKEDIN_DATA_EXTRACTION",
   YC_BATCH_COMPANY_EMPLOYEES = "YC_BATCH_COMPANY_EMPLOYEES",
   CUSTOMER_REVIEWS = "CUSTOMER_REVIEWS",
+  SIMPLE_INTERACTIONS = "SIMPLE_INTERACTIONS",
 }
 
 export const exampleListings: Record<ExampleSite, ExampleListing> = {
@@ -34,6 +37,13 @@ export const exampleListings: Record<ExampleSite, ExampleListing> = {
       description: "Reply to customer reviews",
     },
   },
+  [ExampleSite.SIMPLE_INTERACTIONS]: {
+    dirName: "simple-interactions",
+    metadata: {
+      title: "Airtop: Simple Browser Interactions",
+      description: "Simple interactions with the browser",
+    },
+  },
 };
 
 export const registerToHome = (dirName: string) => {
@@ -43,7 +53,7 @@ export const registerToHome = (dirName: string) => {
 };
 
 export const getAppUrl = (dirName: string) => {
-  return `https://examples.airtop.dev/${dirName}`;
+  return `https://examples.airtop.ai/${dirName}`;
 };
 
 export const getHomeConfig = (dirName: string) => {
@@ -65,7 +75,7 @@ export const getHomeConfig = (dirName: string) => {
   ];
 };
 
-export const getHeadersConfig = () => {
+export const getHeadersConfig = (additionalHeaders: Array<Header> = []) => {
   return {
     async headers() {
       return [
@@ -78,6 +88,7 @@ export const getHeadersConfig = () => {
             { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
           ],
         },
+        ...additionalHeaders,
       ];
     },
   };

@@ -60,6 +60,7 @@ export const GET_YC_BATCHES_OUTPUT_SCHEMA = zodToJsonSchema(GET_YC_BATCHES_SCHEM
 export const GET_COMPANIES_IN_BATCH_PROMPT = `
 You are looking at a startup directory page from Y Combinator that has been filtered by batch. 
 Your task is to extract information for the companies listed on the page.
+Only extract the first 10 companies listed on the page.
 
 For each company, extract:
 1. Name (required): The company name exactly as shown (e.g., "Airtop")

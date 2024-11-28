@@ -2,13 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@local/ui";
 
 interface DisplayPromptResponseProps {
   content: string;
+  profileId?: string;
 }
 
-export function DisplayPromptResponse({ content }: DisplayPromptResponseProps) {
+export function DisplayPromptResponse({ content, profileId }: DisplayPromptResponseProps) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Scraped Data</CardTitle>
+      <CardHeader className="flex flex-column items-start justify-between pb-2">
+        <CardTitle>Profile ID: {profileId}</CardTitle>
+        <CardTitle>Scraped Data</CardTitle>
       </CardHeader>
       <CardContent>
         <pre className="overflow-auto">{content}</pre>

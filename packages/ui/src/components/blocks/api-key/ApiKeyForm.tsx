@@ -7,24 +7,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { getFetchBasePath } from "@local/utils";
 import { type SetApiKeyRequest, setApiKeyRequestSchema } from "@local/utils/api/api-key/set-api-key.validation.js";
 import type React from "react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface SetApiKeyFormProps {
   onError: (error: any) => void;
   onSuccess: (apiKey: string) => void;
   currentApiKey?: string;
-  canRequestNewKey?: boolean;
   onRequestNewKey?: () => void;
 }
 
-export function ApiKeyForm({
-  onError,
-  onSuccess,
-  currentApiKey,
-  canRequestNewKey,
-  onRequestNewKey,
-}: SetApiKeyFormProps) {
+export function ApiKeyForm({ onError, onSuccess, currentApiKey, onRequestNewKey }: SetApiKeyFormProps) {
+  const [isApiKeyVisible, setIsApiKeyVisible] = useState(false);
+
   const form = useForm<SetApiKeyRequest>({
     resolver: zodResolver(setApiKeyRequestSchema),
     defaultValues: {
@@ -78,7 +73,16 @@ export function ApiKeyForm({
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormControl>
-                  <Input {...field} readOnly={!!currentApiKey} placeholder="Your Airtop API key" />
+                  <Input
+                    {...field}
+                    className="mb-1"
+                    readOnly={!!currentApiKey}
+                    placeholder="Your Airtop API key"
+                    type="text"
+                    value={currentApiKey && !isApiKeyVisible ? "(Click to show API key)" : field.value}
+                    onClick={() => currentApiKey && setIsApiKeyVisible(true)}
+                    onBlur={() => setIsApiKeyVisible(false)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

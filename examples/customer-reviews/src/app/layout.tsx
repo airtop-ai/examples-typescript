@@ -6,6 +6,7 @@ import "./globals.css";
 import { exampleListings } from "@internal/home-config";
 import { Body } from "@local/ui";
 import { getApiKeyFromCookie, serverEnvs } from "@local/utils";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -13,7 +14,8 @@ export const metadata: Metadata = exampleListings.CUSTOMER_REVIEWS.metadata;
 const exampleDirName = exampleListings.CUSTOMER_REVIEWS.dirName;
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  const currentApiKey = await getApiKeyFromCookie();
+  const nextCookies = await cookies();
+  const currentApiKey = await getApiKeyFromCookie(nextCookies);
 
   return (
     <html lang="en" suppressHydrationWarning>

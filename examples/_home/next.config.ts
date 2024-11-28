@@ -2,7 +2,26 @@ import {exampleListings, getHeadersConfig, getHomeConfig} from "@internal/home-c
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  ...getHeadersConfig(),
+  ...getHeadersConfig([
+    {
+      // Ensures that the CSRF cookie is always generated for the /decrypt-api-key route
+      source: '/decrypt-api-key',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        },
+        {
+          key: 'Pragma',
+          value: 'no-cache',
+        },
+        {
+          key: 'Expires',
+          value: '0',
+        },
+      ],
+    },
+  ]),
   async rewrites() {
     const rewrites = [];
 

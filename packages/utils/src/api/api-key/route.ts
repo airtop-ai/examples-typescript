@@ -5,6 +5,7 @@ import {
 } from "@/api/api-key/set-api-key.validation.js";
 import { getCookieSession } from "@/cookies.js";
 import { getLogger } from "@/logging.js";
+import { cookies } from "next/headers.js";
 import { type NextRequest, NextResponse } from "next/server.js";
 
 export const maxDuration = 15;
@@ -21,7 +22,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<SetApiKey
   setApiKeyRequestSchema.parse(data);
 
   try {
-    const session = await getCookieSession();
+    const nextCookies = await cookies();
+    const session = await getCookieSession(nextCookies);
 
     session.apiKey = data.apiKey;
 
@@ -50,7 +52,8 @@ export async function DELETE() {
   const log = getLogger().withPrefix("[api/delete-api-key]");
 
   try {
-    const session = await getCookieSession();
+    const nextCookies = await cookies();
+    const session = await getCookieSession(nextCookies);
 
     session.apiKey = "";
 

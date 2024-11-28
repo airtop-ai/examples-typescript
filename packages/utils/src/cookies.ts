@@ -1,8 +1,8 @@
 import { serverEnvs } from "@/server.env.js";
 import { getIronSession } from "iron-session";
-import { cookies } from "next/headers.js";
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies.js";
 
-export const AIRTOP_SESSION_COOKIE_NAME = "airtop-session";
+export const AIRTOP_SESSION_COOKIE_NAME = "airtop-examples-session";
 
 export interface AirtopSessionCookie {
   // The API key for the user
@@ -14,9 +14,10 @@ export interface AirtopSessionCookie {
 function getCookieSettings() {
   const cookieOptions: Record<string, any> = {
     secure: true,
-    sameSite: "strict",
+    sameSite: "lax",
     httpOnly: true,
     path: "/",
+    domain: ".airtop.ai",
   };
 
   if (process.env.NODE_ENV === "development") {
@@ -27,30 +28,32 @@ function getCookieSettings() {
   return cookieOptions;
 }
 
-export async function getCookieSession() {
-  return getIronSession<AirtopSessionCookie>(await cookies(), {
+export async function getCookieSession(cookies: ReadonlyRequestCookies) {
+  return getIronSession<AirtopSessionCookie>(cookies, {
     password: serverEnvs.cookieSecret,
     cookieName: AIRTOP_SESSION_COOKIE_NAME,
     cookieOptions: getCookieSettings(),
   });
 }
 
-export async function getApiKeyFromCookie() {
-  const session = await getCookieSession();
+export async function getApiKeyFromCookie(cookies: ReadonlyRequestCookies) {
+  const session = await getCookieSession(cookies);
 
   return session.apiKey;
 }
 
-export async function getCsrfFromCookie() {
-  const session = await getCookieSession();
+export async function getCsrfFromCookie(cookies: ReadonlyRequestCookies) {
+  const session = await getCookieSession(cookies);
 
   return session.csrf;
 }
 
-export async function generateCsrfCookie() {
-  const session = await getCookieSession();
+export async function generateCsrfCookie(cookies: ReadonlyRequestCookies) {
+  const session = await getCookieSession(cookies);
 
-  session.csrf = Math.random().toString(36).substring(2);
+  if (!session.csrf) {
+    session.csrf = Math.random().toString(36).substring(2);
+  }
 
   await session.save();
 
