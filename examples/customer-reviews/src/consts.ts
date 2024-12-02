@@ -26,9 +26,9 @@ export const TARGET_URL = "https://www.facebook.com/profile.php?id=6156872692573
 
 // Exgtract customer review
 export const EXTRACT_REVIEW_PROMPT = `
-  You are on the Sushi-Taco facebook's page. Find the first customer review that has no reply and do the following:
-  - Extract review text.
-  - Define if review is positive or negative.
+  You are on the Sushi-Taco facebook's page. From the comments that customers left, find the first review that is uncommented and do the following:
+  - Extract the review text.
+  - Define if the review is positive or negative.
   - Generate a reply addressing this review.
 `.trim();
 

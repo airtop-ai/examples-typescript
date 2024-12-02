@@ -1,23 +1,15 @@
 import { LiveViewForm } from "@/components/forms/LiveViewForm";
 import { useAppStore } from "@/store";
-import { Card, CardContent, CardHeader, CardTitle, LiveView } from "@local/ui";
+import { Card, CardContent, CardHeader, LiveView } from "@local/ui";
 
 export function ShowLiveView() {
-  const { liveViewUrl, profileId, signInRequired } = useAppStore((state) => state.session);
+  const { liveViewUrl, signInRequired } = useAppStore((state) => state.session);
   const taskFulfillmentResponse = useAppStore((state) => state.taskFulfillment);
 
-  const title = signInRequired ? "Sign in to Facebook in order to continue" : "";
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        {profileId && (
-          <div className="mt-8 space-y-2">
-            <h4 className="font-medium leading-none">Session's Profile ID</h4>
-            <p className="text-sm text-muted-foreground">{profileId}</p>
-          </div>
-        )}
-        <LiveViewForm />
+        {!taskFulfillmentResponse.accomplished && <LiveViewForm />}
       </CardHeader>
       <CardContent>
         <div className="flex flex-col">

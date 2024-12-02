@@ -1,5 +1,5 @@
 import { useAppStore } from "@/store";
-import { Button, useHandleError, useTerminateSession } from "@local/ui";
+import { Button, CardTitle, useHandleError, useTerminateSession } from "@local/ui";
 import { useCallback } from "react";
 import { Spinner } from "./Spinner";
 
@@ -45,17 +45,26 @@ export function LiveViewForm() {
     }
   }, [session, apiKey, setFetching, requestFulfillTask, handleError, setFulfillmentResponse]);
 
+  const title = session.signInRequired ? "Sign in to Facebook in order to continue" : "";
+
   return (
-    <div className="flex justify-between">
-      <Button type="button" className="mr-4" onClick={onTerminateSession} variant="destructive">
-        Terminate session
-      </Button>
-      {session.signInRequired && (
-        <Button type="submit" onClick={continueProcess}>
-          I've signed in
+    <>
+      {title && <CardTitle className="text-sm font-bold">{title}</CardTitle>}
+      <div className="mt-8 space-y-2">
+        <h4 className="font-medium leading-none">Session's Profile ID</h4>
+        <p className="text-sm text-muted-foreground">{session.profileId}</p>
+      </div>
+      <div className="space-x-4">
+        <Button type="button" onClick={onTerminateSession} variant="destructive">
+          Terminate session
         </Button>
-      )}
-      {isFetching && <Spinner />}
-    </div>
+        {session.signInRequired && (
+          <Button type="submit" onClick={continueProcess}>
+            I've signed in
+          </Button>
+        )}
+        {isFetching && <Spinner />}
+      </div>
+    </>
   );
 }

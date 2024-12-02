@@ -31,7 +31,6 @@ async function cli() {
     const { session, windowInfo } = sessionAndWindow;
     const sessionId = session.id;
     const windowId = windowInfo.data.windowId;
-    log.warn(windowInfo.data.liveViewUrl);
 
     const isSignedIn = await service.checkIfSignedIntoWebsite({
       sessionId,
@@ -44,7 +43,7 @@ async function cli() {
         chalk.blue("Sign-in to Facebook is required, please sign-in to using this live view URL on your browser:"),
       );
 
-      log.info(windowInfo.data.liveViewUrl);
+      log.info(chalk.green(windowInfo.data.liveViewUrl));
       log.info("");
 
       await confirm({ message: "Press enter once you have signed in", default: true });

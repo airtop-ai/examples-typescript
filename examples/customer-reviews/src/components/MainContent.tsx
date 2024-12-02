@@ -35,7 +35,6 @@ export function MainContent({ currentApiKey }: MainContentProps) {
   useEffect(() => {
     const handleBeforeUnload = () => {
       // Only terminate if we have an active session (sessionId + apiKey)
-      // but the task is still in progress
       if (session.sessionId && apiKey && !taskFulfillment?.accomplished) {
         terminateSession();
       }
@@ -66,9 +65,11 @@ export function MainContent({ currentApiKey }: MainContentProps) {
       toast({
         title: "🎉🎊 Yay!",
         description: "Your agent has replied to your customer",
+        duration: 10 * 1000,
       });
+      setTimeout(terminateSession, 5 * 1000);
     }
-  }, [toast, taskFulfillment.accomplished]);
+  }, [terminateSession, toast, taskFulfillment.accomplished]);
 
   if (!apiKey) {
     return <ApiKeyRequired />;
