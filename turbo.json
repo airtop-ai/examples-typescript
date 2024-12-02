@@ -11,7 +11,13 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "cache": true
+      "cache": true,
+      "env": [
+        "EXAMPLES_SITES_COOKIE_SECRET",
+        "AIRTOP_PORTAL_URL",
+        "ENABLE_GET_API_KEY_FROM_PORTAL",
+        "SECRET_FOR_DECRYPTING_API_KEYS"
+      ]
     },
     "build:packages": {
       "dependsOn": ["^build"],

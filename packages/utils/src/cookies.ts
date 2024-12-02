@@ -17,8 +17,11 @@ function getCookieSettings() {
     sameSite: "lax",
     httpOnly: true,
     path: "/",
-    domain: ".airtop.ai",
   };
+
+  if (process.env.VERCEL_ENV === "production") {
+    cookieOptions.domain = ".airtop.ai";
+  }
 
   if (process.env.NODE_ENV === "development") {
     cookieOptions.secure = false;

@@ -1,6 +1,7 @@
 import { DecryptApiKeyContent } from "@/components/DecryptApiKeyContent";
-import { getCsrfFromCookie } from "@local/utils";
+import { getCsrfFromCookie, getLogger } from "@local/utils";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 /**
  * This page is used to set the API key in the session cookie.
@@ -14,7 +15,9 @@ export default async function ApiKeyPage() {
   const csrf = await getCsrfFromCookie(nextCookies);
 
   if (!csrf) {
-    throw new Error("Could not get CSRF from cookie.");
+    // Reload the page so the middleware can kick in and assign a new CSRF token
+    getLogger().info("CSRF token not found, reloading the page to regenerate CSRF token");
+    return redirect("/decrypt-api-key");
   }
 
   return <DecryptApiKeyContent csrf={csrf} />;

@@ -4,7 +4,7 @@ This is an example [Airtop](https://www.airtop.ai/) web application built with [
 app routing and a CLI tool that demonstrates how to interact with a webpage using the Airtop SDK.
 
 - Given an Airtop API key, the code navigates to Google Finance and searches for a ticket provided by the user
-- The code then clicks on a chart for the 6M performance of the provided stock ticket
+- The code then clicks on a chart for the 6M performance of the provided stock ticker
 - Finally, the code runs a page query against the data to retrieve an analysis of the stock's performance
 - The user will be able to monitor Airtop's actions via a live view of the browser
   * In the CLI, a URL to an Airtop [LiveView](https://docs.airtop.ai/guides/how-to/creating-a-live-view) will be printed
