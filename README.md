@@ -9,7 +9,7 @@ in various applications.
 - [pnpm](https://pnpm.io/) is used as the package manager. 
   * [Install pnpm](https://pnpm.io/installation)
 - [turbo](https://turbo.build/) is used to build the shared packages.
-  * [Install turbo](https://turbo.build/docs/installation) 
+  * [Install turbo](https://turbo.build/repo/docs/getting-started/installation#global-installation) 
 
 ## Installation
 

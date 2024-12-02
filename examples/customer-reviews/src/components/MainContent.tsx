@@ -64,8 +64,8 @@ export function MainContent({ currentApiKey }: MainContentProps) {
     if (taskFulfillment.accomplished) {
       toast({
         title: "🎉🎊 Yay!",
-        description: "Your agent has replied to your customer",
-        duration: 10 * 1000,
+        description: "Your agent has successfully replied to your customer",
+        duration: Number.POSITIVE_INFINITY,
       });
       setTimeout(terminateSession, 5 * 1000);
     }
