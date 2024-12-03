@@ -7,6 +7,8 @@ import {
 import { getLogger } from "@local/utils";
 import { type NextRequest, NextResponse } from "next/server";
 
+export const maxDuration = 300;
+
 /**
  * Continues the process of extracting data from yCombinator after the user has completed sign-in.
  */
