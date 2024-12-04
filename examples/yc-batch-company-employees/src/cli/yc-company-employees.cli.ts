@@ -21,21 +21,6 @@ async function cli() {
     required: false,
   });
 
-  const parallelism = Number.parseInt(
-    await input({
-      message: "Enter the number of parallel sessions to run:",
-      default: "1",
-      required: true,
-      validate: (input) => {
-        if (Number.isNaN(input) || Number.parseInt(input) < 1) {
-          return "Please enter a valid number greater than 0";
-        }
-
-        return true;
-      },
-    }),
-  );
-
   const airtop = new AirtopService({ apiKey, log });
 
   const ycService = new YCExtractorService({
@@ -73,6 +58,7 @@ async function cli() {
 
     const isLoggedIn = await linkedInService.checkIfSignedIntoLinkedIn(linkedInSession.data.id);
 
+    let linkedInProfileId: string | undefined = profileId;
     if (!isLoggedIn) {
       const linkedInLoginPageUrl = await linkedInService.getLinkedInLoginPageLiveViewUrl(linkedInSession.data.id);
 
@@ -82,22 +68,37 @@ async function cli() {
       await confirm({ message: "Press enter once you have signed in", default: true });
 
       log.info("You can now close the browser tab for the live view. The extraction will continue in the background.");
+
+      // Terminate session to persist profile if necessary
+      await airtop.terminateSession(linkedInSession.data.id);
+
+      // If we have just logged in, save the profile id
+      linkedInProfileId = linkedInSession.data.profileId;
+      log.info(`New profile id: ${linkedInProfileId}`);
+
+      // Extra sleep to ensure the profile is persisted
+      await new Promise((resolve) => setTimeout(resolve, 2_000));
+    }
+
+    if (!linkedInProfileId) {
+      throw new Error("No LinkedIn profile ID found, cannot continue");
     }
 
     const employeesListUrls = await linkedInService.getEmployeesListUrls({
       companyLinkedInProfileUrls: linkedInProfileUrls,
-      sessionId: linkedInSession.data.id,
-      parallelism,
+      profileId: linkedInProfileId,
     });
 
     await linkedInService.getEmployeesProfileUrls({
       employeesListUrls: employeesListUrls,
-      sessionId: linkedInSession.data.id,
-      parallelism,
+      profileId: linkedInProfileId,
     });
 
     log.info("*** Operation finished ***");
+  } catch (err) {
+    log.error(`Error occurred in main script: ${err}`);
   } finally {
+    log.debug('Final cleanup');
     // Cleanup
     await airtop.terminateAllWindows();
     await airtop.terminateAllSessions();

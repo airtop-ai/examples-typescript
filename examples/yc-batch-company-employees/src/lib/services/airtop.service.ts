@@ -34,7 +34,7 @@ export class AirtopService {
     const session = await this.client.sessions.create({
       configuration: {
         timeoutMinutes: 15,
-        persistProfile: Boolean(!profileId), // Only persist a new profile if we do not have an existing profileId
+        persistProfile: true,
         ...(profileId ? { baseProfileId: profileId } : {}),
       },
     });
