@@ -154,12 +154,12 @@ export class YCExtractorService {
       if (!response.linkedInProfileUrl) {
         throw new Error("Failed to parse LinkedIn profile URL");
       }
-      
+
       profileUrls.push({ url: response.linkedInProfileUrl });
       return {};
     };
 
-    const handleError = async ({error, operationUrls}: BatchOperationError) => {
+    const handleError = async ({ error, operationUrls }: BatchOperationError) => {
       this.log.withError(error).withMetadata({ operationUrls }).error("Error extracting LinkedIn profile URL");
     };
 

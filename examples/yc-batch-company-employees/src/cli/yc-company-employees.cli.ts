@@ -98,7 +98,7 @@ async function cli() {
   } catch (err) {
     log.error(`Error occurred in main script: ${err}`);
   } finally {
-    log.debug('Final cleanup');
+    log.debug("Final cleanup");
     // Cleanup
     await airtop.terminateAllWindows();
     await airtop.terminateAllSessions();

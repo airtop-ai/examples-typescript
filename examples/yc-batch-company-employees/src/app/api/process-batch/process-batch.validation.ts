@@ -4,14 +4,7 @@ export const processBatchRequestSchema = z.object({
   apiKey: z.string().min(10).describe("The API key to use for the request"),
   sessionId: z.string().describe("The id of the session to use"),
   batch: z.string().describe("The YC batch to process. Ex: S24"),
-  parallelism: z
-    .number()
-    .int()
-    .optional()
-    .default(1)
-    .describe(
-      "Max number of sessions to use when batch processing. For non-paid accounts, this is recommended to be set to 1.",
-    ),
+  profileId: z.string().describe("The id of the profile to continue"),
 });
 
 export type ProcessBatchRequest = z.infer<typeof processBatchRequestSchema>;

@@ -87,7 +87,6 @@ export class LinkedInExtractorService {
    * Gets the LinkedIn employees list URLs for a given set of companies
    * @param companyLinkedInProfileUrls - The list of company LinkedIn profile URLs
    * @param sessionId - The ID of the session
-   * @param parallelism - The number of parallel requests to make
    * @returns The list of LinkedIn employees list URLs
    */
   async getEmployeesListUrls({
@@ -97,16 +96,11 @@ export class LinkedInExtractorService {
     companyLinkedInProfileUrls: BatchOperationUrl[];
     profileId: string;
   }): Promise<BatchOperationUrl[]> {
-    this.log
-      .info("Attempting to get the list of employees for the companies");
+    this.log.info("Attempting to get the list of employees for the companies");
 
     const employeesListUrls: string[] = [];
     const getEmployeesListUrl = async (input: BatchOperationInput) => {
-      
-      const scrapedContent = await this.airtop.client.windows.scrapeContent(
-        input.sessionId,
-        input.windowId,
-      );
+      const scrapedContent = await this.airtop.client.windows.scrapeContent(input.sessionId, input.windowId);
 
       const url = this.extractEmployeeListUrl(scrapedContent.data.modelResponse.scrapedContent.text);
 
@@ -117,10 +111,10 @@ export class LinkedInExtractorService {
       employeesListUrls.push(url);
 
       this.log
-      .withMetadata({
-        employeesListUrls,
-      })
-      .info("Successfully fetched employee list URLs for the companies");
+        .withMetadata({
+          employeesListUrls,
+        })
+        .info("Successfully fetched employee list URLs for the companies");
 
       return {};
     };
@@ -141,7 +135,6 @@ export class LinkedInExtractorService {
       },
     });
 
-
     // Filter out any null values and remove duplicates
     return [...new Set(employeesListUrls.filter((url) => url !== null).map((url) => ({ url })))];
   }
@@ -150,7 +143,6 @@ export class LinkedInExtractorService {
    * Gets the LinkedIn employees profile URLs for a list of LinkedIn employees list URLs
    * @param employeesListUrls - The list of LinkedIn employees list URLs
    * @param sessionId - The ID of the session
-   * @param parallelism - The number of parallel requests to make
    * @returns The list of LinkedIn employees profile URLs
    */
   async getEmployeesProfileUrls({
