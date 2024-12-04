@@ -77,6 +77,9 @@ importers:
       react-dom:
         specifier: 19.0.0-rc-66855b96-20241106
         version: 19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106)
+      react-markdown:
+        specifier: ^9.0.1
+        version: 9.0.1(@types/react@18.3.12)(react@19.0.0-rc-66855b96-20241106)
       tailwind-merge:
         specifier: 2.5.5
         version: 2.5.5

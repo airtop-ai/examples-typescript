@@ -4,7 +4,6 @@ import { YCExtractorService } from "@/lib/services/yc-extractor.service";
 import type { SessionResponse } from "@airtop/sdk/api";
 import { confirm, input, select } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
-import chalk from "chalk";
 
 /**
  * Command line example that uses Airtop to extract data from LinkedIn.
@@ -108,7 +107,6 @@ async function cli() {
 }
 
 cli().catch((e) => {
-  console.log(chalk.red("An error occurred"));
   console.error(e);
   process.exit(1);
 });
