@@ -46,7 +46,7 @@ export const exampleListings: Record<ExampleSite, ExampleListing> = {
     metadata: {
       title: "Simple Browser Interactions",
       description: `This example showcases how to use Airtop's AI APIs to interact with a browser. This simple example navigates to [Google Finance](https://www.google.com/finance/), 
-      searches for given ticker symbol selects a 6M timeframe and extract the percentage change. This can be easily accomplished with a few lines of code.
+      searches for given ticker, symbol selects a 6M timeframe, and extracts the percentage change. This can be easily accomplished with a few lines of code.
       Check out the [repo](https://github.com/airtop-ai/examples-typescript/tree/main/examples/simple-interactions) for the full code.`,
     },
   },
