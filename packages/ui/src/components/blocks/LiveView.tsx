@@ -3,7 +3,7 @@ interface LiveViewProps {
   height?: string;
 }
 
-export function LiveView({ liveViewUrl, height = "500px" }: LiveViewProps) {
+export function LiveView({ liveViewUrl, height = "1000px" }: LiveViewProps) {
   return (
     <iframe
       className="w-full border"

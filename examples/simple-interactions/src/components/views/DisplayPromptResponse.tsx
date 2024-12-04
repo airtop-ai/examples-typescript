@@ -1,18 +1,24 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@local/ui";
+import { Button, Card, CardContent, CardHeader, CardTitle } from "@local/ui";
 
 interface DisplayPromptResponseProps {
   content: string;
+  tryAgain?: () => void;
 }
 
-export function DisplayPromptResponse({ content }: DisplayPromptResponseProps) {
+export function DisplayPromptResponse({ content, tryAgain }: DisplayPromptResponseProps) {
   return (
-    <Card>
-      <CardHeader className="flex flex-column items-start justify-between pb-2">
-        <CardTitle>Scraped Data</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <pre className="overflow-auto">{content}</pre>
-      </CardContent>
-    </Card>
+    <>
+      <div>
+        <Button onClick={tryAgain}>Try Again</Button>
+      </div>
+      <Card>
+        <CardHeader className="flex flex-column items-start justify-between pb-2">
+          <CardTitle>Scraped Data</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <pre className="overflow-auto">{content}</pre>
+        </CardContent>
+      </Card>
+    </>
   );
 }

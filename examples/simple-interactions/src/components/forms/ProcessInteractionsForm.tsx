@@ -86,7 +86,7 @@ export function ProcessInteractionsForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={preventDefault} className="space-y-6">
+      <form onSubmit={preventDefault} className="space-x-2 flex flex-row items-start">
         <FormField
           name="ticker"
           control={form.control}
@@ -101,7 +101,7 @@ export function ProcessInteractionsForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isSubmitting} onClick={onSubmit}>
+        <Button type="submit" disabled={isSubmitting} onClick={onSubmit} className="mt-8">
           {isSubmitting ? <ElapsedTime content="Working..." /> : "Search ticker"}
         </Button>
       </form>

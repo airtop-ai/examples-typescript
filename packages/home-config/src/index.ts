@@ -19,29 +19,35 @@ export const exampleListings: Record<ExampleSite, ExampleListing> = {
   [ExampleSite.LINKEDIN_DATA_EXTRACTION]: {
     dirName: "linkedin-data-extraction",
     metadata: {
-      title: "Airtop: LinkedIn Data Extraction",
-      description: "Extracts data from LinkedIn profiles",
+      title: "LinkedIn Data Extraction",
+      description: `This example showcases how to use Airtop's AI APIs to extract data from LinkedIn profiles. 
+      When you first run this example, you will be prompted to sign in to LinkedIn. Once you have signed in, 
+      you will be able to continue extracting data from a profile (we hardcoded our CEO's profiles for this example, but you can [take the code from the repo](https://github.com/airtop-ai/examples-typescript/tree/main/examples/linkedin-data-extraction) and extract data from any LinkedIn profile).
+      Once you've logged in once, you can take the profileId and re-use it to extract data from the same profile without the need to sign in again. This shows how we can store profile information to do a one-time
+      human-in-the-loop authentication action, and subsquent, fully autonomous extractions.`,
     },
   },
   [ExampleSite.YC_BATCH_COMPANY_EMPLOYEES]: {
     dirName: "yc-batch-company-employees",
     metadata: {
-      title: "Airtop: YC Batch Company's Employees's Profiles",
+      title: "YC Batch Company's Employees's Profiles",
       description: "Extracts employees from YC batch companies",
     },
   },
   [ExampleSite.CUSTOMER_REVIEWS]: {
     dirName: "customer-reviews",
     metadata: {
-      title: "Airtop: Restaurant reviews",
+      title: "Restaurant reviews",
       description: "Reply to customer reviews",
     },
   },
   [ExampleSite.SIMPLE_INTERACTIONS]: {
     dirName: "simple-interactions",
     metadata: {
-      title: "Airtop: Simple Browser Interactions",
-      description: "Simple interactions with the browser",
+      title: "Simple Browser Interactions",
+      description: `This example showcases how to use Airtop's AI APIs to interact with a browser. This simple example navigates to [Google Finance](https://www.google.com/finance/), 
+      searches for given ticker symbol selects a 6M timeframe and extract the percentage change. This can be easily accomplished with a few lines of code.
+      Check out the [repo](https://github.com/airtop-ai/examples-typescript/tree/main/examples/simple-interactions) for the full code.`,
     },
   },
 };

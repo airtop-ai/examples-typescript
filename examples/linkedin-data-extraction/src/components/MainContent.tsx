@@ -15,6 +15,7 @@ export function MainContent({ currentApiKey }: MainContentProps) {
   const setApiKey = useAppStore((state) => state.setApiKey);
   const apiKey = useAppStore((state) => state.apiKey);
   const apiResponse = useAppStore((state) => state.response);
+  const resetResponse = useAppStore((state) => state.resetResponse);
 
   useEffect(() => {
     // Set the API key from the cookie if it's not already set
@@ -61,7 +62,9 @@ export function MainContent({ currentApiKey }: MainContentProps) {
 
   // 2. Show results if we have content
   if (apiResponse.content) {
-    return <DisplayPromptResponse content={apiResponse.content} profileId={apiResponse.profileId} />;
+    return (
+      <DisplayPromptResponse content={apiResponse.content} profileId={apiResponse.profileId} tryAgain={resetResponse} />
+    );
   }
 
   // 3. Default view - show initialization screen

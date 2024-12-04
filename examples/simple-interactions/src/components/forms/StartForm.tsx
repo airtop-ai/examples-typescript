@@ -68,7 +68,7 @@ export function StartForm() {
     <Form {...form}>
       <form onSubmit={handleFormSubmit} className="space-y-6">
         <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? <ElapsedTime content="Working..." /> : "Start"}
+          {form.formState.isSubmitting ? <ElapsedTime content="Working..." /> : "Start Session"}
         </Button>
       </form>
     </Form>
