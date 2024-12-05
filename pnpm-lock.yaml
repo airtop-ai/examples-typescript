@@ -467,8 +467,8 @@ importers:
   examples/yc-batch-company-employees:
     dependencies:
       '@airtop/sdk':
-        specifier: airtop-ai/airtop-node-sdk#13a698df059f703b74422ee149b01b27157d22b5
-        version: https://codeload.github.com/airtop-ai/airtop-node-sdk/tar.gz/13a698df059f703b74422ee149b01b27157d22b5(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: airtop-ai/airtop-node-sdk#4c92bdacc4e0f406c0a79cdc8faab3dd2414d6ea
+        version: https://codeload.github.com/airtop-ai/airtop-node-sdk/tar.gz/4c92bdacc4e0f406c0a79cdc8faab3dd2414d6ea(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
@@ -748,8 +748,8 @@ packages:
       puppeteer: '>=22.14.0'
       selenium-webdriver: '>=4.25.0'
 
-  '@airtop/sdk@https://codeload.github.com/airtop-ai/airtop-node-sdk/tar.gz/13a698df059f703b74422ee149b01b27157d22b5':
-    resolution: {tarball: https://codeload.github.com/airtop-ai/airtop-node-sdk/tar.gz/13a698df059f703b74422ee149b01b27157d22b5}
+  '@airtop/sdk@https://codeload.github.com/airtop-ai/airtop-node-sdk/tar.gz/4c92bdacc4e0f406c0a79cdc8faab3dd2414d6ea':
+    resolution: {tarball: https://codeload.github.com/airtop-ai/airtop-node-sdk/tar.gz/4c92bdacc4e0f406c0a79cdc8faab3dd2414d6ea}
     version: 0.1.6
     peerDependencies:
       playwright: '>=1.47.2'
@@ -3899,7 +3899,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@airtop/sdk@https://codeload.github.com/airtop-ai/airtop-node-sdk/tar.gz/13a698df059f703b74422ee149b01b27157d22b5(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
+  '@airtop/sdk@https://codeload.github.com/airtop-ai/airtop-node-sdk/tar.gz/4c92bdacc4e0f406c0a79cdc8faab3dd2414d6ea(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
     dependencies:
       form-data: 4.0.1
       formdata-node: 6.0.3

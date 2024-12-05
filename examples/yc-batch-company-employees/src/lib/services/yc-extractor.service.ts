@@ -12,7 +12,7 @@ import {
   YC_COMPANIES_URL,
 } from "@/consts";
 import type { AirtopService } from "@/lib/services/airtop.service";
-import type { BatchOperationError, BatchOperationInput, BatchOperationUrl } from "@airtop/sdk";
+import type { BatchOperationError, BatchOperationInput, BatchOperationResponse, BatchOperationUrl } from "@airtop/sdk";
 import type { LogLayer } from "loglayer";
 
 /**
@@ -37,13 +37,11 @@ export class YCExtractorService {
    * Gets the Y Combinator batches from the Y Combinator Company Directory page.
    * @returns {Promise<string[]>} A promise that resolves to an array of batches
    */
-  async getYcBatches(sessionId?: string): Promise<string[]> {
+  async getYcBatches(sessionId: string): Promise<string[]> {
     this.log.info("Initiating fetch to get YC batches");
 
     // Get session info if provided, otherwise create a new session
-    const session = sessionId
-      ? await this.airtop.client.sessions.getInfo(sessionId)
-      : await this.airtop.createSession();
+    const session = await this.airtop.client.sessions.getInfo(sessionId);
 
     // YC Company Directory window
     const window = await this.airtop.client.windows.create(session.data.id, {
@@ -84,12 +82,10 @@ export class YCExtractorService {
    * @param {string} sessionId - The ID of the session
    * @returns {Promise<string[]>} A promise that resolves to an array of company names
    */
-  async getCompaniesInBatch(batch: string, sessionId?: string): Promise<Company[]> {
+  async getCompaniesInBatch(batch: string, sessionId: string): Promise<Company[]> {
     this.log.info(`Initiating fetch to get companies in Y Combinator batch "${batch}"`);
 
-    const session = sessionId
-      ? await this.airtop.client.sessions.getInfo(sessionId)
-      : await this.airtop.createSession();
+    const session = await this.airtop.client.sessions.getInfo(sessionId);
 
     // YC Company Directory window
     const window = await this.airtop.client.windows.create(session.data.id, {
@@ -131,8 +127,7 @@ export class YCExtractorService {
   async getCompaniesLinkedInProfileUrls(companies: Company[]): Promise<BatchOperationUrl[]> {
     const companyUrls: BatchOperationUrl[] = companies.map((c) => ({ url: c.link }));
 
-    const profileUrls: BatchOperationUrl[] = [];
-    const getProfileUrl = async (input: BatchOperationInput) => {
+    const getProfileUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<BatchOperationUrl>> => {
       this.log.info(`Scraping for LinkedIn profile URL ${input.operationUrl.url}`);
       const modelResponse = await this.airtop.client.windows.pageQuery(input.sessionId, input.windowId, {
         prompt: GET_COMPANY_LINKEDIN_PROFILE_URL_PROMPT,
@@ -155,8 +150,9 @@ export class YCExtractorService {
         throw new Error("Failed to parse LinkedIn profile URL");
       }
 
-      profileUrls.push({ url: response.linkedInProfileUrl });
-      return {};
+      return {
+        data: { url: response.linkedInProfileUrl },
+      };
     };
 
     const handleError = async ({ error, operationUrls }: BatchOperationError) => {
@@ -164,7 +160,7 @@ export class YCExtractorService {
     };
 
     this.log.info("Getting LinkedIn profile URLs for companies");
-    await this.airtop.client.batchOperate(companyUrls, getProfileUrl, { onError: handleError });
+    const profileUrls = await this.airtop.client.batchOperate(companyUrls, getProfileUrl, { onError: handleError });
 
     this.log
       .withMetadata({

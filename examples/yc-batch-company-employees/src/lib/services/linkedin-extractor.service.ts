@@ -1,6 +1,6 @@
 import { IS_LOGGED_IN_OUTPUT_SCHEMA, IS_LOGGED_IN_PROMPT, type IsLoggedInResponse, LINKEDIN_FEED_URL } from "@/consts";
 import type { AirtopService } from "@/lib/services/airtop.service";
-import type { BatchOperationError, BatchOperationInput, BatchOperationUrl } from "@airtop/sdk";
+import type { BatchOperationError, BatchOperationInput, BatchOperationResponse, BatchOperationUrl } from "@airtop/sdk";
 import type { LogLayer } from "loglayer";
 
 /**
@@ -98,8 +98,7 @@ export class LinkedInExtractorService {
   }): Promise<BatchOperationUrl[]> {
     this.log.info("Attempting to get the list of employees for the companies");
 
-    const employeesListUrls: string[] = [];
-    const getEmployeesListUrl = async (input: BatchOperationInput) => {
+    const getEmployeesListUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<string>> => {
       const scrapedContent = await this.airtop.client.windows.scrapeContent(input.sessionId, input.windowId);
 
       const url = this.extractEmployeeListUrl(scrapedContent.data.modelResponse.scrapedContent.text);
@@ -108,32 +107,33 @@ export class LinkedInExtractorService {
         throw new Error("No employees list URL found");
       }
 
-      employeesListUrls.push(url);
-
-      this.log
-        .withMetadata({
-          employeesListUrls,
-        })
-        .info("Successfully fetched employee list URLs for the companies");
-
-      return {};
+      return {
+        data: url,
+      };
     };
 
-    const handleError = async ({ error, operationUrls }: BatchOperationError) => {
+    const handleError = async ({ error, operationUrls, liveViewUrl }: BatchOperationError) => {
       this.log
         .withError(error)
         .withMetadata({
+          liveViewUrl,
           operationUrls,
         })
-        .error("Error extracting employees list URL for company LinkedIn profile");
+        .error("Error extracting employees list URL for company LinkedIn profile.");
     };
 
-    await this.airtop.client.batchOperate(companyLinkedInProfileUrls, getEmployeesListUrl, {
+    const employeesListUrls = await this.airtop.client.batchOperate(companyLinkedInProfileUrls, getEmployeesListUrl, {
       onError: handleError,
       sessionConfig: {
         baseProfileId: profileId,
       },
     });
+
+    this.log
+      .withMetadata({
+        employeesListUrls,
+      })
+      .info("Successfully fetched employee list URLs for the companies");
 
     // Filter out any null values and remove duplicates
     return [...new Set(employeesListUrls.filter((url) => url !== null).map((url) => ({ url })))];
@@ -151,22 +151,24 @@ export class LinkedInExtractorService {
   }: { employeesListUrls: BatchOperationUrl[]; profileId: string }): Promise<string[]> {
     this.log.info("Initiating extraction of employee's profile URLs for the employees");
 
-    const employeesProfileUrls: string[] = [];
-    const getEmployeeProfileUrl = async (input: BatchOperationInput) => {
+    const getEmployeeProfileUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<string[]>> => {
       this.log.info(`Scraping content for employee URL: ${input.operationUrl.url}`);
       const scrapedContent = await this.airtop.client.windows.scrapeContent(input.sessionId, input.windowId);
 
       const newUrls = this.extractEmployeeProfileUrls(scrapedContent.data.modelResponse.scrapedContent.text);
-      employeesProfileUrls.push(...newUrls);
 
-      return {};
+      return {
+        data: newUrls,
+      };
     };
 
-    await this.airtop.client.batchOperate(employeesListUrls, getEmployeeProfileUrl, {
-      sessionConfig: {
-        baseProfileId: profileId,
-      },
-    });
+    const employeesProfileUrls = (
+      await this.airtop.client.batchOperate(employeesListUrls, getEmployeeProfileUrl, {
+        sessionConfig: {
+          baseProfileId: profileId,
+        },
+      })
+    ).flat();
 
     this.log
       .withMetadata({

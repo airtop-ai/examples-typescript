@@ -37,7 +37,6 @@ export async function continueController({
       batches: batches,
     };
   } catch (error) {
-    await airtop.terminateAllWindows();
     await airtop.terminateSession(sessionId);
     throw error;
   }

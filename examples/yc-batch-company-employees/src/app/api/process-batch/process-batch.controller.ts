@@ -22,25 +22,13 @@ export async function processBatchController({
     // Get LinkedIn profile urls for the companies
     const linkedInProfileUrls = await yCombinator.getCompaniesLinkedInProfileUrls(companies);
 
-    const isLoggedIn = await linkedin.checkIfSignedIntoLinkedIn(sessionId);
-
-    // If LinkedIn auth is needed, return the live view URL
-    if (!isLoggedIn) {
-      const liveViewUrl = await linkedin.getLinkedInLoginPageLiveViewUrl(sessionId);
-      return {
-        sessionId,
-        content: "",
-        signInRequired: true,
-        liveViewUrl,
-      };
-    }
-
     // At this point we should be logged in, so we terminate the session to persist profile
-    await airtop.terminateAllWindows();
-    await airtop.terminateAllSessions();
+    await airtop.terminateSession(sessionId);
 
     // Extra sleep to ensure the profile is persisted
-    await new Promise((resolve) => setTimeout(resolve, 2_000));
+    log.withMetadata({ now: Date.now() }).info("Sleeping for 30 seconds to ensure the profile is persisted...");
+    await new Promise((resolve) => setTimeout(resolve, 30_000));
+    log.withMetadata({ now: Date.now() }).info("Done sleeping, continuing...");
 
     // Get employee list url for each company
     const employeesListUrls = await linkedin.getEmployeesListUrls({
@@ -71,8 +59,6 @@ export async function processBatchController({
     };
   } finally {
     log.debug("Final cleanup");
-    // Cleanup
-    await airtop.terminateAllWindows();
-    await airtop.terminateAllSessions();
+    await airtop.terminateSession(sessionId);
   }
 }

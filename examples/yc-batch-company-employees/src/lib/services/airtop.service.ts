@@ -7,8 +7,6 @@ import type { LogLayer } from "loglayer";
  */
 export class AirtopService {
   client: AirtopClient;
-  savedSessions: Map<string, SessionResponse>;
-  savedWindows: Map<string, { sessionId: string; windowId: string }>;
   log: LogLayer;
 
   /**
@@ -21,8 +19,6 @@ export class AirtopService {
     this.client = new AirtopClient({ apiKey });
 
     this.log = log;
-    this.savedSessions = new Map();
-    this.savedWindows = new Map();
   }
 
   /**
@@ -39,8 +35,6 @@ export class AirtopService {
       },
     });
 
-    this.savedSessions.set(session.data.id, session);
-
     return session;
   }
 
@@ -53,27 +47,10 @@ export class AirtopService {
       return;
     }
 
-    const session = this.savedSessions.has(sessionId);
-
-    if (!session) {
-      return;
-    }
-
     this.log.debug(`Terminating session: ${sessionId}`);
 
     // Terminate the session
     await this.client.sessions.terminate(sessionId);
-
-    this.savedSessions.delete(sessionId);
-  }
-
-  /**
-   * Terminates all sessions.
-   */
-  async terminateAllSessions(): Promise<void> {
-    for (const [sessionId] of this.savedSessions) {
-      await this.terminateSession(sessionId);
-    }
   }
 
   /**
@@ -85,41 +62,6 @@ export class AirtopService {
   async createWindow(sessionId: string, url: string): Promise<WindowIdResponse> {
     const window = await this.client.windows.create(sessionId, { url });
 
-    this.savedWindows.set(window.data.windowId, { sessionId, windowId: window.data.windowId });
-
     return window;
-  }
-
-  /**
-   * Terminates a window.
-   * @param windowId - The ID of the window to terminate
-   */
-  async terminateWindow(windowId: string | undefined): Promise<void> {
-    if (!windowId) {
-      return;
-    }
-
-    const window = this.savedWindows.get(windowId);
-
-    if (!window) {
-      return;
-    }
-
-    this.log.debug(`Terminating window: ${window.windowId}`);
-
-    // Close the window
-    await this.client.windows.close(window.sessionId, window.windowId);
-
-    // Remove the window from the list
-    this.savedWindows.delete(windowId);
-  }
-
-  /**
-   * Terminates all windows.
-   */
-  async terminateAllWindows(): Promise<void> {
-    for (const [windowId] of this.savedWindows) {
-      await this.terminateWindow(windowId);
-    }
   }
 }

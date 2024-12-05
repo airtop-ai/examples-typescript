@@ -25,7 +25,7 @@ export async function startController({ apiKey, log, profileId }: StartControlle
 
       return {
         sessionId: session.data.id,
-        profileId: session.data.profileId,
+        profileId: session.data.profileId, // Use latest profile id
         liveViewUrl,
         signInRequired: true,
       };
@@ -40,13 +40,11 @@ export async function startController({ apiKey, log, profileId }: StartControlle
     // Return the batches in the response
     return {
       sessionId: session.data.id,
-      profileId: session.data.profileId,
+      profileId, // Use provided profile id
       batches: batches,
       signInRequired: false,
     };
   } catch (error) {
-    // Clean up session if there's an error
-    await airtop.terminateAllWindows();
     await airtop.terminateSession(session.data.id);
     throw error;
   }

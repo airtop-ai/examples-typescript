@@ -34,10 +34,9 @@ async function cli() {
   });
 
   let ycSession: SessionResponse | undefined;
-  let linkedInSession: SessionResponse | undefined;
 
   try {
-    ycSession = await ycService.airtop.createSession();
+    ycSession = await ycService.airtop.createSession(profileId);
     const batches = await ycService.getYcBatches(ycSession.data.id);
 
     const selectedBatch = await select({
@@ -51,16 +50,15 @@ async function cli() {
 
     log.info("This might take a while...");
 
-    const linkedInProfileUrls = await ycService.getCompaniesLinkedInProfileUrls(companies.slice(0, 5));
+    const linkedInProfileUrls = await ycService.getCompaniesLinkedInProfileUrls(companies);
 
-    linkedInSession = await linkedInService.airtop.createSession(profileId);
-    log.withMetadata({ profileId: linkedInSession.data.profileId }).info("Profile id");
+    log.withMetadata({ profileId: ycSession.data.profileId }).info("Profile id");
 
-    const isLoggedIn = await linkedInService.checkIfSignedIntoLinkedIn(linkedInSession.data.id);
+    const isLoggedIn = await linkedInService.checkIfSignedIntoLinkedIn(ycSession.data.id);
 
-    let linkedInProfileId: string | undefined = profileId;
+    let latestProfileId: string | undefined = profileId;
     if (!isLoggedIn) {
-      const linkedInLoginPageUrl = await linkedInService.getLinkedInLoginPageLiveViewUrl(linkedInSession.data.id);
+      const linkedInLoginPageUrl = await linkedInService.getLinkedInLoginPageLiveViewUrl(ycSession.data.id);
 
       log.info("Please sign in to LinkedIn using this live view URL in your browser:");
       log.info(linkedInLoginPageUrl);
@@ -69,29 +67,31 @@ async function cli() {
 
       log.info("You can now close the browser tab for the live view. The extraction will continue in the background.");
 
-      // Terminate session to persist profile if necessary
-      await airtop.terminateSession(linkedInSession.data.id);
-
-      // If we have just logged in, save the profile id
-      linkedInProfileId = linkedInSession.data.profileId;
-      log.info(`New profile id: ${linkedInProfileId}`);
-
-      // Extra sleep to ensure the profile is persisted
-      await new Promise((resolve) => setTimeout(resolve, 2_000));
+      // Update latest profile id
+      latestProfileId = ycSession.data.profileId;
+      log.info(`Latest profile id: ${latestProfileId}`);
     }
 
-    if (!linkedInProfileId) {
+    if (!latestProfileId) {
       throw new Error("No LinkedIn profile ID found, cannot continue");
     }
 
+    // Terminate session to persist profile
+    await airtop.terminateSession(ycSession.data.id);
+
+    // Extra sleep to ensure the profile is persisted
+    log.withMetadata({ now: Date.now() }).info("Sleeping for 30 seconds to ensure the profile is persisted...");
+    await new Promise((resolve) => setTimeout(resolve, 30_000));
+    log.withMetadata({ now: Date.now() }).info("Done sleeping, continuing...");
+
     const employeesListUrls = await linkedInService.getEmployeesListUrls({
       companyLinkedInProfileUrls: linkedInProfileUrls,
-      profileId: linkedInProfileId,
+      profileId: latestProfileId,
     });
 
     await linkedInService.getEmployeesProfileUrls({
       employeesListUrls: employeesListUrls,
-      profileId: linkedInProfileId,
+      profileId: latestProfileId,
     });
 
     log.info("*** Operation finished ***");
@@ -99,9 +99,7 @@ async function cli() {
     log.error(`Error occurred in main script: ${err}`);
   } finally {
     log.debug("Final cleanup");
-    // Cleanup
-    await airtop.terminateAllWindows();
-    await airtop.terminateAllSessions();
+    await airtop.terminateSession(ycSession?.data.id);
   }
 
   process.exit(0);
