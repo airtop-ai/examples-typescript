@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
   ElapsedTime,
-  Label,
   Select,
   SelectContent,
   SelectItem,
@@ -23,9 +22,9 @@ interface BatchSelectorFormProps {
 
 export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [parallelSessions, setParallelSessions] = useState<number>(1);
   const apiKey = useAppStore((state) => state.apiKey);
   const sessionId = useAppStore((state) => state.response.sessionId);
+  const profileId = useAppStore((state) => state.response.profileId);
   const setProcessBatchResponse = useAppStore((state) => state.setProcessBatchResponse);
   const selectedBatch = useAppStore((state) => state.selectedBatch);
   const setSelectedBatch = useAppStore((state) => state.setSelectedBatch);
@@ -52,7 +51,7 @@ export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
           apiKey,
           batch: selectedBatch,
           sessionId,
-          parallelism: parallelSessions,
+          profileId,
         }),
       });
 
@@ -72,7 +71,7 @@ export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [selectedBatch, apiKey, sessionId, setProcessBatchResponse, handleError, parallelSessions]);
+  }, [selectedBatch, apiKey, sessionId, setProcessBatchResponse, handleError, profileId]);
 
   return (
     <Card>
@@ -93,25 +92,6 @@ export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
               ))}
             </SelectContent>
           </Select>
-
-          <div>
-            <Label>Number of sessions to use for batch processing</Label>
-            <Select
-              value={parallelSessions.toString()}
-              onValueChange={(value) => setParallelSessions(Number.parseInt(value))}
-            >
-              <SelectTrigger className="w-full p-2 border rounded-md bg-background mt-1">
-                <SelectValue placeholder={"Number of sessions to use for batch processing"} />
-              </SelectTrigger>
-              <SelectContent>
-                {["1", "2", "3"].map((parallelism) => (
-                  <SelectItem key={parallelism} value={parallelism}>
-                    {parallelism} {parallelism === "1" ? "session (recommended for free-tier orgs)" : "sessions"}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
 
           <Button onClick={handleBatchSelect} disabled={!selectedBatch || isSubmitting}>
             {isSubmitting ? <ElapsedTime content="Fetching employee profiles..." /> : "Process Batch"}

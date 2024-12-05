@@ -1,5 +1,6 @@
 import { IS_LOGGED_IN_OUTPUT_SCHEMA, IS_LOGGED_IN_PROMPT, type IsLoggedInResponse, LINKEDIN_FEED_URL } from "@/consts";
 import type { AirtopService } from "@/lib/services/airtop.service";
+import type { BatchOperationError, BatchOperationInput, BatchOperationResponse, BatchOperationUrl } from "@airtop/sdk";
 import type { LogLayer } from "loglayer";
 
 /**
@@ -58,43 +59,6 @@ export class LinkedInExtractorService {
   }
 
   /**
-   * Processes a list of URLs in batches to avoid rate limiting / overloading issues
-   * @param urls - The list of URLs to process
-   * @param processor - The function to process each URL
-   * @param batchSize - The size of the batch
-   * @param delayBetweenBatchesInMs - The delay between batches in milliseconds
-   * @returns The results of processing each URL
-   */
-  async processBatchedUrls<T>({
-    urls,
-    processor,
-    batchSize = 1,
-    delayBetweenBatchesInMs = 3000,
-  }: {
-    urls: string[];
-    processor: (url: string) => Promise<T>;
-    batchSize?: number;
-    delayBetweenBatchesInMs?: number;
-  }): Promise<T[]> {
-    const results: T[] = [];
-
-    for (let i = 0; i < urls.length; i += batchSize) {
-      const batch = urls.slice(i, i + batchSize);
-
-      this.log.info(`Processing ${batch.length} / ${urls.length} URLs`);
-      const batchResults = await Promise.all(batch.map(processor));
-
-      results.push(...batchResults);
-
-      // Wait for the specified delay between batches
-      this.log.info(`Waiting for ${delayBetweenBatchesInMs}ms before processing the next batch`);
-      await new Promise((resolve) => setTimeout(resolve, delayBetweenBatchesInMs));
-    }
-
-    return results;
-  }
-
-  /**
    * Checks if the user is signed into LinkedIn
    * @param sessionId - The ID of the session
    * @returns Whether the user is signed into LinkedIn
@@ -123,110 +87,96 @@ export class LinkedInExtractorService {
    * Gets the LinkedIn employees list URLs for a given set of companies
    * @param companyLinkedInProfileUrls - The list of company LinkedIn profile URLs
    * @param sessionId - The ID of the session
-   * @param parallelism - The number of parallel requests to make
    * @returns The list of LinkedIn employees list URLs
    */
   async getEmployeesListUrls({
     companyLinkedInProfileUrls,
-    sessionId,
-    parallelism,
+    profileId,
   }: {
-    companyLinkedInProfileUrls: string[];
-    sessionId: string;
-    parallelism: number;
-  }): Promise<string[]> {
-    this.log
-      .withMetadata({
-        parallelism,
-      })
-      .info("Attempting to get the list of employees for the companies");
+    companyLinkedInProfileUrls: BatchOperationUrl[];
+    profileId: string;
+  }): Promise<BatchOperationUrl[]> {
+    this.log.info("Attempting to get the list of employees for the companies");
 
-    const employeesListUrls = await this.processBatchedUrls({
-      urls: companyLinkedInProfileUrls,
-      batchSize: parallelism,
-      processor: async (url) => {
-        let windowId: string | null = null;
-        try {
-          const companyProfileWindow = await this.airtop.createWindow(sessionId, url);
-          windowId = companyProfileWindow.data.windowId;
+    const getEmployeesListUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<string>> => {
+      const scrapedContent = await this.airtop.client.windows.scrapeContent(input.sessionId, input.windowId);
 
-          this.log.info(`Attempting to obtain company employee list for URL: ${url}`);
+      const url = this.extractEmployeeListUrl(scrapedContent.data.modelResponse.scrapedContent.text);
 
-          const scrapedContent = await this.airtop.client.windows.scrapeContent(
-            sessionId,
-            companyProfileWindow.data.windowId,
-          );
+      if (!url) {
+        throw new Error("No employees list URL found");
+      }
 
-          const employeesListUrls = this.extractEmployeeListUrl(scrapedContent.data.modelResponse.scrapedContent.text);
+      return {
+        data: url,
+      };
+    };
 
-          this.log
-            .withMetadata({
-              employeesListUrls,
-            })
-            .info("Successfully fetched employee list URLs for the companies");
+    const handleError = async ({ error, operationUrls, liveViewUrl }: BatchOperationError) => {
+      this.log
+        .withError(error)
+        .withMetadata({
+          liveViewUrl,
+          operationUrls,
+        })
+        .error("Error extracting employees list URL for company LinkedIn profile.");
+    };
 
-          return employeesListUrls;
-        } catch (error: any) {
-          this.log
-            .withError(error?.message ?? error)
-            .withMetadata({
-              sessionId,
-              windowId,
-            })
-            .error(`Error extracting employees list URL for company LinkedIn profile: ${url}`);
-          return null;
-        }
+    const employeesListUrls = await this.airtop.client.batchOperate(companyLinkedInProfileUrls, getEmployeesListUrl, {
+      onError: handleError,
+      sessionConfig: {
+        baseProfileId: profileId,
       },
     });
 
-    await this.airtop.terminateAllWindows();
+    this.log
+      .withMetadata({
+        employeesListUrls,
+      })
+      .info("Successfully fetched employee list URLs for the companies");
 
     // Filter out any null values and remove duplicates
-    return [...new Set(employeesListUrls.filter((url) => url !== null))];
+    return [...new Set(employeesListUrls.filter((url) => url !== null).map((url) => ({ url })))];
   }
 
   /**
    * Gets the LinkedIn employees profile URLs for a list of LinkedIn employees list URLs
    * @param employeesListUrls - The list of LinkedIn employees list URLs
    * @param sessionId - The ID of the session
-   * @param parallelism - The number of parallel requests to make
    * @returns The list of LinkedIn employees profile URLs
    */
   async getEmployeesProfileUrls({
     employeesListUrls,
-    sessionId,
-    parallelism,
-  }: { employeesListUrls: string[]; sessionId: string; parallelism: number }): Promise<string[]> {
-    this.log
-      .withMetadata({
-        parallelism,
+    profileId,
+  }: { employeesListUrls: BatchOperationUrl[]; profileId: string }): Promise<string[]> {
+    this.log.info("Initiating extraction of employee's profile URLs for the employees");
+
+    const getEmployeeProfileUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<string[]>> => {
+      this.log.info(`Scraping content for employee URL: ${input.operationUrl.url}`);
+      const scrapedContent = await this.airtop.client.windows.scrapeContent(input.sessionId, input.windowId);
+
+      const newUrls = this.extractEmployeeProfileUrls(scrapedContent.data.modelResponse.scrapedContent.text);
+
+      return {
+        data: newUrls,
+      };
+    };
+
+    const employeesProfileUrls = (
+      await this.airtop.client.batchOperate(employeesListUrls, getEmployeeProfileUrl, {
+        sessionConfig: {
+          baseProfileId: profileId,
+        },
       })
-      .info("Initiating extraction of employee's profile URLs for the employees");
-
-    const employeesProfileUrls = await this.processBatchedUrls({
-      urls: employeesListUrls,
-      batchSize: parallelism,
-      processor: async (url) => {
-        const window = await this.airtop.createWindow(sessionId, url);
-
-        this.log.info(`Scraping content for employee URL: ${url}`);
-        const scrapedContent = await this.airtop.client.windows.scrapeContent(sessionId, window.data.windowId);
-
-        return this.extractEmployeeProfileUrls(scrapedContent.data.modelResponse.scrapedContent.text);
-      },
-    });
-
-    await this.airtop.terminateAllWindows();
-
-    const result = employeesProfileUrls.flat();
+    ).flat();
 
     this.log
       .withMetadata({
-        employeesProfileUrls: result,
+        employeesProfileUrls,
       })
       .info("Successfully obtained employee profile URLs");
 
-    return result;
+    return employeesProfileUrls;
   }
 
   /**

@@ -12,6 +12,7 @@ import {
   YC_COMPANIES_URL,
 } from "@/consts";
 import type { AirtopService } from "@/lib/services/airtop.service";
+import type { BatchOperationError, BatchOperationInput, BatchOperationResponse, BatchOperationUrl } from "@airtop/sdk";
 import type { LogLayer } from "loglayer";
 
 /**
@@ -36,13 +37,11 @@ export class YCExtractorService {
    * Gets the Y Combinator batches from the Y Combinator Company Directory page.
    * @returns {Promise<string[]>} A promise that resolves to an array of batches
    */
-  async getYcBatches(sessionId?: string): Promise<string[]> {
+  async getYcBatches(sessionId: string): Promise<string[]> {
     this.log.info("Initiating fetch to get YC batches");
 
     // Get session info if provided, otherwise create a new session
-    const session = sessionId
-      ? await this.airtop.client.sessions.getInfo(sessionId)
-      : await this.airtop.createSession();
+    const session = await this.airtop.client.sessions.getInfo(sessionId);
 
     // YC Company Directory window
     const window = await this.airtop.client.windows.create(session.data.id, {
@@ -83,12 +82,10 @@ export class YCExtractorService {
    * @param {string} sessionId - The ID of the session
    * @returns {Promise<string[]>} A promise that resolves to an array of company names
    */
-  async getCompaniesInBatch(batch: string, sessionId?: string): Promise<Company[]> {
+  async getCompaniesInBatch(batch: string, sessionId: string): Promise<Company[]> {
     this.log.info(`Initiating fetch to get companies in Y Combinator batch "${batch}"`);
 
-    const session = sessionId
-      ? await this.airtop.client.sessions.getInfo(sessionId)
-      : await this.airtop.createSession();
+    const session = await this.airtop.client.sessions.getInfo(sessionId);
 
     // YC Company Directory window
     const window = await this.airtop.client.windows.create(session.data.id, {
@@ -127,44 +124,12 @@ export class YCExtractorService {
    * @param {Company[]} companies - The companies to get LinkedIn profile URLs for
    * @returns {Promise<string[]>} A promise that resolves to an array of LinkedIn profile URLs
    */
-  async getCompaniesLinkedInProfileUrls(companies: Company[]): Promise<string[]> {
-    const companyLinks = companies.map((c) => c.link);
+  async getCompaniesLinkedInProfileUrls(companies: Company[]): Promise<BatchOperationUrl[]> {
+    const companyUrls: BatchOperationUrl[] = companies.map((c) => ({ url: c.link }));
 
-    this.log.info("Getting LinkedIn profile URLs for companies");
-    const companyLinkedInProfileUrls = await Promise.all(
-      companyLinks.map(async (link) => this.getCompanyLinkedInProfileUrl(link)),
-    );
-
-    this.log
-      .withMetadata({
-        linkedInProfileUrls: companyLinkedInProfileUrls,
-      })
-      .info("Successfully fetched LinkedIn profile urls for the companies");
-
-    return companyLinkedInProfileUrls.filter(Boolean) as string[];
-  }
-
-  /**
-   * PRIVATE METHOD
-   * Gets the LinkedIn profile URL for a company.
-   * @param {string} companyLink - The URL of the company to get the LinkedIn profile URL for
-   * @returns {Promise<string | null>} A promise that resolves to the LinkedIn profile URL or null if not found
-   */
-  private async getCompanyLinkedInProfileUrl(companyLink: string): Promise<string | null> {
-    let sessionId: string | undefined;
-    let windowId: string | undefined;
-
-    try {
-      this.log.info(`Creating session to get LinkedIn profile URL for ${companyLink}`);
-      const session = await this.airtop.createSession();
-      sessionId = session.data.id;
-      const window = await this.airtop.client.windows.create(session.data.id, {
-        url: companyLink,
-      });
-      windowId = window.data.windowId;
-
-      this.log.info(`Scraping for LinkedIn profile URL via ${companyLink}`);
-      const modelResponse = await this.airtop.client.windows.pageQuery(session.data.id, window.data.windowId, {
+    const getProfileUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<BatchOperationUrl>> => {
+      this.log.info(`Scraping for LinkedIn profile URL ${input.operationUrl.url}`);
+      const modelResponse = await this.airtop.client.windows.pageQuery(input.sessionId, input.windowId, {
         prompt: GET_COMPANY_LINKEDIN_PROFILE_URL_PROMPT,
         configuration: {
           outputSchema: GET_COMPANY_LINKEDIN_PROFILE_URL_OUTPUT_SCHEMA,
@@ -172,30 +137,37 @@ export class YCExtractorService {
       });
 
       if (!modelResponse.data.modelResponse || modelResponse.data.modelResponse === "") {
-        return null;
+        throw new Error("No LinkedIn profile URL found");
       }
 
       const response = JSON.parse(modelResponse.data.modelResponse) as GetCompanyLinkedInProfileUrlResponse;
 
       if (response.error) {
-        return null;
+        throw new Error(response.error);
       }
 
-      return response.linkedInProfileUrl;
-    } catch (error: any) {
-      this.log
-        .withError(error?.message ?? error)
-        .withMetadata({ sessionId, windowId })
-        .error(`Skipping LinkedIn profile URL for ${companyLink} due to an error`);
-      return null;
-    } finally {
-      if (windowId) {
-        await this.airtop.terminateWindow(windowId);
+      if (!response.linkedInProfileUrl) {
+        throw new Error("Failed to parse LinkedIn profile URL");
       }
 
-      if (sessionId) {
-        await this.airtop.terminateSession(sessionId);
-      }
-    }
+      return {
+        data: { url: response.linkedInProfileUrl },
+      };
+    };
+
+    const handleError = async ({ error, operationUrls }: BatchOperationError) => {
+      this.log.withError(error).withMetadata({ operationUrls }).error("Error extracting LinkedIn profile URL");
+    };
+
+    this.log.info("Getting LinkedIn profile URLs for companies");
+    const profileUrls = await this.airtop.client.batchOperate(companyUrls, getProfileUrl, { onError: handleError });
+
+    this.log
+      .withMetadata({
+        linkedInProfileUrls: companyUrls,
+      })
+      .info("Successfully fetched LinkedIn profile urls for the companies");
+
+    return profileUrls.filter((url) => url.url !== null);
   }
 }
