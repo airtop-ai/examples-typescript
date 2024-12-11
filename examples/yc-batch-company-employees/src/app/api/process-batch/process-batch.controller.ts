@@ -25,11 +25,6 @@ export async function processBatchController({
     // At this point we should be logged in, so we terminate the session to persist profile
     await airtop.terminateSession(sessionId);
 
-    // Extra sleep to ensure the profile is persisted
-    log.withMetadata({ now: Date.now() }).info("Sleeping for 30 seconds to ensure the profile is persisted...");
-    await new Promise((resolve) => setTimeout(resolve, 30_000));
-    log.withMetadata({ now: Date.now() }).info("Done sleeping, continuing...");
-
     // Get employee list url for each company
     const employeesListUrls = await linkedin.getEmployeesListUrls({
       companyLinkedInProfileUrls: linkedInProfileUrls,
@@ -59,6 +54,8 @@ export async function processBatchController({
     };
   } finally {
     log.debug("Final cleanup");
-    await airtop.terminateSession(sessionId);
+    airtop.terminateSession(sessionId).catch((e) => {
+      log.error(`Error occurred in final cleanup: ${e}`);
+    });
   }
 }

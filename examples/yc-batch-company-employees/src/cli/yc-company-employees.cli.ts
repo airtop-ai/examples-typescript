@@ -79,11 +79,6 @@ async function cli() {
     // Terminate session to persist profile
     await airtop.terminateSession(ycSession.data.id);
 
-    // Extra sleep to ensure the profile is persisted
-    log.withMetadata({ now: Date.now() }).info("Sleeping for 30 seconds to ensure the profile is persisted...");
-    await new Promise((resolve) => setTimeout(resolve, 30_000));
-    log.withMetadata({ now: Date.now() }).info("Done sleeping, continuing...");
-
     const employeesListUrls = await linkedInService.getEmployeesListUrls({
       companyLinkedInProfileUrls: linkedInProfileUrls,
       profileId: latestProfileId,
@@ -99,7 +94,9 @@ async function cli() {
     log.error(`Error occurred in main script: ${err}`);
   } finally {
     log.debug("Final cleanup");
-    await airtop.terminateSession(ycSession?.data.id);
+    airtop.terminateSession(ycSession?.data.id).catch((e) => {
+      log.error(`Error occurred in final cleanup: ${e}`);
+    });
   }
 
   process.exit(0);
