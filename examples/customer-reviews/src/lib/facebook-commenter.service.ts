@@ -217,7 +217,7 @@ export class FacebookCommenterService {
 
     this.log.info("Replying to customer...");
     const result = await this.client.windows.type(sessionId, windowId, {
-      elementDescription: `The comment box below the comment that begins with "${beginOfComment}..."`,
+      elementDescription: `The input field that says "Comment as..." for the comment "${beginOfComment}..."`,
       text: review.reply,
       pressEnterKey: true, // Press Enter after typing
     });

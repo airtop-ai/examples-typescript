@@ -5,7 +5,7 @@ export const LOGIN_URL = "https://www.facebook.com/login";
 
 // Login Prompt
 export const IS_LOGGED_IN_PROMPT =
-  "This browser is open to a page that either display's a restaurant profile or prompts the user to login.  Please give me a JSON response matching the schema below.";
+  "This browser is open to a page that either displays a restaurant profile or prompts the user to login.  Please give me a JSON response matching the schema below.";
 
 export const IS_LOGGED_IN_OUTPUT_SCHEMA = {
   $schema: "http://json-schema.org/draft-07/schema#",
