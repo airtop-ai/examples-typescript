@@ -1,3 +1,5 @@
+export * from "./alert.jsx";
+export * from "./avatar.jsx";
 export * from "./card.jsx";
 export * from "./input.jsx";
 export * from "./label.jsx";

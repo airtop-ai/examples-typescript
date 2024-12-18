@@ -13,6 +13,7 @@ export enum ExampleSite {
   YC_BATCH_COMPANY_EMPLOYEES = "YC_BATCH_COMPANY_EMPLOYEES",
   CUSTOMER_REVIEWS = "CUSTOMER_REVIEWS",
   SIMPLE_INTERACTIONS = "SIMPLE_INTERACTIONS",
+  SOCIAL_MEDIA_LISTENING = "SOCIAL_MEDIA_LISTENING",
 }
 
 export const exampleListings: Record<ExampleSite, ExampleListing> = {
@@ -48,6 +49,13 @@ export const exampleListings: Record<ExampleSite, ExampleListing> = {
       description: `This example showcases how to use Airtop's AI APIs to interact with a browser. This simple example navigates to [Google Finance](https://www.google.com/finance/), 
       searches for given ticker, symbol selects a 6M timeframe, and extracts the percentage change. This can be easily accomplished with a few lines of code.
       Check out the [repo](https://github.com/airtop-ai/examples-typescript/tree/main/examples/simple-interactions) for the full code.`,
+    },
+  },
+  [ExampleSite.SOCIAL_MEDIA_LISTENING]: {
+    dirName: "social-media-listening",
+    metadata: {
+      title: "Airtop: Social Media Listening",
+      description: "Monitor and comment in posts of your interest.",
     },
   },
 };
