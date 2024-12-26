@@ -149,7 +149,7 @@ export class XInteractionService {
     const startTime = Date.now();
 
     const extractionPrompt = trimPrompt(EXTRACT_POSTS_PROMPT, "{MATCH_PROMPT}", matchPrompt).replace(
-      "{REASULT_LIMIT}",
+      "{RESULT_LIMIT}",
       `${resultLimit}`,
     );
 

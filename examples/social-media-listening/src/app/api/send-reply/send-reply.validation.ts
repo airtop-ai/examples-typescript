@@ -7,9 +7,7 @@ export const sendReplySchema = z.object({
   reply: z.string().min(10).describe("The reply to send"),
 });
 
-export const sendReplyResponseSchema = z.object({
-  message: z.string().describe("The message to send"),
-});
-
 export type SendReplyRequest = z.infer<typeof sendReplySchema>;
-export type SendReplyResponse = z.infer<typeof sendReplyResponseSchema>;
+export interface SendReplyResponse {
+  message: string;
+}

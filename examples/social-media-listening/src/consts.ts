@@ -42,7 +42,7 @@ const postSchema = z
   })
   .describe("Post information");
 
-export const EXTRACT_POSTS_PROMPT = `This is the X feed. Please extract the first {REASULT_LIMIT} posts that match the criteria below, extract the URL to the post, the author's username and the post content.
+export const EXTRACT_POSTS_PROMPT = `This is the X feed. Please extract the first {RESULT_LIMIT} posts that match the criteria below, extract the URL to the post, the author's username and the post content.
 
 Criteria: {MATCH_PROMPT}`;
 

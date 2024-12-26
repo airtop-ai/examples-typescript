@@ -18,12 +18,14 @@ Once the app is configured, the agent will go to x.com, ask to sign in if necess
 
 ## Code
 
-The Airtop code used by the web application and CLI is located in `src/lib/x-interaction.service.ts` as a class
-called `XInteractionService`.
+The core functionality of this application is implemented in the `src/lib/x-interaction.service.ts` file as a class
+called `XInteractionService`. Both the web application and CLI script use this class to interact with X.
 
-- This is implemented in the web application in the Next.js app router API routes in `src/app/api`.
+**Other key files:**
+- The prompts and values used for the demo are located in `src/consts.ts`
+- `src/app/api` contains the API routes for the Next.js application.
 - The CLI implementation is found in `src/cli/social-media-listening.cli.ts`.
-- The prompts and values used for the demo is located in `src/consts.ts`
+
 
 ## Installation
 
@@ -47,9 +49,9 @@ In most cases, you should be able to access the web application at [http://local
 
 **Configuration**
 
-The CLI requires certain environment variables to function correctly. You can set these variables in a `.env` file at the root of the project.
+The CLI requires certain environment variables to function correctly. You can set these variables in the `.env` file that was created after installing the project's dependencies. You can find the `.env` file in the root of the project (at the same level as this README file).
 
-*`.env` File:*
+*Variables in the `.env` file:*
 
 ```
 AIRTOP_API_KEY=your_airtop_api_key

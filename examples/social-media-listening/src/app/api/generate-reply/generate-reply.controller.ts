@@ -22,7 +22,7 @@ export async function generateReplyController({
   // Initialize the interactions service
   const service = new XInteractionService({ apiKey, log });
 
-  // Search for posts
+  // Generate a reply
   const result = await service.generateReply({ sessionId, windowId, postLink, replyPrompt });
 
   // Return result

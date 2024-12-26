@@ -20,7 +20,7 @@ export async function sendReplyController({
   // Initialize the interactions service
   const service = new XInteractionService({ apiKey, log });
 
-  // Search for posts
+  // Send a reply
   await service.sendReply({ sessionId, windowId, reply });
 
   // Return result
