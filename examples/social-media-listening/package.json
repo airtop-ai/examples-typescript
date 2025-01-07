@@ -1,0 +1,49 @@
+{
+  "name": "social-media-listening",
+  "description": "Airtop Demo: Monitor and comment in posts you're interested in",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf .turbo .next node_modules",
+    "cli": "NODE_OPTIONS=\"--no-deprecation\" tsx ./src/cli/social-media-listening.cli.ts",
+    "dev": "next dev --turbopack",
+    "build": "pnpm run lint && next build",
+    "start": "next start",
+    "lint": "biome check --write --unsafe src && biome format src --write && biome lint src --fix",
+    "verify-types": "tsc --project tsconfig.json --noEmit",
+    "postinstall": "copy-files-from-to"
+  },
+  "dependencies": {
+    "@airtop/sdk": "0.1.6",
+    "@hookform/resolvers": "3.9.1",
+    "@inquirer/prompts": "7.1.0",
+    "@internal/home-config": "workspace:*",
+    "@local/ui": "workspace:*",
+    "@local/utils": "workspace:*",
+    "chalk": "5.3.0",
+    "immer": "10.1.1",
+    "loglayer": "4.8.0",
+    "lucide-react": "0.462.0",
+    "next": "15.0.3",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-hook-form": "7.53.2",
+    "zod": "3.23.8",
+    "zod-to-json-schema": "3.23.5",
+    "zustand": "5.0.1"
+  },
+  "devDependencies": {
+    "@local/tailwind-config": "workspace:*",
+    "@local/typescript-config": "workspace:*",
+    "@types/node": "22.10.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "copy-files-from-to": "3.12.0",
+    "dotenv": "^16.4.7",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.15",
+    "tsx": "4.19.2",
+    "typescript": "5.7.2"
+  }
+}
