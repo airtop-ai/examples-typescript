@@ -14,6 +14,7 @@ export enum ExampleSite {
   CUSTOMER_REVIEWS = "CUSTOMER_REVIEWS",
   SIMPLE_INTERACTIONS = "SIMPLE_INTERACTIONS",
   SOCIAL_MEDIA_LISTENING = "SOCIAL_MEDIA_LISTENING",
+  LEAD_GENERATION = "LEAD_GENERATION",
 }
 
 export const exampleListings: Record<ExampleSite, ExampleListing> = {
@@ -26,6 +27,14 @@ export const exampleListings: Record<ExampleSite, ExampleListing> = {
       you will be able to continue extracting data from a profile (we hardcoded our CEO's profiles for this example, but you can [take the code from the repo](https://github.com/airtop-ai/examples-typescript/tree/main/examples/linkedin-data-extraction) and extract data from any LinkedIn profile).
       Once you've logged in once, you can take the profileId and re-use it to extract data from the same profile without the need to sign in again. This shows how we can store profile information to do a one-time
       human-in-the-loop authentication action, and subsquent, fully autonomous extractions.`,
+    },
+  },
+  [ExampleSite.LEAD_GENERATION]: {
+    dirName: "lead-generation",
+    metadata: {
+      title: "Lead Generation",
+      description:
+        "This example showcases how to use Airtop's AI APIs to gather information about a page containing a list of therapists, and then generate lead information with outreach messages tailored to each therapist. This example is orchestrated with Langchain's Langgraph tools",
     },
   },
   [ExampleSite.YC_BATCH_COMPANY_EMPLOYEES]: {
