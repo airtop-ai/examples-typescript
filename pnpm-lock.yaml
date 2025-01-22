@@ -127,8 +127,8 @@ importers:
   examples/cli-only-template:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.6
-        version: 0.1.6(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.12
+        version: 0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@inquirer/prompts':
         specifier: 7.1.0
         version: 7.1.0(@types/node@22.10.0)
@@ -164,8 +164,8 @@ importers:
   examples/customer-reviews:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.6
-        version: 0.1.6(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.12
+        version: 0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
@@ -267,8 +267,8 @@ importers:
   examples/linkedin-data-extraction:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.6
-        version: 0.1.6(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.12
+        version: 0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
@@ -367,8 +367,8 @@ importers:
   examples/simple-interactions:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.6
-        version: 0.1.6(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.12
+        version: 0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
@@ -467,8 +467,8 @@ importers:
   examples/social-media-listening:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.6
-        version: 0.1.6(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.12
+        version: 0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
@@ -555,8 +555,8 @@ importers:
   examples/yc-batch-company-employees:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.7
-        version: 0.1.7(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.12
+        version: 0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
@@ -798,8 +798,8 @@ importers:
         version: 4.8.0
     optionalDependencies:
       '@airtop/sdk':
-        specifier: 0.1.5
-        version: 0.1.5(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.12
+        version: 0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       next:
         specifier: 15.0.3
         version: 15.0.3(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
@@ -825,22 +825,8 @@ importers:
 
 packages:
 
-  '@airtop/sdk@0.1.5':
-    resolution: {integrity: sha512-qk0qPPdMyS76SknW6M5bMthNdHUVltExJnl3z0WbsPwfBCIwxZd3r5fYC4jNHU5gUxFzukTE7FOMCml6q5RKYg==}
-    peerDependencies:
-      playwright: '>=1.47.2'
-      puppeteer: '>=22.14.0'
-      selenium-webdriver: '>=4.25.0'
-
-  '@airtop/sdk@0.1.6':
-    resolution: {integrity: sha512-Kn+sAmLlAs7QvvsbrSwF/seYOAAiKPy0aVIFqq/7dOAbm6BgeZLjwaqz7cfEwfU5u8foDlP6et1Ku7K+zncb0Q==}
-    peerDependencies:
-      playwright: '>=1.47.2'
-      puppeteer: '>=22.14.0'
-      selenium-webdriver: '>=4.25.0'
-
-  '@airtop/sdk@0.1.7':
-    resolution: {integrity: sha512-4X/GkgPbujG2LhGuxFXncJjiPYitFP26+Mhr0gVPWaGsQO8p+1L43HYLMFjFHwp/s4sGU6iGx98PAFQAIkoHwg==}
+  '@airtop/sdk@0.1.12':
+    resolution: {integrity: sha512-opJJUFaCBUE27c+3HW5uF7LLqxw0sDeB1lgtXy9fLqPMwy3YBYkPb1MS1DKGwoKEIvdpflIbPGQkQYtfVPSAmg==}
     peerDependencies:
       playwright: '>=1.47.2'
       puppeteer: '>=22.14.0'
@@ -2372,6 +2358,9 @@ packages:
   esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
+
+  eventemitter3@5.0.1:
+    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
 
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
@@ -3980,38 +3969,10 @@ packages:
 
 snapshots:
 
-  '@airtop/sdk@0.1.5(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
-    dependencies:
-      form-data: 4.0.1
-      formdata-node: 6.0.3
-      js-base64: 3.7.2
-      node-fetch: 2.7.0
-      playwright: 1.48.2
-      puppeteer: 23.7.1(typescript@5.7.2)
-      qs: 6.11.2
-      selenium-webdriver: 4.26.0
-      url-join: 4.0.1
-    transitivePeerDependencies:
-      - encoding
-    optional: true
-
-  '@airtop/sdk@0.1.6(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
-    dependencies:
-      form-data: 4.0.1
-      formdata-node: 6.0.3
-      js-base64: 3.7.2
-      node-fetch: 2.7.0
-      playwright: 1.48.2
-      puppeteer: 23.7.1(typescript@5.7.2)
-      qs: 6.11.2
-      selenium-webdriver: 4.26.0
-      url-join: 4.0.1
-    transitivePeerDependencies:
-      - encoding
-
-  '@airtop/sdk@0.1.7(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
+  '@airtop/sdk@0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
     dependencies:
       async-mutex: 0.5.0
+      eventemitter3: 5.0.1
       form-data: 4.0.1
       formdata-node: 6.0.3
       js-base64: 3.7.2
@@ -5661,6 +5622,8 @@ snapshots:
   estree-util-is-identifier-name@3.0.0: {}
 
   esutils@2.0.3: {}
+
+  eventemitter3@5.0.1: {}
 
   extend@3.0.2: {}
 

@@ -1,5 +1,5 @@
 import { LinkedInExtractorService } from "@/linkedin-extractor.service";
-import { confirm, input } from "@inquirer/prompts";
+import { confirm, input, select } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
 import chalk from "chalk";
 
@@ -8,16 +8,40 @@ import chalk from "chalk";
  */
 async function cli() {
   const log = getLogger();
+  let profileName = "";
 
   const apiKey = await input({
     message: "Enter your Airtop API key:",
     required: true,
   });
 
-  const profileId = await input({
-    message: "(optional) Enter a browser profile ID to use:",
-    required: false,
+  const profileAnswer = await select({
+    message: "Do you want to use a profile for this session?",
+    choices: [
+      {
+        name: "Create a new profile",
+        value: "create",
+        short: "Create one",
+      },
+      {
+        name: "Use an existing profile",
+        value: "use",
+        short: "Use existing",
+      },
+      {
+        name: "Don't use a profile",
+        value: "none",
+        short: "None",
+      },
+    ],
   });
+
+  if (profileAnswer === "create" || profileAnswer === "use") {
+    profileName = await input({
+      message: "Enter the profile name to use in the session:",
+      required: true,
+    });
+  }
 
   const service = new LinkedInExtractorService({
     apiKey,
@@ -27,8 +51,12 @@ async function cli() {
   let sessionAndWindow = undefined;
 
   try {
-    sessionAndWindow = await service.initializeSessionAndBrowser(profileId);
+    sessionAndWindow = await service.initializeSessionAndBrowser(profileAnswer === "use" ? profileName : undefined);
     const { session, windowInfo } = sessionAndWindow;
+
+    if (profileAnswer === "create") {
+      await service.saveProfileOnTermination(session.id, profileName);
+    }
 
     const isSignedIn = await service.checkIfSignedIntoLinkedIn({
       sessionId: session.id,
@@ -65,6 +93,9 @@ async function cli() {
 }
 
 cli().catch((e) => {
+  if (e?.message?.includes("404")) {
+    console.error("Profile name not found, please create a new profile or use an existing one.");
+  }
   console.error(e);
   process.exit(1);
 });

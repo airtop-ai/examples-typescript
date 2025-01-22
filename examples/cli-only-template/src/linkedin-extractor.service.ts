@@ -49,16 +49,15 @@ export class LinkedInExtractorService {
 
   /**
    * Initializes a new browser session and window.
-   * @param {string} [profileId] - Optional profile ID for session persistence
+   * @param {string} [profileName] - Optional profile name for session persistence
    * @returns {Promise<{session: any, windowInfo: any}>} Session and window information
    */
-  async initializeSessionAndBrowser(profileId?: string): Promise<{ session: any; windowInfo: any }> {
+  async initializeSessionAndBrowser(profileName?: string): Promise<{ session: any; windowInfo: any }> {
     this.log.info("Creating a new session");
     const createSessionResponse = await this.client.sessions.create({
       configuration: {
         timeoutMinutes: 10,
-        persistProfile: !profileId, // Only persist a new profile if we do not have an existing profileId
-        baseProfileId: profileId,
+        profileName,
       },
     });
 
@@ -105,6 +104,11 @@ export class LinkedInExtractorService {
     }
 
     return parsedResponse.isLoggedIn;
+  }
+
+  async saveProfileOnTermination(sessionId: string, profileName: string): Promise<void> {
+    this.log.info(`Profile '${profileName}' will be saved on session termination.`);
+    await this.client.sessions.saveProfileOnTermination(sessionId, profileName);
   }
 
   /**
