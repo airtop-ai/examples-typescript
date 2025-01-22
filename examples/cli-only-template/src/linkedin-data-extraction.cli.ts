@@ -54,7 +54,7 @@ async function cli() {
     sessionAndWindow = await service.initializeSessionAndBrowser(profileAnswer === "use" ? profileName : undefined);
     const { session, windowInfo } = sessionAndWindow;
 
-    if (profileAnswer === "create") {
+    if (profileAnswer === "create" || profileAnswer === "use") {
       await service.saveProfileOnTermination(session.id, profileName);
     }
 

@@ -49,7 +49,7 @@ export class LinkedInExtractorService {
 
   /**
    * Initializes a new browser session and window.
-   * @param {string} [profileName] - Optional profile name for session persistence
+   * @param {string} [profileName] - Optional profile name for creating a new profile for session persistence
    * @returns {Promise<{session: any, windowInfo: any}>} Session and window information
    */
   async initializeSessionAndBrowser(profileName?: string): Promise<{ session: any; windowInfo: any }> {
