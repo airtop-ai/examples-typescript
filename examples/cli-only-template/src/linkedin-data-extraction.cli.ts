@@ -93,8 +93,8 @@ async function cli() {
 }
 
 cli().catch((e) => {
-  if (e?.message?.includes("404")) {
-    console.error("Profile name not found, please create a new profile or use an existing one.");
+  if (e?.message?.includes("unable to create a new session")) {
+    console.error(chalk.yellow("Please make sure you are using an existing profile name."));
   }
   console.error(e);
   process.exit(1);
