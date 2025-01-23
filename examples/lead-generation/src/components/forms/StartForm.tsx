@@ -12,13 +12,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Form,
   Input,
   useHandleError,
 } from "@local/ui";
 import { getFetchBasePath } from "@local/utils";
 import { useCallback } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 
 export function StartForm() {
   const setStartResponse = useAppStore((state) => state.setStartResponse);
