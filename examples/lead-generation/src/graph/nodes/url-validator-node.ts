@@ -2,6 +2,7 @@ import { getAirtopClient } from "@/airtop-client";
 import type { Url, UrlOutput, UrlState } from "@/graph/state";
 import { URL_VALIDATOR_OUTPUT_SCHEMA } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
+import { getLogger } from "@local/utils";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
 // Name of the edge
@@ -87,6 +88,9 @@ Your task is to determine if the webpage matches the following criteria:
  * @returns The graph state with the validated URLs
  */
 export const urlValidatorNode = async (state: UrlState) => {
+  const log = getLogger().withPrefix("[urlValidatorNode]");
+  log.withMetadata({ urls: state.urls }).debug("Validating URLs");
+
   const airtopClient = getAirtopClient(process.env.AIRTOP_API_KEY!);
 
   const links = state.urls.map((url) => ({ url: url.url })).filter((url) => validateString(url.url));
@@ -121,6 +125,8 @@ export const urlValidatorNode = async (state: UrlState) => {
   const handleError = async ({ error }: BatchOperationError) => {};
 
   const validatedUrls = await airtopClient.batchOperate(links, validateUrl, { onError: handleError });
+
+  log.withMetadata({ urls: validatedUrls }).debug("Urls that were validated");
 
   return {
     ...state,

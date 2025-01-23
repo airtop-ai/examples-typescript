@@ -8,6 +8,7 @@ import {
   type UrlState,
 } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
+import { getLogger } from "@local/utils";
 
 const FETCH_THERAPISTS_PROMPT = `
 You are looking at a webpage that contains a list of therapists.
@@ -37,6 +38,8 @@ export const FETCH_THERAPISTS = "fetch-therapists";
  * @returns The updated state of the URL validator node.
  */
 export const fetchTherapistsNode = async (state: UrlState) => {
+  const log = getLogger().withPrefix("[fetchTherapistsNode]");
+
   const websiteLinks = state.urls.map((url) => ({ url: url.url }));
 
   const airtopClient = getAirtopClient(process.env.AIRTOP_API_KEY!);
@@ -69,6 +72,8 @@ export const fetchTherapistsNode = async (state: UrlState) => {
   };
 
   const results = await airtopClient.batchOperate(websiteLinks, fetchTherapists, { onError: handleError });
+
+  log.withMetadata({ results }).debug("Fetched therapists successfully");
 
   // We expect the response to be an array of one object with the therapists.
   // For that reason, we set the state field of therapists to that single object

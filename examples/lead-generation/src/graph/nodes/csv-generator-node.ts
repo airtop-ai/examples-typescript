@@ -10,9 +10,10 @@ export const CSV_GENERATOR_NODE_NAME = "csv-generator";
  * @returns Void (it writes to a file and saves it locally)
  */
 export const csvGeneratorNode = async (state: TherapistState) => {
-  const log = getLogger();
+  const log = getLogger().withPrefix("[csvGeneratorNode]");
+  log.debug("Generating CSV file");
 
-  const CSV_FILE_NAME = "therapists.csv";
+  const CSV_FILE_NAME = "lead-generation-results.csv";
   const columns = ["name", "email", "phone", "website", "source", "message"];
   let csvContent = `${columns.join(",")}\n`;
 

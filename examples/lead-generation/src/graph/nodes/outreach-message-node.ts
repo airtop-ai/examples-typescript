@@ -1,6 +1,7 @@
 import type { Therapist, TherapistState } from "@/graph/state";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { OpenAI } from "@langchain/openai";
+import { getLogger } from "@local/utils";
 
 let openai: OpenAI | null = null;
 
@@ -72,6 +73,9 @@ export const OUTREACH_MESSAGE_NODE_NAME = "outreach-message-node";
  * @returns The updated state of the therapist node with the outreach messages.
  */
 export const outreachMessageNode = async (state: TherapistState) => {
+  const log = getLogger().withPrefix("[outreachMessageNode]");
+  log.debug("Adding outreach messages to therapists");
+
   const therapistsWithOutreachMessage = await Promise.all(state.therapists.map(addMessageToTherapist));
 
   return {
