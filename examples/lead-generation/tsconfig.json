@@ -1,37 +1,20 @@
 {
     "extends": "@local/typescript-config/base.json",
     "compilerOptions": {
-        "plugins": [
-            {
-                "name": "next"
-            }
-        ],
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
-        "target": "ES2023",
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "allowJs": true,
-        "jsx": "preserve",
-        "noEmit": true,
-        "incremental": true,
-        "allowImportingTsExtensions": true,
-        "paths": {
-            "@/*": [
-                "./src/*"
-            ]
-        }
+      "plugins": [{ "name": "next" }],
+      "lib": ["dom", "dom.iterable", "esnext"],
+      "target": "ES2023",
+      "module": "ESNext",
+      "moduleResolution": "Bundler",
+      "allowJs": true,
+      "jsx": "preserve",
+      "noEmit": true,
+      "incremental": true,
+      "paths": {
+        "@/*": ["./src/*"]
+      }
     },
-    "include": [
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx",
-        ".next/types/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
-}
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+    "exclude": ["node_modules"]
+  }
+  
