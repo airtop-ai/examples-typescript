@@ -27,13 +27,16 @@ type FormData = z.infer<typeof formSchema>;
 
 export function StartForm() {
   const setOpenAiKey = useAppStore((state) => state.setOpenAiKey);
+  const apiKey = useAppStore((state) => state.apiKey);
   const setUrls = useAppStore((state) => state.setUrls);
+  const setStartResponse = useAppStore((state) => state.setStartResponse);
   const handleError = useHandleError();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       openAiKey: "",
+      apiKey,
       urls: [],
     },
   });
@@ -57,13 +60,16 @@ export function StartForm() {
         });
 
         if (!response.ok) {
-          throw await response.json();
+          const errorData = await response.json();
+          throw errorData;
         }
 
         const result = await response.json();
         if (result.error) {
           throw result;
         }
+
+        setStartResponse(result);
       } catch (e) {
         handleError({
           error: {
@@ -74,7 +80,7 @@ export function StartForm() {
         });
       }
     },
-    [setOpenAiKey, setUrls, handleError],
+    [setOpenAiKey, setUrls, handleError, setStartResponse],
   );
 
   const addUrl = useCallback(
