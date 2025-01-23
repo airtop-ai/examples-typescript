@@ -29,5 +29,9 @@ export const csvGeneratorNode = async (state: TherapistState) => {
   log.info(`CSV file ${CSV_FILE_NAME} created successfully`);
   log.info(`File location: ${process.cwd()}/${CSV_FILE_NAME}`);
 
-  return state;
+  return {
+    ...state,
+    csvContent,
+    csvPath: CSV_FILE_NAME,
+  };
 };

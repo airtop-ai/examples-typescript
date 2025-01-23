@@ -7,7 +7,13 @@ import { URL_VALIDATOR, urlValidatorNode, validUrlCounterEdge } from "@/graph/no
 import { state } from "@/graph/state";
 import { END, START, StateGraph } from "@langchain/langgraph";
 
-export const leadGenerationGraph = (graphInputs: string[]) => {
+export type LeadGenerationGraphResult = {
+  csvContent: string;
+  csvPath: string;
+  error: string;
+};
+
+export const leadGenerationGraph = async (graphInputs: string[]): Promise<LeadGenerationGraphResult> => {
   const graphBuilder = new StateGraph(state)
     .addNode(URL_VALIDATOR, urlValidatorNode)
     .addNode(FETCH_THERAPISTS, fetchTherapistsNode)
@@ -27,7 +33,9 @@ export const leadGenerationGraph = (graphInputs: string[]) => {
 
   const graph = graphBuilder.compile();
 
-  graph.invoke({
+  const result = await graph.invoke({
     urls: graphInputs.map((url) => ({ url: url })),
   });
+
+  return result;
 };

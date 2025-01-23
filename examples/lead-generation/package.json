@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@airtop/sdk": "^0.1.8",
+    "@hookform/resolvers": "3.9.1",
     "@inquirer/prompts": "7.1.0",
     "@internal/home-config": "workspace:*",
     "@langchain/core": "^0.3.27",
@@ -27,7 +28,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "2.1.1",
     "immer": "10.1.1",
-    "lucide-react": "^0.473.0",
+    "loglayer": "4.8.0",
+    "lucide-react": "0.462.0",
     "next": "15.0.3",
     "next-themes": "0.4.3",
     "react": "19.0.0-rc-66855b96-20241106",
@@ -44,7 +46,11 @@
     "@local/tailwind-config": "workspace:^",
     "@local/typescript-config": "workspace:*",
     "@types/node": "22.10.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "copy-files-from-to": "3.12.0",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.15",
     "tsx": "4.19.2",
     "typescript": "5.7.2"
   }

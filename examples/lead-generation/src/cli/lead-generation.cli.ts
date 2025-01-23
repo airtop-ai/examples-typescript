@@ -50,7 +50,9 @@ const main = async () => {
 
   // run the graph
   log.info("Running the graph...");
-  leadGenerationGraph(urls);
+  const result = await leadGenerationGraph(urls);
+  log.info("Graph finished, lets look at the result");
+  log.withMetadata(result).info("Here is the result");
 };
 
 main().catch((e) => {

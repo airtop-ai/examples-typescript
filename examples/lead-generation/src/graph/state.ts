@@ -69,4 +69,7 @@ export type UrlState = z.infer<typeof URL_STATE_SCHEMA>;
 export const state = Annotation.Root({
   therapists: Annotation<Therapist[]>,
   urls: Annotation<Url[]>,
+  csvContent: Annotation<string>,
+  csvPath: Annotation<string>,
+  error: Annotation<string>,
 });
