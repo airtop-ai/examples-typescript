@@ -10,8 +10,8 @@ import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-export const metadata: Metadata = exampleListings.YC_BATCH_COMPANY_EMPLOYEES.metadata;
-const exampleDirName = exampleListings.YC_BATCH_COMPANY_EMPLOYEES.dirName;
+export const metadata: Metadata = exampleListings.LEAD_GENERATION.metadata;
+const exampleDirName = exampleListings.LEAD_GENERATION.dirName;
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   const nextCookies = await cookies();
