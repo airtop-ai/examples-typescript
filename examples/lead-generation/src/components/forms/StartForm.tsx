@@ -14,7 +14,7 @@ import {
 } from "@local/ui";
 import type React from "react";
 import { useCallback } from "react";
-import { type Control as ControlType, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -26,7 +26,6 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function StartForm() {
-  const setApiKey = useAppStore((state) => state.setApiKey);
   const setOpenAiKey = useAppStore((state) => state.setOpenAiKey);
   const setUrls = useAppStore((state) => state.setUrls);
   const handleError = useHandleError();
@@ -34,7 +33,6 @@ export function StartForm() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      apiKey: "",
       openAiKey: "",
       urls: [],
     },
@@ -43,9 +41,12 @@ export function StartForm() {
   const onSubmit = useCallback(
     async (data: FormData) => {
       try {
-        setApiKey(data.apiKey);
         setOpenAiKey(data.openAiKey);
         setUrls(data.urls);
+
+        // Set env variables
+        process.env.AIRTOP_API_KEY = data.apiKey;
+        process.env.OPENAI_API_KEY = data.openAiKey;
 
         const response = await fetch("/api/start", {
           method: "POST",
@@ -73,7 +74,7 @@ export function StartForm() {
         });
       }
     },
-    [setApiKey, setOpenAiKey, setUrls, handleError],
+    [setOpenAiKey, setUrls, handleError],
   );
 
   const addUrl = useCallback(
@@ -109,20 +110,6 @@ export function StartForm() {
     <FormProvider {...form}>
       <form onSubmit={handleFormSubmit} className="space-y-6">
         <FormField
-          name="apiKey"
-          control={form.control as unknown as ControlType<FormData>}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Airtop API Key</FormLabel>
-              <FormControl>
-                <Input {...field} type="password" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
           name="openAiKey"
           control={form.control}
           render={({ field }) => (
@@ -135,7 +122,6 @@ export function StartForm() {
             </FormItem>
           )}
         />
-
         <FormField
           name="urls"
           control={form.control}
@@ -188,7 +174,6 @@ export function StartForm() {
             </FormItem>
           )}
         />
-
         <Button
           type="submit"
           disabled={form.formState.isSubmitting || form.watch("urls").length === 0}

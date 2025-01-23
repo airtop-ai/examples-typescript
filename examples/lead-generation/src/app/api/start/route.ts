@@ -19,6 +19,10 @@ export async function POST(request: NextRequest) {
   try {
     startRequestSchema.parse(data);
 
+    // Set env variable
+    process.env.AIRTOP_API_KEY = data.apiKey;
+    process.env.OPENAI_API_KEY = data.openAiKey;
+
     const controllerResponse = await startController({ ...data });
     return NextResponse.json<StartResponse>(controllerResponse);
   } catch (e: any) {
