@@ -1,12 +1,12 @@
 import type { z } from "zod";
 
-import { getAirtopClient } from "@/airtop-client.js";
+import { getAirtopClient } from "@/airtop-client";
 import {
   THERAPISTS_OUTPUT_JSON_SCHEMA,
   type THERAPISTS_OUTPUT_SCHEMA,
   type TherapistState,
   type UrlState,
-} from "@/graph/state.js";
+} from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
 
 const FETCH_THERAPISTS_PROMPT = `

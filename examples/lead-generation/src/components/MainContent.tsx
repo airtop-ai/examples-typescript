@@ -1,3 +1,5 @@
+"use client";
+
 import { DisplayCsvContent } from "@/components/views/DisplayCsvContent";
 import { DisplayError } from "@/components/views/DisplayError";
 import { InitializeView } from "@/components/views/InitializeView";

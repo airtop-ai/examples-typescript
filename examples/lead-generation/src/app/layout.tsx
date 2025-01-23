@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type { PropsWithChildren } from "react";
 
-import "./globals.css";
+import "./global.css";
 import { exampleListings } from "@internal/home-config";
 import { Body } from "@local/ui";
 import { getApiKeyFromCookie, serverEnvs } from "@local/utils";

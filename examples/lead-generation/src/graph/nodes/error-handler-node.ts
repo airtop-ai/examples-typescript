@@ -1,4 +1,4 @@
-import type { UrlState } from "@/graph/state.js";
+import type { UrlState } from "@/graph/state";
 
 // Name of the node
 export const ERROR_HANDLER = "error-handler";

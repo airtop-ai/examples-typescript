@@ -1,5 +1,5 @@
-import { getAirtopClient } from "@/airtop-client.js";
-import { type ENRICHED_THERAPIST_SCHEMA, THERAPIST_SCHEMA, type TherapistState } from "@/graph/state.js";
+import { getAirtopClient } from "@/airtop-client";
+import { type ENRICHED_THERAPIST_SCHEMA, THERAPIST_SCHEMA, type TherapistState } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationUrl } from "@airtop/sdk";
 import type { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";

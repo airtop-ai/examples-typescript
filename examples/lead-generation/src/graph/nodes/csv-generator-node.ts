@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import type { TherapistState } from "@/graph/state.js";
+import type { TherapistState } from "@/graph/state";
 import { getLogger } from "@local/utils";
 
 export const CSV_GENERATOR_NODE_NAME = "csv-generator";

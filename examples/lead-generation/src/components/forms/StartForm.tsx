@@ -14,7 +14,7 @@ import {
 } from "@local/ui";
 import type React from "react";
 import { useCallback } from "react";
-import { type Control, FormProvider, useForm } from "react-hook-form";
+import { type Control as ControlType, FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -110,7 +110,7 @@ export function StartForm() {
       <form onSubmit={handleFormSubmit} className="space-y-6">
         <FormField
           name="apiKey"
-          control={form.control as Control<FormData>}
+          control={form.control as unknown as ControlType<FormData>}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Airtop API Key</FormLabel>

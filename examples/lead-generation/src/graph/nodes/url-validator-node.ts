@@ -1,6 +1,6 @@
-import { getAirtopClient } from "@/airtop-client.js";
-import type { Url, UrlOutput, UrlState } from "@/graph/state.js";
-import { URL_VALIDATOR_OUTPUT_SCHEMA } from "@/graph/state.js";
+import { getAirtopClient } from "@/airtop-client";
+import type { Url, UrlOutput, UrlState } from "@/graph/state";
+import { URL_VALIDATOR_OUTPUT_SCHEMA } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
 import { zodToJsonSchema } from "zod-to-json-schema";
 

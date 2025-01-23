@@ -1,4 +1,4 @@
-import type { Therapist, TherapistState } from "@/graph/state.js";
+import type { Therapist, TherapistState } from "@/graph/state";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { OpenAI } from "@langchain/openai";
 
