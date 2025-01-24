@@ -36,7 +36,7 @@ const main = async () => {
   });
 
   // Collect the OpenAI API Key
-  const openaiApiKey = await input({
+  const openAiKey = await input({
     message: "Enter your OpenAI API key:",
     validate: (value) => {
       if (!value) return "Please enter a valid API key";
@@ -44,13 +44,9 @@ const main = async () => {
     },
   });
 
-  // Set the API Keys as environment variables
-  process.env.AIRTOP_API_KEY = apiKey;
-  process.env.OPENAI_API_KEY = openaiApiKey;
-
   // run the graph
   log.info("Running the graph...");
-  const result = await leadGenerationGraph(urls);
+  const result = await leadGenerationGraph(urls, { apiKey, openAiKey });
   log.info("Graph finished, lets look at the result");
   log.withMetadata(result).info("Here is the result");
 };

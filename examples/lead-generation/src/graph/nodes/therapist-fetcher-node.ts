@@ -2,10 +2,10 @@ import type { z } from "zod";
 
 import { getAirtopClient } from "@/airtop-client";
 import {
+  type GraphState,
   THERAPISTS_OUTPUT_JSON_SCHEMA,
   type THERAPISTS_OUTPUT_SCHEMA,
   type TherapistState,
-  type UrlState,
 } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
 import { getLogger } from "@local/utils";
@@ -37,12 +37,12 @@ export const FETCH_THERAPISTS = "fetch-therapists";
  * @param state - The state of the URL validator node.
  * @returns The updated state of the URL validator node.
  */
-export const fetchTherapistsNode = async (state: UrlState) => {
+export const fetchTherapistsNode = async (state: GraphState) => {
   const log = getLogger().withPrefix("[fetchTherapistsNode]");
 
   const websiteLinks = state.urls.map((url) => ({ url: url.url }));
 
-  const airtopClient = getAirtopClient(process.env.AIRTOP_API_KEY!);
+  const airtopClient = getAirtopClient(state.config.apiKey);
 
   const fetchTherapists = async (input: BatchOperationInput): Promise<BatchOperationResponse<TherapistState>> => {
     const modelResponse = await airtopClient.windows.pageQuery(input.sessionId, input.windowId, {

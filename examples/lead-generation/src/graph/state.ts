@@ -66,10 +66,25 @@ export type TherapistState = z.infer<typeof THERAPIST_STATE_SCHEMA>;
 
 export type UrlState = z.infer<typeof URL_STATE_SCHEMA>;
 
+export type LeadGenerationGraphConfig = {
+  apiKey: string;
+  openAiKey: string;
+};
+
+export type GraphState = {
+  therapists: Therapist[];
+  urls: Url[];
+  csvContent: string;
+  csvPath: string;
+  error: string;
+  config: LeadGenerationGraphConfig;
+};
+
 export const state = Annotation.Root({
   therapists: Annotation<Therapist[]>,
   urls: Annotation<Url[]>,
   csvContent: Annotation<string>,
   csvPath: Annotation<string>,
   error: Annotation<string>,
+  config: Annotation<LeadGenerationGraphConfig>,
 });

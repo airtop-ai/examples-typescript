@@ -3,20 +3,28 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { OpenAI } from "@langchain/openai";
 import { getLogger } from "@local/utils";
 
-let openai: OpenAI | null = null;
+const openAiClientsMap = new Map<string, OpenAI>();
 
 /**
- * Get an OpenAI instance using the singleton pattern.
- * @param apiKey - The API key for the OpenAI.
+ * Get an OpenAI instance using a cache pattern with API key as the unique identifier.
+ * @param apiKey - The API key for OpenAI.
  * @returns An instance of OpenAI.
  */
 const getOpenaiClient = (apiKey: string): OpenAI => {
-  if (!openai) {
-    openai = new OpenAI({
+  if (!openAiClientsMap.has(apiKey)) {
+    openAiClientsMap.set(
       apiKey,
-    });
+      new OpenAI({
+        apiKey,
+      }),
+    );
   }
-  return openai;
+  return openAiClientsMap.get(apiKey)!;
+};
+
+// Optional: Cleanup function to remove unused clients
+export const removeOpenAiClient = (apiKey: string): void => {
+  openAiClientsMap.delete(apiKey);
 };
 
 const outreachMessagePrompt = (therapist: Therapist) => {

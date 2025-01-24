@@ -7,9 +7,9 @@ interface StartControllerParams {
   urls: string[];
 }
 
-export async function startController({ urls }: StartControllerParams): Promise<StartResponse> {
+export async function startController({ urls, apiKey, openAiKey }: StartControllerParams): Promise<StartResponse> {
   // Execute the graph
-  const result = await leadGenerationGraph(urls);
+  const result = await leadGenerationGraph(urls, { apiKey, openAiKey });
 
   return {
     csvContent: result.csvContent,

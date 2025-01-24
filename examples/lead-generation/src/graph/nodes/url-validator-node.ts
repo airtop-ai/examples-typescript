@@ -1,5 +1,5 @@
 import { getAirtopClient } from "@/airtop-client";
-import type { Url, UrlOutput, UrlState } from "@/graph/state";
+import type { GraphState, Url, UrlOutput, UrlState } from "@/graph/state";
 import { URL_VALIDATOR_OUTPUT_SCHEMA } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
 import { getLogger } from "@local/utils";
@@ -87,11 +87,11 @@ Your task is to determine if the webpage matches the following criteria:
  * @param state - The graph state containing the URLs to validate
  * @returns The graph state with the validated URLs
  */
-export const urlValidatorNode = async (state: UrlState) => {
+export const urlValidatorNode = async (state: GraphState) => {
   const log = getLogger().withPrefix("[urlValidatorNode]");
   log.withMetadata({ urls: state.urls }).debug("Validating URLs");
 
-  const airtopClient = getAirtopClient(process.env.AIRTOP_API_KEY!);
+  const airtopClient = getAirtopClient(state.config.apiKey);
 
   const links = state.urls.map((url) => ({ url: url.url })).filter((url) => validateString(url.url));
 
