@@ -4,10 +4,10 @@ import type { ConfigurableAnnotation } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
 import type { RunnableConfig } from "@langchain/core/runnables";
 import { getLogger } from "@local/utils";
+import isUrl from "validator/lib/isURL";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { ERROR_HANDLER_NODE_NAME } from "./error-handler-node";
 import { FETCH_THERAPISTS_NODE_NAME } from "./therapist-fetcher-node";
-
 // Name of the edge
 export const VALID_URL_COUNTER_EDGE = "valid-url-counter-edge";
 
@@ -20,53 +20,6 @@ export const validUrlCounterEdge = (state: typeof StateAnnotation.State): string
   const validUrlCount = state.urls.filter((url) => !!url?.isValid).length;
 
   return validUrlCount > 0 ? FETCH_THERAPISTS_NODE_NAME : ERROR_HANDLER_NODE_NAME;
-};
-
-/**
- * Validates a string to determine if it is a valid URL
- * @param url - The URL to validate
- * @returns Whether the URL is valid
- */
-const validateString = (url: string): boolean => {
-  try {
-    // Basic string checks
-    if (!url?.trim()) {
-      return false;
-    }
-
-    if (url.length > 2048) {
-      return false;
-    }
-
-    // Parse the URL
-    const parsed = new URL(url);
-
-    // Check scheme
-    if (!["http:", "https:"].includes(parsed.protocol)) {
-      return false;
-    }
-
-    // Check domain format and invalid characters
-    const domainPattern = /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
-    if (!domainPattern.test(parsed.hostname)) {
-      return false;
-    }
-
-    // Check for common invalid characters
-    const invalidChars = '<>"{}|\\^`';
-    if ([...invalidChars].some((char) => url.includes(char))) {
-      return false;
-    }
-
-    // Check for at least one dot in domain (redundant with URL parsing but kept for parity)
-    if (!parsed.hostname.includes(".")) {
-      return false;
-    }
-
-    return true;
-  } catch (e) {
-    return false;
-  }
 };
 
 // Name of the node
@@ -99,7 +52,7 @@ export const urlValidatorNode = async (
 
   const airtopClient = config.configurable?.airtopClient!;
 
-  const links = state.urls.map((url) => ({ url: url.url })).filter((url) => validateString(url.url));
+  const links = state.urls.map((url) => ({ url: url.url })).filter((url) => isUrl(url.url));
 
   const validateUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<Url>> => {
     const modelResponse = await airtopClient.windows.pageQuery(input.sessionId, input.windowId, {
