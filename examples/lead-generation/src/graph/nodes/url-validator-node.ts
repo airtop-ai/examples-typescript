@@ -3,24 +3,15 @@ import { URL_VALIDATOR_OUTPUT_SCHEMA } from "@/graph/state";
 import type { ConfigurableAnnotation } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
 import type { RunnableConfig } from "@langchain/core/runnables";
+import { Command } from "@langchain/langgraph";
 import { getLogger } from "@local/utils";
 import isUrl from "validator/lib/isURL";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { ERROR_HANDLER_NODE_NAME } from "./error-handler-node";
 import { FETCH_THERAPISTS_NODE_NAME } from "./therapist-fetcher-node";
+
 // Name of the edge
 export const VALID_URL_COUNTER_EDGE = "valid-url-counter-edge";
-
-/**
- * Conditional edge that determines if the graph should continue to the next node based on valid URLs or go to the error handler
- * @param state - The state of the URL node
- * @returns The next node to take
- */
-export const validUrlCounterEdge = (state: typeof StateAnnotation.State): string => {
-  const validUrlCount = state.urls.filter((url) => !!url?.isValid).length;
-
-  return validUrlCount > 0 ? FETCH_THERAPISTS_NODE_NAME : ERROR_HANDLER_NODE_NAME;
-};
 
 // Name of the node
 export const URL_VALIDATOR_NODE_NAME = "url-validator-node";
@@ -87,8 +78,11 @@ export const urlValidatorNode = async (
 
   log.withMetadata({ urls: validatedUrls }).debug("Urls that were validated");
 
-  return {
-    ...state,
-    urls: validatedUrls.filter((url) => url.isValid),
-  };
+  return new Command({
+    update: {
+      ...state,
+      urls: validatedUrls.filter((url) => url.isValid),
+    },
+    goto: validatedUrls.filter((url) => url.isValid).length > 0 ? FETCH_THERAPISTS_NODE_NAME : ERROR_HANDLER_NODE_NAME,
+  });
 };
