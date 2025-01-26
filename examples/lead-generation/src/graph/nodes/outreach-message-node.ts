@@ -1,4 +1,4 @@
-import type { Therapist, TherapistState } from "@/graph/state";
+import type { GraphState, Therapist } from "@/graph/state";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { OpenAI } from "@langchain/openai";
 import { getLogger } from "@local/utils";
@@ -27,6 +27,23 @@ export const removeOpenAiClient = (apiKey: string): void => {
   openAiClientsMap.delete(apiKey);
 };
 
+const responseSchema = {
+  type: "object",
+  properties: {
+    message: {
+      type: "string",
+      description: "The outreach message for the therapist",
+      maxLength: 500, // Ensuring it stays relatively brief
+    },
+    error: {
+      type: "string",
+      description: "Error message if the request cannot be fulfilled",
+    },
+  },
+  required: ["message"],
+  additionalProperties: false,
+};
+
 const outreachMessagePrompt = (therapist: Therapist) => {
   return `
 Generate a small outreach message for the following therapist:
@@ -39,12 +56,11 @@ The message should be a small message that is 100 words or less.
 The goal of the message is to connect with the therapist to sell them an app that serves as a 
 companion for their practice.
 
-Return the message in the following JSON format:
-{{
-    "message": "The outreach message for the therapist",
-    "error": "If you cannot fulfill the request, use this field to report the problem."
-}}
-    `;
+Your response must conform to this JSON schema:
+${JSON.stringify(responseSchema, null, 2)}
+
+Ensure your response is valid JSON and matches the schema exactly.
+`;
 };
 
 /**
@@ -52,8 +68,8 @@ Return the message in the following JSON format:
  * @param therapist - The therapist to add the outreach message to.
  * @returns The updated therapist with the outreach message.
  */
-const addMessageToTherapist = async (therapist: Therapist): Promise<Therapist> => {
-  const openai = getOpenaiClient(process.env.OPENAI_API_KEY!);
+const addMessageToTherapist = async (therapist: Therapist, openAiKey: string): Promise<Therapist> => {
+  const openai = getOpenaiClient(openAiKey);
 
   const result = await openai.invoke([
     new SystemMessage("You are an AI assistant that generates outreach messages for therapists."),
@@ -80,11 +96,14 @@ export const OUTREACH_MESSAGE_NODE_NAME = "outreach-message-node";
  * @param state - The state of the therapist node.
  * @returns The updated state of the therapist node with the outreach messages.
  */
-export const outreachMessageNode = async (state: TherapistState) => {
+export const outreachMessageNode = async (state: GraphState) => {
   const log = getLogger().withPrefix("[outreachMessageNode]");
   log.debug("Adding outreach messages to therapists");
 
-  const therapistsWithOutreachMessage = await Promise.all(state.therapists.map(addMessageToTherapist));
+  const openAiKey = state.config.openAiKey;
+  const therapistsWithOutreachMessage = await Promise.all(
+    state.therapists.map((therapist) => addMessageToTherapist(therapist, openAiKey)),
+  );
 
   return {
     ...state,
