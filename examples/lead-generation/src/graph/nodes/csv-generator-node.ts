@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import type { TherapistState } from "@/graph/state";
+import type { StateAnnotation } from "@/graph/state";
 import { getLogger } from "@local/utils";
 
 export const CSV_GENERATOR_NODE_NAME = "csv-generator-node";
@@ -9,7 +9,7 @@ export const CSV_GENERATOR_NODE_NAME = "csv-generator-node";
  * @param state - The therapists state.
  * @returns Void (it writes to a file and saves it locally)
  */
-export const csvGeneratorNode = async (state: TherapistState) => {
+export const csvGeneratorNode = async (state: typeof StateAnnotation.State) => {
   const log = getLogger().withPrefix("[csvGeneratorNode]");
   log.debug("Generating CSV file");
 

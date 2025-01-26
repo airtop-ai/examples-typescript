@@ -1,27 +1,24 @@
-import { removeAirtopClient } from "@/airtop-client";
 import { CSV_GENERATOR_NODE_NAME, csvGeneratorNode } from "@/graph/nodes/csv-generator-node";
 import { ERROR_HANDLER_NODE_NAME, errorHandlerNode } from "@/graph/nodes/error-handler-node";
 import { OUTREACH_MESSAGE_NODE_NAME, outreachMessageNode } from "@/graph/nodes/outreach-message-node";
-import { removeOpenAiClient } from "@/graph/nodes/outreach-message-node";
 import { ENRICH_THERAPISTS_NODE_NAME, enrichTherapistNode } from "@/graph/nodes/therapist-enrichment-node";
 import { FETCH_THERAPISTS_NODE_NAME, fetchTherapistsNode } from "@/graph/nodes/therapist-fetcher-node";
 import { URL_VALIDATOR_NODE_NAME, urlValidatorNode, validUrlCounterEdge } from "@/graph/nodes/url-validator-node";
-import { type LeadGenerationGraphConfig, state } from "@/graph/state";
+import { ConfigurableAnnotation, type LeadGenerationGraphConfig, StateAnnotation } from "@/graph/state";
+import { AirtopClient } from "@airtop/sdk";
 import { END, START, StateGraph } from "@langchain/langgraph";
-
+import { OpenAI } from "@langchain/openai";
 export type LeadGenerationGraphResult = {
   csvContent: string;
   csvPath: string;
   error: string;
 };
 
-export type { LeadGenerationGraphConfig };
-
 export const leadGenerationGraph = async (
   graphInputs: string[],
   config: LeadGenerationGraphConfig,
 ): Promise<LeadGenerationGraphResult> => {
-  const graphBuilder = new StateGraph(state)
+  const graphBuilder = new StateGraph(StateAnnotation, ConfigurableAnnotation)
     .addNode(URL_VALIDATOR_NODE_NAME, urlValidatorNode)
     .addNode(FETCH_THERAPISTS_NODE_NAME, fetchTherapistsNode)
     .addNode(ENRICH_THERAPISTS_NODE_NAME, enrichTherapistNode)
@@ -43,14 +40,20 @@ export const leadGenerationGraph = async (
 
   const graph = graphBuilder.compile();
 
-  const result = await graph.invoke({
-    urls: graphInputs.map((url) => ({ url: url })),
-    config,
-  });
+  const airtopClient = new AirtopClient({ apiKey: config.apiKey });
+  const openAiClient = new OpenAI({ apiKey: config.openAiKey });
 
-  // Cleanup
-  removeAirtopClient(config.apiKey);
-  removeOpenAiClient(config.openAiKey);
+  const result = await graph.invoke(
+    {
+      urls: graphInputs.map((url) => ({ url: url })),
+    },
+    {
+      configurable: {
+        airtopClient,
+        openAiClient,
+      },
+    },
+  );
 
   return result;
 };

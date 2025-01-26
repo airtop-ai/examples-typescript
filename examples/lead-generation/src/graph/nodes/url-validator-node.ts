@@ -1,9 +1,12 @@
-import { getAirtopClient } from "@/airtop-client";
-import type { GraphState, Url, UrlOutput, UrlState } from "@/graph/state";
+import type { StateAnnotation, Url, UrlOutput } from "@/graph/state";
 import { URL_VALIDATOR_OUTPUT_SCHEMA } from "@/graph/state";
+import type { ConfigurableAnnotation } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
+import type { RunnableConfig } from "@langchain/core/runnables";
 import { getLogger } from "@local/utils";
 import { zodToJsonSchema } from "zod-to-json-schema";
+import { ERROR_HANDLER_NODE_NAME } from "./error-handler-node";
+import { FETCH_THERAPISTS_NODE_NAME } from "./therapist-fetcher-node";
 
 // Name of the edge
 export const VALID_URL_COUNTER_EDGE = "valid-url-counter-edge";
@@ -11,12 +14,12 @@ export const VALID_URL_COUNTER_EDGE = "valid-url-counter-edge";
 /**
  * Conditional edge that determines if the graph should continue to the next node based on valid URLs or go to the error handler
  * @param state - The state of the URL node
- * @returns The next edge to take
+ * @returns The next node to take
  */
-export const validUrlCounterEdge = (state: UrlState): string => {
+export const validUrlCounterEdge = (state: typeof StateAnnotation.State): string => {
   const validUrlCount = state.urls.filter((url) => !!url?.isValid).length;
 
-  return validUrlCount > 0 ? "fetch-therapists" : "error-handler";
+  return validUrlCount > 0 ? FETCH_THERAPISTS_NODE_NAME : ERROR_HANDLER_NODE_NAME;
 };
 
 /**
@@ -87,11 +90,14 @@ Your task is to determine if the webpage matches the following criteria:
  * @param state - The graph state containing the URLs to validate
  * @returns The graph state with the validated URLs
  */
-export const urlValidatorNode = async (state: GraphState) => {
+export const urlValidatorNode = async (
+  state: typeof StateAnnotation.State,
+  config: RunnableConfig<typeof ConfigurableAnnotation.State>,
+) => {
   const log = getLogger().withPrefix("[urlValidatorNode]");
   log.withMetadata({ urls: state.urls }).debug("Validating URLs");
 
-  const airtopClient = getAirtopClient(state.config.apiKey);
+  const airtopClient = config.configurable?.airtopClient!;
 
   const links = state.urls.map((url) => ({ url: url.url })).filter((url) => validateString(url.url));
 

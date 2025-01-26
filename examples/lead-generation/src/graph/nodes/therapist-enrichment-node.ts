@@ -1,9 +1,11 @@
-import { getAirtopClient } from "@/airtop-client";
-import { type ENRICHED_THERAPIST_SCHEMA, type GraphState, THERAPIST_SCHEMA } from "@/graph/state";
+import { type ENRICHED_THERAPIST_SCHEMA, type StateAnnotation, THERAPIST_SCHEMA } from "@/graph/state";
+import type { ConfigurableAnnotation } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationUrl } from "@airtop/sdk";
+import type { RunnableConfig } from "@langchain/core/runnables";
 import { getLogger } from "@local/utils";
 import type { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
+
 const ENRICHED_THERAPIST_JSON_SCHEMA = zodToJsonSchema(THERAPIST_SCHEMA);
 
 // Name of the Enrich Therapist Node
@@ -32,11 +34,14 @@ If no errors are found, set the error field to an empty string.`;
  * @param state - The state of the therapist node.
  * @returns The updated state of the therapist node.
  */
-export const enrichTherapistNode = async (state: GraphState) => {
+export const enrichTherapistNode = async (
+  state: typeof StateAnnotation.State,
+  config: RunnableConfig<typeof ConfigurableAnnotation.State>,
+) => {
   const log = getLogger().withPrefix("[enrichTherapistNode]");
   log.debug("Enriching therapists");
 
-  const client = getAirtopClient(state.config.apiKey);
+  const client = config.configurable?.airtopClient!;
 
   const enrichmentInput: BatchOperationUrl[] = state.therapists
     .map((therapist) => {

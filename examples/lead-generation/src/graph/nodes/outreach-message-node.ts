@@ -1,5 +1,6 @@
-import type { GraphState, Therapist } from "@/graph/state";
+import type { ConfigurableAnnotation, StateAnnotation, Therapist } from "@/graph/state";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import type { RunnableConfig } from "@langchain/core/runnables";
 import { OpenAI } from "@langchain/openai";
 import { getLogger } from "@local/utils";
 
@@ -10,7 +11,7 @@ const openAiClientsMap = new Map<string, OpenAI>();
  * @param apiKey - The API key for OpenAI.
  * @returns An instance of OpenAI.
  */
-const getOpenaiClient = (apiKey: string): OpenAI => {
+export const getOpenAiClient = (apiKey: string): OpenAI => {
   if (!openAiClientsMap.has(apiKey)) {
     openAiClientsMap.set(
       apiKey,
@@ -68,10 +69,8 @@ Ensure your response is valid JSON and matches the schema exactly.
  * @param therapist - The therapist to add the outreach message to.
  * @returns The updated therapist with the outreach message.
  */
-const addMessageToTherapist = async (therapist: Therapist, openAiKey: string): Promise<Therapist> => {
-  const openai = getOpenaiClient(openAiKey);
-
-  const result = await openai.invoke([
+const addMessageToTherapist = async (therapist: Therapist, openAiClient: OpenAI): Promise<Therapist> => {
+  const result = await openAiClient.invoke([
     new SystemMessage("You are an AI assistant that generates outreach messages for therapists."),
     new HumanMessage(outreachMessagePrompt(therapist)),
   ]);
@@ -96,13 +95,17 @@ export const OUTREACH_MESSAGE_NODE_NAME = "outreach-message-node";
  * @param state - The state of the therapist node.
  * @returns The updated state of the therapist node with the outreach messages.
  */
-export const outreachMessageNode = async (state: GraphState) => {
+export const outreachMessageNode = async (
+  state: typeof StateAnnotation.State,
+  config: RunnableConfig<typeof ConfigurableAnnotation.State>,
+) => {
   const log = getLogger().withPrefix("[outreachMessageNode]");
   log.debug("Adding outreach messages to therapists");
 
-  const openAiKey = state.config.openAiKey;
+  const openAiClient = config.configurable?.openAiClient!;
+
   const therapistsWithOutreachMessage = await Promise.all(
-    state.therapists.map((therapist) => addMessageToTherapist(therapist, openAiKey)),
+    state.therapists.map((therapist) => addMessageToTherapist(therapist, openAiClient)),
   );
 
   return {

@@ -1,14 +1,14 @@
-import type { z } from "zod";
-
-import { getAirtopClient } from "@/airtop-client";
 import {
-  type GraphState,
+  type ConfigurableAnnotation,
+  type StateAnnotation,
   THERAPISTS_OUTPUT_JSON_SCHEMA,
   type THERAPISTS_OUTPUT_SCHEMA,
   type TherapistState,
 } from "@/graph/state";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse } from "@airtop/sdk";
+import type { RunnableConfig } from "@langchain/core/runnables";
 import { getLogger } from "@local/utils";
+import type { z } from "zod";
 
 const FETCH_THERAPISTS_PROMPT = `
 You are looking at a webpage that contains a list of therapists.
@@ -37,12 +37,15 @@ export const FETCH_THERAPISTS_NODE_NAME = "therapist-fetcher-node";
  * @param state - The state of the URL validator node.
  * @returns The updated state of the URL validator node.
  */
-export const fetchTherapistsNode = async (state: GraphState) => {
+export const fetchTherapistsNode = async (
+  state: typeof StateAnnotation.State,
+  config: RunnableConfig<typeof ConfigurableAnnotation.State>,
+) => {
   const log = getLogger().withPrefix("[fetchTherapistsNode]");
 
   const websiteLinks = state.urls.map((url) => ({ url: url.url }));
 
-  const airtopClient = getAirtopClient(state.config.apiKey);
+  const airtopClient = config.configurable?.airtopClient!;
 
   const fetchTherapists = async (input: BatchOperationInput): Promise<BatchOperationResponse<TherapistState>> => {
     const modelResponse = await airtopClient.windows.pageQuery(input.sessionId, input.windowId, {

@@ -1,4 +1,6 @@
+import type { AirtopClient } from "@airtop/sdk";
 import { Annotation } from "@langchain/langgraph";
+import type { OpenAI } from "@langchain/openai";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
@@ -64,23 +66,17 @@ export type Therapist = z.infer<typeof THERAPIST_SCHEMA>;
 
 export type TherapistState = z.infer<typeof THERAPIST_STATE_SCHEMA>;
 
-export type UrlState = z.infer<typeof URL_STATE_SCHEMA>;
-
 export type LeadGenerationGraphConfig = {
   apiKey: string;
   openAiKey: string;
 };
 
-export type GraphState = {
-  therapists: Therapist[];
-  urls: Url[];
-  csvContent: string;
-  csvPath: string;
-  error: string;
-  config: LeadGenerationGraphConfig;
-};
+export const ConfigurableAnnotation = Annotation.Root({
+  airtopClient: Annotation<AirtopClient>,
+  openAiClient: Annotation<OpenAI>,
+});
 
-export const state = Annotation.Root({
+export const StateAnnotation = Annotation.Root({
   therapists: Annotation<Therapist[]>,
   urls: Annotation<Url[]>,
   csvContent: Annotation<string>,
