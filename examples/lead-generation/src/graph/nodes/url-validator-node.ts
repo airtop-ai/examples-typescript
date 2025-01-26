@@ -67,7 +67,7 @@ const validateString = (url: string): boolean => {
 };
 
 // Name of the node
-export const URL_VALIDATOR = "url-validator";
+export const URL_VALIDATOR_NODE_NAME = "url-validator-node";
 
 export const URL_VALIDATOR_PROMPT = `
 You are looking at a webpage.

@@ -7,7 +7,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 const ENRICHED_THERAPIST_JSON_SCHEMA = zodToJsonSchema(THERAPIST_SCHEMA);
 
 // Name of the Enrich Therapist Node
-export const ENRICH_THERAPISTS_NODE_NAME = "enrich-therapists" as const;
+export const ENRICH_THERAPISTS_NODE_NAME = "enrich-therapists-node";
 
 const ENRICH_THERAPISTS_PROMPT = `
 You are looking at a webpage that contains info about a specific therapist.

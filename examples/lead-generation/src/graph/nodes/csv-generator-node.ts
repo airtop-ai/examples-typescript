@@ -2,7 +2,7 @@ import fs from "node:fs";
 import type { TherapistState } from "@/graph/state";
 import { getLogger } from "@local/utils";
 
-export const CSV_GENERATOR_NODE_NAME = "csv-generator";
+export const CSV_GENERATOR_NODE_NAME = "csv-generator-node";
 
 /**
  * Langgraph Node: Generate a CSV file from the therapists state.

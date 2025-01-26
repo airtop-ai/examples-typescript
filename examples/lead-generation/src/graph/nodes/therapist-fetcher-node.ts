@@ -30,7 +30,7 @@ If no errors are found, set the error field to an empty string.
 `;
 
 // Name of the fetch therapists node
-export const FETCH_THERAPISTS = "fetch-therapists";
+export const FETCH_THERAPISTS_NODE_NAME = "therapist-fetcher-node";
 
 /**
  * Fetches the therapists from the URLs in the state
