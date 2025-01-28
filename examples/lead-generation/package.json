@@ -16,7 +16,7 @@
     "postinstall": "copy-files-from-to"
   },
   "dependencies": {
-    "@airtop/sdk": "^0.1.8",
+    "@airtop/sdk": "^0.1.13",
     "@hookform/resolvers": "3.9.1",
     "@inquirer/prompts": "7.1.0",
     "@internal/home-config": "workspace:*",
