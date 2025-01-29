@@ -61,7 +61,7 @@ export class FacebookCommenterService {
     const createSessionResponse = await this.client.sessions.create({
       configuration: {
         timeoutMinutes: 10,
-        profileName
+        profileName,
       },
     });
 
