@@ -23,7 +23,7 @@ import { useForm } from "react-hook-form";
 /**
  * StartForm Component
  * A form component that handles session's task initialization.
- * It collects an API key and profile ID from the user and makes a POST request
+ * It collects an API key and profile name from the user and makes a POST request
  * to start Airtop's session.
  */
 export function StartForm() {
@@ -40,7 +40,7 @@ export function StartForm() {
     resolver: zodResolver(startRequestSchema),
     defaultValues: {
       apiKey,
-      profileId: "",
+      profileName: "",
     },
   });
 
@@ -88,15 +88,15 @@ export function StartForm() {
     <Form {...form}>
       <form onSubmit={handleFormSubmit} className="space-y-6">
         <FormField
-          name="profileId"
+          name="profileName"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Profile ID</FormLabel>
+              <FormLabel>Profile Name</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormDescription>{startRequestSchema.shape.profileId.description}</FormDescription>
+              <FormDescription>{startRequestSchema.shape.profileName.description}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
