@@ -37,17 +37,14 @@ export const leadGenerationGraph = async (
 
   const graph = graphBuilder.compile();
 
-  const airtopClient = new AirtopClient({ apiKey: config.apiKey });
-  const openAiClient = new ChatOpenAI({ apiKey: config.openAiKey });
-
   const result = await graph.invoke(
     {
       urls: graphInputs.map((url) => ({ url: url })),
     },
     {
       configurable: {
-        airtopClient,
-        openAiClient,
+        airtopClient: new AirtopClient({ apiKey: config.apiKey }),
+        openAiClient: new ChatOpenAI({ apiKey: config.openAiKey }),
       },
     },
   );

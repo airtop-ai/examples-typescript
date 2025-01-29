@@ -62,7 +62,7 @@ export const outreachMessageNode = async (
   const log = getLogger().withPrefix("[outreachMessageNode]");
   log.debug("Adding outreach messages to therapists");
 
-  const openAiClient = config.configurable?.openAiClient!;
+  const openAiClient = config.configurable!.openAiClient;
 
   const therapistsWithOutreachMessage = await Promise.all(
     state.therapists.map((therapist) => addMessageToTherapist(therapist, openAiClient)),

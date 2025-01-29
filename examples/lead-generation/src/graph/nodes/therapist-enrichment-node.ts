@@ -41,7 +41,7 @@ export const enrichTherapistNode = async (
   const log = getLogger().withPrefix("[enrichTherapistNode]");
   log.debug("Enriching therapists");
 
-  const client = config.configurable?.airtopClient!;
+  const client = config.configurable!.airtopClient;
 
   const enrichmentInput: BatchOperationUrl[] = state.therapists
     .map((therapist) => {

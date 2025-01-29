@@ -40,6 +40,8 @@ const main = async () => {
     message: "Enter your OpenAI API key:",
     validate: (value) => {
       if (!value) return "Please enter a valid API key";
+
+      if (!value.startsWith("sk-")) return "Please enter a valid OpenAI API key";
       return true;
     },
   });

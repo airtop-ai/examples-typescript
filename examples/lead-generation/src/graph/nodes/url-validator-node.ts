@@ -41,7 +41,7 @@ export const urlValidatorNode = async (
   const log = getLogger().withPrefix("[urlValidatorNode]");
   log.withMetadata({ urls: state.urls }).debug("Validating URLs");
 
-  const airtopClient = config.configurable?.airtopClient!;
+  const airtopClient = config.configurable!.airtopClient;
 
   const links = state.urls.map((url) => ({ url: url.url })).filter((url) => isUrl(url.url));
 

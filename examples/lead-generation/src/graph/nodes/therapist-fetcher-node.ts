@@ -45,7 +45,7 @@ export const fetchTherapistsNode = async (
 
   const websiteLinks = state.urls.map((url) => ({ url: url.url }));
 
-  const airtopClient = config.configurable?.airtopClient!;
+  const airtopClient = config.configurable!.airtopClient;
 
   const fetchTherapists = async (input: BatchOperationInput): Promise<BatchOperationResponse<TherapistState>> => {
     const modelResponse = await airtopClient.windows.pageQuery(input.sessionId, input.windowId, {
