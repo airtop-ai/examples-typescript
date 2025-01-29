@@ -34,7 +34,6 @@ export class FacebookCommenterService {
   }) {
     this.client = new AirtopClient({
       apiKey,
-      environment: "https://browsers.dev.airtop.ai/api/v1/", // REMOVE THIS LINE
     });
     this.log = log;
   }
