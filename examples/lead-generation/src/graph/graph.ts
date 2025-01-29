@@ -7,7 +7,7 @@ import { URL_VALIDATOR_NODE_NAME, urlValidatorNode } from "@/graph/nodes/url-val
 import { ConfigurableAnnotation, type LeadGenerationGraphConfig, StateAnnotation } from "@/graph/state";
 import { AirtopClient } from "@airtop/sdk";
 import { END, START, StateGraph } from "@langchain/langgraph";
-import { OpenAI } from "@langchain/openai";
+import { ChatOpenAI } from "@langchain/openai";
 export type LeadGenerationGraphResult = {
   csvContent: string;
   csvPath: string;
@@ -38,7 +38,7 @@ export const leadGenerationGraph = async (
   const graph = graphBuilder.compile();
 
   const airtopClient = new AirtopClient({ apiKey: config.apiKey });
-  const openAiClient = new OpenAI({ apiKey: config.openAiKey });
+  const openAiClient = new ChatOpenAI({ apiKey: config.openAiKey });
 
   const result = await graph.invoke(
     {

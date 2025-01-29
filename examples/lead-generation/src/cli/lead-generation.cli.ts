@@ -2,9 +2,9 @@ import { leadGenerationGraph } from "@/graph/graph";
 import { confirm, input } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
 
-const main = async () => {
-  const log = getLogger();
+const log = getLogger();
 
+const main = async () => {
   log.info("Welcome to the Lead Generation Recipe CLI!");
 
   const urls: string[] = [];
@@ -52,6 +52,6 @@ const main = async () => {
 };
 
 main().catch((e) => {
-  console.error(e);
+  log.withError(e).error("An error occurred while running the graph");
   process.exit(1);
 });

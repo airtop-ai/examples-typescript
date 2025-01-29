@@ -71,7 +71,7 @@ export const fetchTherapistsNode = async (
   };
 
   const handleError = async ({ error }: BatchOperationError) => {
-    console.error("An error occurred while fetching the therapists", error);
+    log.withError(error).error("An error occurred while fetching the therapists");
   };
 
   const results = await airtopClient.batchOperate(websiteLinks, fetchTherapists, { onError: handleError });

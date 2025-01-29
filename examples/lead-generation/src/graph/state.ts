@@ -1,6 +1,6 @@
 import type { AirtopClient } from "@airtop/sdk";
 import { Annotation } from "@langchain/langgraph";
-import type { OpenAI } from "@langchain/openai";
+import type { ChatOpenAI } from "@langchain/openai";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
@@ -73,7 +73,7 @@ export type LeadGenerationGraphConfig = {
 
 export const ConfigurableAnnotation = Annotation.Root({
   airtopClient: Annotation<AirtopClient>,
-  openAiClient: Annotation<OpenAI>,
+  openAiClient: Annotation<ChatOpenAI>,
 });
 
 export const StateAnnotation = Annotation.Root({
