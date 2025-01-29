@@ -63,7 +63,11 @@ export function MainContent({ currentApiKey }: MainContentProps) {
   // 2. Show results if we have content
   if (apiResponse.content) {
     return (
-      <DisplayPromptResponse content={apiResponse.content} profileId={apiResponse.profileId} tryAgain={resetResponse} />
+      <DisplayPromptResponse
+        content={apiResponse.content}
+        profileName={apiResponse.profileName}
+        tryAgain={resetResponse}
+      />
     );
   }
 
