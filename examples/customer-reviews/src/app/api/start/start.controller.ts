@@ -28,6 +28,11 @@ export async function startController({ apiKey, profileName, log }: StartControl
   // Start a new browser session and get window information
   const { session, windowInfo } = await service.initializeSessionAndBrowser(profileName);
 
+  // Save profile on termination
+  if (profileName) {
+    await service.saveProfileOnTermination(session.id, profileName);
+  }
+
   // Check if the browser (client) is already authenticated in Facebook
   const isSignedIn = await service.checkIfSignedIntoWebsite({
     sessionId: session.id,
