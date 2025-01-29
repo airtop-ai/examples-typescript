@@ -106,8 +106,13 @@ export class LinkedInExtractorService {
     return parsedResponse.isLoggedIn;
   }
 
+  /**
+   * Saves changes made to the browsing profile on session termination.
+   * @param {string} sessionId - The ID of the session to save the profile on
+   * @param {string} profileName - The name of the profile to save
+   */
   async saveProfileOnTermination(sessionId: string, profileName: string): Promise<void> {
-    this.log.info(`Profile '${profileName}' will be saved on session termination.`);
+    this.log.info(`Profile "${profileName}" will be saved on session termination.`);
     await this.client.sessions.saveProfileOnTermination(sessionId, profileName);
   }
 
