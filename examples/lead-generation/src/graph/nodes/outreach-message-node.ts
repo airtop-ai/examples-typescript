@@ -1,49 +1,15 @@
 import type { ConfigurableAnnotation, StateAnnotation, Therapist } from "@/graph/state";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import type { RunnableConfig } from "@langchain/core/runnables";
-import { OpenAI } from "@langchain/openai";
+import type { OpenAI } from "@langchain/openai";
 import { getLogger } from "@local/utils";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
-const openAiClientsMap = new Map<string, OpenAI>();
-
-/**
- * Get an OpenAI instance using a cache pattern with API key as the unique identifier.
- * @param apiKey - The API key for OpenAI.
- * @returns An instance of OpenAI.
- */
-export const getOpenAiClient = (apiKey: string): OpenAI => {
-  if (!openAiClientsMap.has(apiKey)) {
-    openAiClientsMap.set(
-      apiKey,
-      new OpenAI({
-        apiKey,
-      }),
-    );
-  }
-  return openAiClientsMap.get(apiKey)!;
-};
-
-// Optional: Cleanup function to remove unused clients
-export const removeOpenAiClient = (apiKey: string): void => {
-  openAiClientsMap.delete(apiKey);
-};
-
-const responseSchema = {
-  type: "object",
-  properties: {
-    message: {
-      type: "string",
-      description: "The outreach message for the therapist",
-      maxLength: 500, // Ensuring it stays relatively brief
-    },
-    error: {
-      type: "string",
-      description: "Error message if the request cannot be fulfilled",
-    },
-  },
-  required: ["message"],
-  additionalProperties: false,
-};
+const responseSchema = z.object({
+  message: z.string().describe("The outreach message for the therapist"),
+  error: z.string().optional().describe("Error message if the request cannot be fulfilled"),
+});
 
 const outreachMessagePrompt = (therapist: Therapist) => {
   return `
@@ -58,7 +24,7 @@ The goal of the message is to connect with the therapist to sell them an app tha
 companion for their practice.
 
 Your response must conform to this JSON schema:
-${JSON.stringify(responseSchema, null, 2)}
+${JSON.stringify(zodToJsonSchema(responseSchema), null, 2)}
 
 Ensure your response is valid JSON and matches the schema exactly.
 `;
