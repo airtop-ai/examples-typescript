@@ -6,12 +6,12 @@ import type { LogLayer } from "loglayer";
  * Parameters required for the start controller
  * @interface StartControllerParams
  * @property {string} apiKey - API key for Airtop authentication
- * @property {string} profileId - Profile ID to use for the session
+ * @property {string} profileName - Profile name to use for the session
  * @property {LogLayer} log - Logger instance for tracking operations
  */
 interface StartControllerParams {
   apiKey: string;
-  profileId?: string;
+  profileName?: string;
   log: LogLayer;
 }
 
@@ -22,14 +22,18 @@ interface StartControllerParams {
  */
 export async function startController({
   apiKey,
-  profileId,
+  profileName,
   log,
 }: StartControllerParams): Promise<StartSessionResponse> {
   // Initialize the interactions service
   const service = new XInteractionService({ apiKey, log });
 
   // Start a new browser session and get window information
-  const sessionContext = await service.initializeSessionAndBrowser(profileId);
+  const sessionContext = await service.initializeSessionAndBrowser(profileName);
+
+  if (profileName) {
+    await service.saveProfileOnTermination(sessionContext.session.id, profileName);
+  }
 
   // Return the session data
   return sessionContext;

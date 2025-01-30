@@ -58,32 +58,41 @@ export class XInteractionService {
     this.log = log;
   }
 
-  async initializeSessionAndBrowser(profileId?: string): Promise<SessionContext> {
+  async initializeSessionAndBrowser(profileName?: string): Promise<SessionContext> {
     this.log.info("Initializing new session");
 
-    const session = await this.createSession(profileId);
+    const session = await this.createSession(profileName);
     const windowInfo = await this.createBrowserWindow(session.id);
 
     return { session, windowInfo };
   }
 
-  private async createSession(profileId?: string) {
+  private async createSession(profileName?: string) {
     const sessionResponse = await this.client.sessions.create({
       configuration: {
         timeoutMinutes: 10,
-        persistProfile: !profileId,
-        baseProfileId: profileId,
+        profileName,
       },
     });
 
     const session = sessionResponse.data;
-    this.log.info(`Created session: ${session.id}, Profile Id: ${profileId || session.profileId}`);
+    this.log.info(`Created session: ${session.id} ${profileName ? ` - Profile Name: ${profileName}` : ""}`);
 
     if (!session.cdpWsUrl) {
       throw new Error("CDP URL not available");
     }
 
     return session;
+  }
+
+  /**
+   * Saves changes made to the browsing profile on session termination.
+   * @param {string} sessionId - The ID of the session to save the profile on
+   * @param {string} profileName - The name of the profile to save
+   */
+  async saveProfileOnTermination(sessionId: string, profileName: string): Promise<void> {
+    this.log.info(`Profile "${profileName}" will be saved on session termination.`);
+    await this.client.sessions.saveProfileOnTermination(sessionId, profileName);
   }
 
   private async createBrowserWindow(sessionId: string) {
