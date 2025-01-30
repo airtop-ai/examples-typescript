@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@internal/home-config": "workspace:*",
-    "@airtop/sdk": "0.1.12",
+    "@airtop/sdk": "0.1.14",
     "@hookform/resolvers": "3.9.1",
     "@inquirer/prompts": "7.1.0",
     "@local/ui": "workspace:*",

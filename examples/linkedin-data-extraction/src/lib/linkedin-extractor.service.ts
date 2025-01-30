@@ -31,7 +31,6 @@ export class LinkedInExtractorService {
   }) {
     this.client = new AirtopClient({
       apiKey,
-      environment: "https://browsers.dev.airtop.ai/api/v1/",
     });
     this.log = log;
   }

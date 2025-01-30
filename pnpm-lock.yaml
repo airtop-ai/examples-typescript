@@ -267,8 +267,8 @@ importers:
   examples/linkedin-data-extraction:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.12
-        version: 0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.14
+        version: 0.1.14(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
@@ -825,8 +825,8 @@ importers:
 
 packages:
 
-  '@airtop/sdk@0.1.12':
-    resolution: {integrity: sha512-opJJUFaCBUE27c+3HW5uF7LLqxw0sDeB1lgtXy9fLqPMwy3YBYkPb1MS1DKGwoKEIvdpflIbPGQkQYtfVPSAmg==}
+  '@airtop/sdk@0.1.14':
+    resolution: {integrity: sha512-KYrf3SV9VMx5Plpf4reidfNzcKo0pSH4DKN+J682Hx5oEJ90fb0VTSuXaeu7R9vjYU4+rc3O/SbeaCl47pFawQ==}
     peerDependencies:
       playwright: '>=1.47.2'
       puppeteer: '>=22.14.0'
@@ -3990,7 +3990,7 @@ packages:
 
 snapshots:
 
-  '@airtop/sdk@0.1.12(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
+  '@airtop/sdk@0.1.14(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
     dependencies:
       async-mutex: 0.5.0
       eventemitter3: 5.0.1
