@@ -29,7 +29,7 @@
   "devDependencies": {
     "zod": "3.23.8",
     "next": "15.0.3",
-    "@airtop/sdk": "0.1.12",
+    "@airtop/sdk": "0.1.6",
     "@local/typescript-config": "workspace:*",
     "@types/node": "22.10.0",
     "hash-runner": "2.0.1",
@@ -39,7 +39,7 @@
   "license": "MIT",
   "optionalDependencies": {
     "zod": "3.23.8",
-    "@airtop/sdk": "0.1.12",
+    "@airtop/sdk": "0.1.5",
     "next": "15.0.3"
   }
 }
