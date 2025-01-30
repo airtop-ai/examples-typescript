@@ -1,5 +1,5 @@
 import { metadata } from "@/app/layout";
-import { MainContent } from "@/components/MainContent";
+import { MainContent } from "@/components/main-content";
 import { PageHeader } from "@local/ui";
 import { getApiKeyFromCookie } from "@local/utils";
 import { cookies } from "next/headers";

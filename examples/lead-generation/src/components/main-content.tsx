@@ -1,8 +1,8 @@
 "use client";
 
-import { DisplayCsvContent } from "@/components/views/DisplayCsvContent";
-import { DisplayError } from "@/components/views/DisplayError";
-import { InitializeView } from "@/components/views/InitializeView";
+import { DisplayCsvContent } from "@/components/views/display-csv-content";
+import { DisplayError } from "@/components/views/display-errors";
+import { InitializeView } from "@/components/views/initialize-view";
 import { useAppStore } from "@/store";
 import { ApiKeyRequired } from "@local/ui";
 import { useEffect } from "react";

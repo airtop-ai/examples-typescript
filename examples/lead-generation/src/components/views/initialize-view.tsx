@@ -1,4 +1,4 @@
-import { StartForm } from "@/components/forms/StartForm";
+import { StartForm } from "@/components/forms/start-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@local/ui";
 
 export function InitializeView() {
