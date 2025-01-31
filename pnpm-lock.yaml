@@ -267,8 +267,8 @@ importers:
   examples/lead-generation:
     dependencies:
       '@airtop/sdk':
-        specifier: ^0.1.13
-        version: 0.1.13(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: ^0.1.15
+        version: 0.1.15(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
@@ -937,8 +937,8 @@ importers:
 
 packages:
 
-  '@airtop/sdk@0.1.13':
-    resolution: {integrity: sha512-SqMg+3I8MEgvMgdWf3p9w88sQsqnRrzD4RQASeHl474CBrHQCei6Y5xrRQbRVF+oeNv3FnWOmoJeqcCauvQqTQ==}
+  '@airtop/sdk@0.1.15':
+    resolution: {integrity: sha512-apcuQRhcBQB8Xzz9cfv66Qvw4+B8ZZ2LIwXl1pH1SLyYt8h6V5EOTA/+CAPpzyFQ5vP2WDL2ehaATJHPuy2Qlg==}
     peerDependencies:
       playwright: '>=1.47.2'
       puppeteer: '>=22.14.0'
@@ -4259,7 +4259,7 @@ packages:
 
 snapshots:
 
-  '@airtop/sdk@0.1.13(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
+  '@airtop/sdk@0.1.15(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
     dependencies:
       async-mutex: 0.5.0
       eventemitter3: 5.0.1
