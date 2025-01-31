@@ -73,9 +73,6 @@ export function StartForm() {
         setOpenAiKey(data.openAiKey);
         setUrls(data.urls);
 
-        process.env.AIRTOP_API_KEY = data.apiKey;
-        process.env.OPENAI_API_KEY = data.openAiKey;
-
         const response = await fetch("/api/start", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

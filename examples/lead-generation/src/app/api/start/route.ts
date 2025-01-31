@@ -11,21 +11,32 @@ export const maxDuration = 300;
  * - Otherwise, will return with the extracted data
  */
 export async function POST(request: NextRequest) {
-  const log = getLogger().withPrefix("[api/start]");
-  log.withMetadata({ request }).debug("Received request to api/start");
+  const log = getLogger().withPrefix("[api/start]").withMetadata({
+    url: request.url,
+    method: request.method,
+  });
 
-  const data = (await request.json()) as StartRequest;
+  log.info("Received start request");
 
   try {
-    startRequestSchema.parse(data);
+    const data = (await request.json()) as StartRequest;
+    log.withMetadata({ urls: data.urls }).debug("Request payload");
 
-    // Set env variable
-    process.env.AIRTOP_API_KEY = data.apiKey;
-    process.env.OPENAI_API_KEY = data.openAiKey;
+    // Validate request data
+    try {
+      startRequestSchema.parse(data);
+    } catch (e) {
+      log.withError(e).error("Request validation failed");
+      return NextResponse.json(serializeErrors(e), { status: 400 });
+    }
 
+    // Execute controller
     const controllerResponse = await startController({ ...data });
+    log.info("Request processed successfully");
+
     return NextResponse.json<StartResponse>(controllerResponse);
   } catch (e: any) {
+    log.withError(e).error("Failed to process request");
     return NextResponse.json(serializeErrors(e), {
       status: 500,
     });
