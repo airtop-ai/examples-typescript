@@ -59,7 +59,7 @@ export function MainContent({ currentApiKey }: MainContentProps) {
 
   // 2. Show results if we have content
   if (apiResponse.content) {
-    return <DisplayPromptResponse content={apiResponse.content} profileId={apiResponse.profileId} />;
+    return <DisplayPromptResponse content={apiResponse.content} profileName={apiResponse.profileName} />;
   }
 
   // 3. Show batch selection if we have batches but no selection

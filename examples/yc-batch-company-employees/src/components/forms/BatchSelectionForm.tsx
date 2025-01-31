@@ -24,7 +24,7 @@ export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const apiKey = useAppStore((state) => state.apiKey);
   const sessionId = useAppStore((state) => state.response.sessionId);
-  const profileId = useAppStore((state) => state.response.profileId);
+  const profileName = useAppStore((state) => state.response.profileName);
   const setProcessBatchResponse = useAppStore((state) => state.setProcessBatchResponse);
   const selectedBatch = useAppStore((state) => state.selectedBatch);
   const setSelectedBatch = useAppStore((state) => state.setSelectedBatch);
@@ -51,7 +51,7 @@ export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
           apiKey,
           batch: selectedBatch,
           sessionId,
-          profileId,
+          profileName,
         }),
       });
 
@@ -71,7 +71,7 @@ export function BatchSelectorForm({ batches }: BatchSelectorFormProps) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [selectedBatch, apiKey, sessionId, setProcessBatchResponse, handleError, profileId]);
+  }, [selectedBatch, apiKey, sessionId, setProcessBatchResponse, handleError, profileName]);
 
   return (
     <Card>

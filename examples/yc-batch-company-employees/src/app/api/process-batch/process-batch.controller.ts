@@ -10,7 +10,7 @@ export async function processBatchController({
   apiKey,
   sessionId,
   batch,
-  profileId,
+  profileName,
   log,
 }: ProcessBatchControllerParams): Promise<ProcessBatchResponse> {
   const { airtop, yCombinator, linkedin } = getServices(apiKey, log);
@@ -28,13 +28,13 @@ export async function processBatchController({
     // Get employee list url for each company
     const employeesListUrls = await linkedin.getEmployeesListUrls({
       companyLinkedInProfileUrls: linkedInProfileUrls,
-      profileId,
+      profileName,
     });
 
     // Get employee's Profile Urls for each employee list url
     const employeesProfileUrls = await linkedin.getEmployeesProfileUrls({
       employeesListUrls: employeesListUrls,
-      profileId,
+      profileName,
     });
 
     log.info("*** Batch operation completed, returning response to client ***");

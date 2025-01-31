@@ -2,10 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@local/ui";
 
 interface DisplayPromptResponseProps {
   content: string;
-  profileId?: string;
+  profileName?: string;
 }
 
-export function DisplayPromptResponse({ content, profileId }: DisplayPromptResponseProps) {
+export function DisplayPromptResponse({ content, profileName }: DisplayPromptResponseProps) {
   return (
     <>
       <Card>
@@ -16,13 +16,13 @@ export function DisplayPromptResponse({ content, profileId }: DisplayPromptRespo
           <pre className="overflow-auto">{content}</pre>
         </CardContent>
       </Card>
-      {profileId && (
+      {profileName && (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Profile ID</CardTitle>
+            <CardTitle className="text-sm font-medium">Profile Name</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className="overflow-auto">{profileId}</pre>
+            <pre className="overflow-auto">{profileName}</pre>
           </CardContent>
         </Card>
       )}
