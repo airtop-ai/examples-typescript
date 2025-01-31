@@ -7,7 +7,7 @@ export const CSV_GENERATOR_NODE_NAME = "csv-generator-node";
 /**
  * Langgraph Node: Generate a CSV file from the therapists state.
  * @param state - The therapists state.
- * @returns Void (it writes to a file and saves it locally)
+ * @returns The updated state with the CSV file path and content.
  */
 export const csvGeneratorNode = async (state: typeof StateAnnotation.State) => {
   const log = getLogger().withPrefix("[csvGeneratorNode]");

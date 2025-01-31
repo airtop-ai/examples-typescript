@@ -32,6 +32,7 @@ If no errors are found, set the error field to an empty string.`;
 /**
  * Enrich the therapists with the information from the website
  * @param state - The state of the therapist node.
+ * @param config - The graph config containing the Airtop client
  * @returns The updated state of the therapist node.
  */
 export const enrichTherapistNode = async (

@@ -29,7 +29,8 @@ Your task is to determine if the webpage matches the following criteria:
 /**
  * Uses Airtop's PageQuery API to validate an URL to determine if it contains a list of therapists
  * @param state - The graph state containing the URLs to validate
- * @returns The graph state with the validated URLs
+ * @param config - The graph config containing the Airtop client
+ * @returns The graph state with the validated URLs and the next node to execute
  */
 export const urlValidatorNode = async (
   state: typeof StateAnnotation.State,

@@ -35,6 +35,7 @@ export const FETCH_THERAPISTS_NODE_NAME = "therapist-fetcher-node";
 /**
  * Fetches the therapists from the URLs in the state
  * @param state - The state of the URL validator node.
+ * @param config - The graph config containing the Airtop client
  * @returns The updated state of the URL validator node.
  */
 export const fetchTherapistsNode = async (
