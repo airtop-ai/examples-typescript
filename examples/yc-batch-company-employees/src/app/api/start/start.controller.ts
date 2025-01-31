@@ -5,7 +5,7 @@ import type { LogLayer } from "loglayer";
 
 interface StartControllerParams {
   apiKey: string;
-  profileName?: string;
+  profileName: string;
   log: LogLayer;
 }
 
@@ -16,6 +16,9 @@ export async function startController({ apiKey, log, profileName }: StartControl
   // Create a new session
   const session = await linkedin.airtop.createSession(profileName);
 
+  // Save the profile on session termination
+  await airtop.client.sessions.saveProfileOnTermination(session.data.id, profileName);
+
   try {
     const isLoggedIn = await linkedin.checkIfSignedIntoLinkedIn(session.data.id);
 
@@ -25,7 +28,7 @@ export async function startController({ apiKey, log, profileName }: StartControl
 
       return {
         sessionId: session.data.id,
-        profileName, // Use latest profile name
+        profileName,
         liveViewUrl,
         signInRequired: true,
       };

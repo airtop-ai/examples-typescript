@@ -17,8 +17,8 @@ async function cli() {
   });
 
   const profileName = await input({
-    message: "(optional) Enter a browser profile name to use:",
-    required: false,
+    message: "Enter a browser profile name to use:",
+    required: true,
   });
 
   const airtop = new AirtopService({ apiKey, log });
@@ -38,10 +38,8 @@ async function cli() {
   try {
     ycSession = await ycService.airtop.createSession(profileName);
 
-    if (profileName) {
-      log.info(`Profile "${profileName}" will be saved on session termination.`);
-      await airtop.client.sessions.saveProfileOnTermination(ycSession.data.id, profileName);
-    }
+    log.info(`Profile "${profileName}" will be saved on session termination.`);
+    await airtop.client.sessions.saveProfileOnTermination(ycSession.data.id, profileName);
 
     const batches = await ycService.getYcBatches(ycSession.data.id);
 
@@ -69,6 +67,9 @@ async function cli() {
       await confirm({ message: "Press enter once you have signed in", default: true });
 
       log.info("You can now close the browser tab for the live view. The extraction will continue in the background.");
+
+      // Terminate the session to save the profile
+      await airtop.terminateSession(ycSession.data.id);
     }
 
     const employeesListUrls = await linkedInService.getEmployeesListUrls({
