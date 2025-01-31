@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import { leadGenerationGraph } from "@/graph/graph";
 import { confirm, input } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
@@ -49,8 +50,20 @@ const main = async () => {
   // run the graph
   log.info("Running the graph...");
   const result = await leadGenerationGraph(urls, { apiKey, openAiKey });
-  log.info("Graph finished, lets look at the result");
-  log.withMetadata(result).info("Here is the result");
+
+  if (result.csvContent) {
+    const csvFileName = "lead-generation-results.csv";
+    fs.writeFileSync(csvFileName, result.csvContent);
+    log.info("CSV file created successfully");
+    log.info(`File location: ${process.cwd()}/${csvFileName}`);
+
+    log.info("Graph finished, lets look at the result");
+    log.withMetadata(result).info("Here is the result");
+  }
+
+  if (result.error) {
+    log.withError(result.error).error("An error occurred while running the graph");
+  }
 };
 
 main().catch((e) => {

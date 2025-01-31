@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import type { StateAnnotation } from "@/graph/state";
 import { getLogger } from "@local/utils";
 
@@ -13,7 +12,6 @@ export const csvGeneratorNode = async (state: typeof StateAnnotation.State) => {
   const log = getLogger().withPrefix("[csvGeneratorNode]");
   log.debug("Generating CSV file");
 
-  const CSV_FILE_NAME = "lead-generation-results.csv";
   const columns = ["name", "email", "phone", "website", "source", "message"];
   let csvContent = `${columns.join(",")}\n`;
 
@@ -25,14 +23,10 @@ export const csvGeneratorNode = async (state: typeof StateAnnotation.State) => {
     csvContent += `${escapedName},${therapist.email},${therapist.phone},${therapist.website},${therapist.source},${escapedMessage}\n`;
   });
 
-  fs.writeFileSync(CSV_FILE_NAME, csvContent);
-
-  log.info(`CSV file ${CSV_FILE_NAME} created successfully`);
-  log.info(`File location: ${process.cwd()}/${CSV_FILE_NAME}`);
+  log.info("CSV Content successfully generated");
 
   return {
     ...state,
     csvContent,
-    csvPath: CSV_FILE_NAME,
   };
 };
