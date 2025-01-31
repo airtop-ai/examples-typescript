@@ -937,15 +937,15 @@ importers:
 
 packages:
 
-  '@airtop/sdk@0.1.15':
-    resolution: {integrity: sha512-apcuQRhcBQB8Xzz9cfv66Qvw4+B8ZZ2LIwXl1pH1SLyYt8h6V5EOTA/+CAPpzyFQ5vP2WDL2ehaATJHPuy2Qlg==}
+  '@airtop/sdk@0.1.14':
+    resolution: {integrity: sha512-KYrf3SV9VMx5Plpf4reidfNzcKo0pSH4DKN+J682Hx5oEJ90fb0VTSuXaeu7R9vjYU4+rc3O/SbeaCl47pFawQ==}
     peerDependencies:
       playwright: '>=1.47.2'
       puppeteer: '>=22.14.0'
       selenium-webdriver: '>=4.25.0'
 
-  '@airtop/sdk@0.1.5':
-    resolution: {integrity: sha512-qk0qPPdMyS76SknW6M5bMthNdHUVltExJnl3z0WbsPwfBCIwxZd3r5fYC4jNHU5gUxFzukTE7FOMCml6q5RKYg==}
+  '@airtop/sdk@0.1.15':
+    resolution: {integrity: sha512-apcuQRhcBQB8Xzz9cfv66Qvw4+B8ZZ2LIwXl1pH1SLyYt8h6V5EOTA/+CAPpzyFQ5vP2WDL2ehaATJHPuy2Qlg==}
     peerDependencies:
       playwright: '>=1.47.2'
       puppeteer: '>=22.14.0'
@@ -2568,7 +2568,6 @@ packages:
 
   eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
-
 
   eventemitter3@5.0.1:
     resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
@@ -4260,7 +4259,7 @@ packages:
 
 snapshots:
 
-  '@airtop/sdk@0.1.15(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
+  '@airtop/sdk@0.1.14(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
     dependencies:
       async-mutex: 0.5.0
       eventemitter3: 5.0.1
@@ -4276,8 +4275,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@airtop/sdk@0.1.5(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
-  
+  '@airtop/sdk@0.1.15(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
     dependencies:
       async-mutex: 0.5.0
       eventemitter3: 5.0.1
@@ -6041,7 +6039,6 @@ snapshots:
   estree-util-is-identifier-name@3.0.0: {}
 
   esutils@2.0.3: {}
-
 
   event-target-shim@5.0.1: {}
 
