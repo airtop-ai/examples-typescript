@@ -23,15 +23,14 @@ export class AirtopService {
 
   /**
    * Creates a new session.
-   * @param profileId - The ID of the profile to use for the session
+   * @param profileName - The name of the profile to use for the session
    * @returns The created session
    */
-  async createSession(profileId?: string): Promise<SessionResponse> {
+  async createSession(profileName?: string): Promise<SessionResponse> {
     const session = await this.client.sessions.create({
       configuration: {
         timeoutMinutes: 15,
-        persistProfile: true,
-        ...(profileId ? { baseProfileId: profileId } : {}),
+        profileName,
       },
     });
 

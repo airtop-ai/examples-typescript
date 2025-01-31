@@ -164,7 +164,7 @@ export class YCExtractorService {
 
     this.log
       .withMetadata({
-        linkedInProfileUrls: companyUrls,
+        linkedInProfileUrls: profileUrls,
       })
       .info("Successfully fetched LinkedIn profile urls for the companies");
 
