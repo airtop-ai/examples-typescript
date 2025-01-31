@@ -10,9 +10,6 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import { ERROR_HANDLER_NODE_NAME } from "./error-handler-node";
 import { FETCH_THERAPISTS_NODE_NAME } from "./therapist-fetcher-node";
 
-// Name of the edge
-export const VALID_URL_COUNTER_EDGE = "valid-url-counter-edge";
-
 // Name of the node
 export const URL_VALIDATOR_NODE_NAME = "url-validator-node";
 
