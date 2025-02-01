@@ -1,12 +1,12 @@
+import { openai } from "@ai-sdk/openai";
 import { AirtopClient } from "@airtop/sdk";
 import type { ExternalSessionWithConnectionInfo, WindowResponse } from "@airtop/sdk/api";
-import { generateText, type StepResult, tool, } from "ai";
-import { openai } from "@ai-sdk/openai";
-import { z } from "zod";
+import { type StepResult, generateText, tool } from "ai";
 import type { LogLayer } from "loglayer";
+import { z } from "zod";
 
 /**
- * Service for extracting LinkedIn data using the Airtop client.
+ * Service for running a financial analysis agent using Airtop and OpenAI.
  */
 export class FinancialAnalysisService {
   client: AirtopClient;
@@ -14,7 +14,7 @@ export class FinancialAnalysisService {
   windowId?: string;
   log: LogLayer;
   /**
-   * Creates a new instance of LinkedInExtractorService.
+   * Creates a new instance of FinancialAnalysisService.
    * @param {Object} params - Configuration parameters
    * @param {string} params.apiKey - API key for Airtop client authentication
    * @param {LogLayer} params.log - Logger instance for service operations
@@ -44,7 +44,10 @@ export class FinancialAnalysisService {
     await this.client.sessions.terminate(sessionId);
   }
 
-  async initializeSessionAndBrowser(): Promise<{ session: ExternalSessionWithConnectionInfo; windowInfo: WindowResponse }> {
+  async initializeSessionAndBrowser(): Promise<{
+    session: ExternalSessionWithConnectionInfo;
+    windowInfo: WindowResponse;
+  }> {
     this.log.info("Creating a new session");
     const createSessionResponse = await this.client.sessions.create({
       configuration: {
@@ -67,8 +70,12 @@ export class FinancialAnalysisService {
     };
   }
 
-  private async sendPrompt({ goal }: { goal: string, }): Promise<{ text: string, steps: StepResult<any>[] }> {
-
+  /**
+   * Sends a prompt to the OpenAI API and returns the result.
+   * @param {string} params.goal - The goal of the analysis
+   * @returns {Promise<{ text: string, steps: StepResult<any>[] }>} The result of the analysis
+   */
+  private async sendPrompt({ goal }: { goal: string }): Promise<{ text: string; steps: StepResult<any>[] }> {
     const { text, steps } = await generateText({
       model: openai("gpt-4o"),
       onStepFinish: ({ text, toolResults, finishReason }) => {
@@ -77,10 +84,11 @@ export class FinancialAnalysisService {
         this.log.info(`Finish reason: ${finishReason}`);
       },
       tools: {
+        // Tool to load a URL
         loadUrl: tool({
-          description: 'Load a URL',
+          description: "Load a URL",
           parameters: z.object({
-            url: z.string().describe('The URL to load'),
+            url: z.string().describe("The URL to load"),
           }),
           execute: async ({ url }) => {
             this.log.info(`Loading URL: ${url}`);
@@ -88,16 +96,17 @@ export class FinancialAnalysisService {
               throw new Error("Session or window ID not found");
             }
 
-            await this.client.windows.loadUrl(this.sessionId, this.windowId, { url })
+            await this.client.windows.loadUrl(this.sessionId, this.windowId, { url });
             return {
-              data: "URL loaded"
-            }
+              data: "URL loaded",
+            };
           },
         }),
+        // Tool to extract data from the page given a natural language query/prompt
         extractData: tool({
-          description: 'Extract data from the page given a natural language query/prompt',
+          description: "Extract data from the page given a natural language query/prompt",
           parameters: z.object({
-            prompt: z.string().describe('The natural language query/prompt to extract data from the page'),
+            prompt: z.string().describe("The natural language query/prompt to extract data from the page"),
           }),
           execute: async ({ prompt }) => {
             this.log.info(`Extracting data from the page with prompt: ${prompt}`);
@@ -107,14 +116,15 @@ export class FinancialAnalysisService {
 
             const result = await this.client.windows.pageQuery(this.sessionId, this.windowId, { prompt });
             return {
-              data: result.data.modelResponse
-            }
+              data: result.data.modelResponse,
+            };
           },
         }),
+        // Tool to click an element on the page
         clickButton: tool({
-          description: 'Click an element on the page',
+          description: "Click an element on the page",
           parameters: z.object({
-            elementDescription: z.string().describe('The description of the element to click'),
+            elementDescription: z.string().describe("The description of the element to click"),
           }),
           execute: async ({ elementDescription }) => {
             this.log.info(`Clicking element on the page with description: ${elementDescription}`);
@@ -124,8 +134,8 @@ export class FinancialAnalysisService {
 
             const result = await this.client.windows.click(this.sessionId, this.windowId, { elementDescription });
             return {
-              data: result.data.modelResponse
-            }
+              data: result.data.modelResponse,
+            };
           },
         }),
       },
@@ -154,15 +164,23 @@ export class FinancialAnalysisService {
     return {
       text,
       steps,
-    }
+    };
   }
 
+  /**
+   * Performs a financial analysis.
+   * @param {string} sessionId - The ID of the session
+   * @param {string} windowId - The ID of the window
+   * @returns {Promise<string>} The result of the analysis
+   */
   async performAnalysis(sessionId: string, windowId: string): Promise<string> {
     this.sessionId = sessionId;
     this.windowId = windowId;
 
-    const goal = `Extract the current price of NVDA and the growth percentage over all the time periods available. There may be buttons on the page to access historical information.
+    const goal = `Extract the current price of NVDA and the growth percentage over all the time periods available. 
+    There may be buttons on the page to access historical information.
     Use Google Finance to access stock data at https://www.google.com/finance/quote/NVDA:NASDAQ`;
+
     const { text } = await this.sendPrompt({ goal });
 
     this.log.info(`Received result: ${text}`);

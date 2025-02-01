@@ -1,7 +1,7 @@
-import { config } from "dotenv";
 import { FinancialAnalysisService } from "@/financial-analysis.service";
 import { input } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
+import { config } from "dotenv";
 
 // Load environment variables from .env file
 config();
@@ -35,7 +35,6 @@ async function cli() {
     log.info("LiveView URL:", windowInfo.data.liveViewUrl);
     const analysis = await service.performAnalysis(session.id, windowInfo.data.windowId);
     log.info("Analysis:", analysis);
-
   } finally {
     if (sessionAndWindow?.session) {
       await service.terminateSession(sessionAndWindow.session.id);
