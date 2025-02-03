@@ -33,8 +33,7 @@ export const exampleListings: Record<ExampleSite, ExampleListing> = {
     dirName: "lead-generation",
     metadata: {
       title: "Lead Generation",
-      description:
-        `This example showcases how to use Airtop's AI APIs to gather information about a page containing a list of therapists, and then generate lead information with outreach messages tailored to each therapist. This example is orchestrated with Langchain's Langgraph tools. This example is limited to downloading data for 5 therapists only, but check out the source and modify to handle as many leads as you want. While this agent deals with therapists as the target, you can modify the agent to target any kind of lead. Perfect for sales & recruiting.`
+      description: `This example showcases how to use Airtop's AI APIs to gather information about a page containing a list of therapists, and then generate lead information with outreach messages tailored to each therapist. This example is orchestrated with Langchain's Langgraph tools. This example is limited to downloading data for 5 therapists only, but check out the source and modify to handle as many leads as you want. While this agent deals with therapists as the target, you can modify the agent to target any kind of lead. Perfect for sales & recruiting.`,
     },
   },
   [ExampleSite.YC_BATCH_COMPANY_EMPLOYEES]: {
