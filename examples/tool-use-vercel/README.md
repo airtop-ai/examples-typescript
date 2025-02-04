@@ -21,6 +21,7 @@ This is an sample tool that demonstrates automated financial data extraction and
    Replace the variables with your API keys
 4. Run the CLI:
    ```bash
+   pnpm i
    pnpm run cli
    ```
 
