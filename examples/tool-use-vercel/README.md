@@ -1,10 +1,10 @@
 # Financial Analysis Agent
 
-This is an sample tool that demonstrates automated financial data extraction and analysis using the [Airtop SDK](https://www.airtop.ai/), OpenAI's GPT-4o, and Vercel AI tool use.
+This is an sample tool that demonstrates automated financial data extraction and analysis using the [Airtop SDK](https://docs.airtop.ai/api-reference/airtop-api), OpenAI's GPT-4o, and Vercel AI tool use.
 
 ## Features
 
-- Connects to a financial data sources using Airtop's browser automation
+- Connects to a financial data source using Airtop's browser automation
 - Extracts real-time stock price data and historical performance metrics
 - Uses AI to analyze and interpret financial data
 - Provides a browser-based [LiveView](https://docs.airtop.ai/guides/how-to/creating-a-live-view) URL to monitor the automation in real-time

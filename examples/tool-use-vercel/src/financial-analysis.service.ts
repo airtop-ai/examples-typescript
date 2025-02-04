@@ -5,6 +5,10 @@ import { type StepResult, generateText, tool } from "ai";
 import type { LogLayer } from "loglayer";
 import { z } from "zod";
 
+const GOAL = `Extract the current price of NVDA and the growth percentage over all the time periods available. 
+There may be buttons on the page to access historical information.
+Use Google Finance to access stock data at https://www.google.com/finance/quote/NVDA:NASDAQ`;
+
 /**
  * Service for running a financial analysis agent using Airtop and OpenAI.
  */
@@ -177,14 +181,7 @@ export class FinancialAnalysisService {
     this.sessionId = sessionId;
     this.windowId = windowId;
 
-    const goal = `Extract the current price of NVDA and the growth percentage over all the time periods available. 
-    There may be buttons on the page to access historical information.
-    Use Google Finance to access stock data at https://www.google.com/finance/quote/NVDA:NASDAQ`;
-
-    const { text } = await this.sendPrompt({ goal });
-
-    this.log.info(`Received result: ${text}`);
-
+    const { text } = await this.sendPrompt({ goal: GOAL });
     return text;
   }
 }
