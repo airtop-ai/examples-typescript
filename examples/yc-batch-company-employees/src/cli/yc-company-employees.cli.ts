@@ -16,9 +16,9 @@ async function cli() {
     required: true,
   });
 
-  const profileId = await input({
-    message: "(optional) Enter a browser profile ID to use:",
-    required: false,
+  const profileName = await input({
+    message: "Enter a browser profile name to use:",
+    required: true,
   });
 
   const airtop = new AirtopService({ apiKey, log });
@@ -36,7 +36,11 @@ async function cli() {
   let ycSession: SessionResponse | undefined;
 
   try {
-    ycSession = await ycService.airtop.createSession(profileId);
+    ycSession = await ycService.airtop.createSession(profileName);
+
+    log.info(`Profile "${profileName}" will be saved on session termination.`);
+    await airtop.client.sessions.saveProfileOnTermination(ycSession.data.id, profileName);
+
     const batches = await ycService.getYcBatches(ycSession.data.id);
 
     const selectedBatch = await select({
@@ -52,11 +56,8 @@ async function cli() {
 
     const linkedInProfileUrls = await ycService.getCompaniesLinkedInProfileUrls(companies);
 
-    log.withMetadata({ profileId: ycSession.data.profileId }).info("Profile id");
-
     const isLoggedIn = await linkedInService.checkIfSignedIntoLinkedIn(ycSession.data.id);
 
-    let latestProfileId: string | undefined = profileId;
     if (!isLoggedIn) {
       const linkedInLoginPageUrl = await linkedInService.getLinkedInLoginPageLiveViewUrl(ycSession.data.id);
 
@@ -67,26 +68,18 @@ async function cli() {
 
       log.info("You can now close the browser tab for the live view. The extraction will continue in the background.");
 
-      // Update latest profile id
-      latestProfileId = ycSession.data.profileId;
-      log.info(`Latest profile id: ${latestProfileId}`);
+      // Terminate the session to save the profile
+      await airtop.terminateSession(ycSession.data.id);
     }
-
-    if (!latestProfileId) {
-      throw new Error("No LinkedIn profile ID found, cannot continue");
-    }
-
-    // Terminate session to persist profile
-    await airtop.terminateSession(ycSession.data.id);
 
     const employeesListUrls = await linkedInService.getEmployeesListUrls({
       companyLinkedInProfileUrls: linkedInProfileUrls,
-      profileId: latestProfileId,
+      profileName,
     });
 
     await linkedInService.getEmployeesProfileUrls({
       employeesListUrls: employeesListUrls,
-      profileId: latestProfileId,
+      profileName,
     });
 
     log.info("*** Operation finished ***");

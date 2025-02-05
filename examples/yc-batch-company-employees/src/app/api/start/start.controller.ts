@@ -5,16 +5,19 @@ import type { LogLayer } from "loglayer";
 
 interface StartControllerParams {
   apiKey: string;
-  profileId?: string;
+  profileName: string;
   log: LogLayer;
 }
 
-export async function startController({ apiKey, log, profileId }: StartControllerParams): Promise<StartResponse> {
+export async function startController({ apiKey, log, profileName }: StartControllerParams): Promise<StartResponse> {
   // Initialize the LinkedIn extractor service
   const { airtop, linkedin } = getServices(apiKey, log);
 
   // Create a new session
-  const session = await linkedin.airtop.createSession(profileId);
+  const session = await linkedin.airtop.createSession(profileName);
+
+  // Save the profile on session termination
+  await airtop.client.sessions.saveProfileOnTermination(session.data.id, profileName);
 
   try {
     const isLoggedIn = await linkedin.checkIfSignedIntoLinkedIn(session.data.id);
@@ -25,7 +28,7 @@ export async function startController({ apiKey, log, profileId }: StartControlle
 
       return {
         sessionId: session.data.id,
-        profileId: session.data.profileId, // Use latest profile id
+        profileName,
         liveViewUrl,
         signInRequired: true,
       };
@@ -40,7 +43,7 @@ export async function startController({ apiKey, log, profileId }: StartControlle
     // Return the batches in the response
     return {
       sessionId: session.data.id,
-      profileId, // Use provided profile id
+      profileName, // Use provided profile name
       batches: batches,
       signInRequired: false,
     };
