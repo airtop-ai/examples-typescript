@@ -127,8 +127,8 @@ importers:
   examples/cli-only-template:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.6
-        version: 0.1.6(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.16
+        version: 0.1.16(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@inquirer/prompts':
         specifier: 7.1.0
         version: 7.1.0(@types/node@22.10.0)
@@ -923,6 +923,13 @@ packages:
 
   '@airtop/sdk@0.1.15':
     resolution: {integrity: sha512-apcuQRhcBQB8Xzz9cfv66Qvw4+B8ZZ2LIwXl1pH1SLyYt8h6V5EOTA/+CAPpzyFQ5vP2WDL2ehaATJHPuy2Qlg==}
+    peerDependencies:
+      playwright: '>=1.47.2'
+      puppeteer: '>=22.14.0'
+      selenium-webdriver: '>=4.25.0'
+
+  '@airtop/sdk@0.1.16':
+    resolution: {integrity: sha512-I9cmcCnU7mYCJFySLeNGPSPx3YuhUUr9W/+zXr60jpZ/33eowbKyij0Sr+9hkXihX5K8t93WM4Y+GjiA8dLh5w==}
     peerDependencies:
       playwright: '>=1.47.2'
       puppeteer: '>=22.14.0'
@@ -4198,6 +4205,22 @@ snapshots:
       - encoding
 
   '@airtop/sdk@0.1.15(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
+    dependencies:
+      async-mutex: 0.5.0
+      eventemitter3: 5.0.1
+      form-data: 4.0.1
+      formdata-node: 6.0.3
+      js-base64: 3.7.2
+      node-fetch: 2.7.0
+      playwright: 1.48.2
+      puppeteer: 23.7.1(typescript@5.7.2)
+      qs: 6.11.2
+      selenium-webdriver: 4.26.0
+      url-join: 4.0.1
+    transitivePeerDependencies:
+      - encoding
+
+  '@airtop/sdk@0.1.16(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)':
     dependencies:
       async-mutex: 0.5.0
       eventemitter3: 5.0.1

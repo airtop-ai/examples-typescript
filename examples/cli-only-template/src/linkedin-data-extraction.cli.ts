@@ -14,8 +14,8 @@ async function cli() {
     required: true,
   });
 
-  const profileId = await input({
-    message: "(optional) Enter a browser profile ID to use:",
+  const profileName = await input({
+    message: "(optional) Enter a browser profile name to use:",
     required: false,
   });
 
@@ -27,8 +27,12 @@ async function cli() {
   let sessionAndWindow = undefined;
 
   try {
-    sessionAndWindow = await service.initializeSessionAndBrowser(profileId);
+    sessionAndWindow = await service.initializeSessionAndBrowser(profileName);
     const { session, windowInfo } = sessionAndWindow;
+
+    if (profileName) {
+      await service.saveProfileOnTermination(session.id, profileName);
+    }
 
     const isSignedIn = await service.checkIfSignedIntoLinkedIn({
       sessionId: session.id,
@@ -60,6 +64,7 @@ async function cli() {
   } finally {
     if (sessionAndWindow?.session) {
       await service.terminateSession(sessionAndWindow.session.id);
+      log.info("Session terminated");
     }
   }
 }
