@@ -91,10 +91,10 @@ export class LinkedInExtractorService {
    */
   async getEmployeesListUrls({
     companyLinkedInProfileUrls,
-    profileId,
+    profileName,
   }: {
     companyLinkedInProfileUrls: BatchOperationUrl[];
-    profileId: string;
+    profileName: string;
   }): Promise<BatchOperationUrl[]> {
     this.log.info("Attempting to get the list of employees for the companies");
 
@@ -125,7 +125,7 @@ export class LinkedInExtractorService {
     const employeesListUrls = await this.airtop.client.batchOperate(companyLinkedInProfileUrls, getEmployeesListUrl, {
       onError: handleError,
       sessionConfig: {
-        baseProfileId: profileId,
+        profileName,
       },
     });
 
@@ -147,8 +147,8 @@ export class LinkedInExtractorService {
    */
   async getEmployeesProfileUrls({
     employeesListUrls,
-    profileId,
-  }: { employeesListUrls: BatchOperationUrl[]; profileId: string }): Promise<string[]> {
+    profileName,
+  }: { employeesListUrls: BatchOperationUrl[]; profileName: string }): Promise<string[]> {
     this.log.info("Initiating extraction of employee's profile URLs for the employees");
 
     const getEmployeeProfileUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<string[]>> => {
@@ -165,7 +165,7 @@ export class LinkedInExtractorService {
     const employeesProfileUrls = (
       await this.airtop.client.batchOperate(employeesListUrls, getEmployeeProfileUrl, {
         sessionConfig: {
-          baseProfileId: profileId,
+          profileName,
         },
       })
     ).flat();

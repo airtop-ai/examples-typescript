@@ -4,7 +4,7 @@ This is an example [Airtop](https://www.airtop.ai/) web application built with [
 app routing and a CLI tool that demonstrates how to extract data from LinkedIn using the Airtop SDK.
 
 - Given an Airtop API key, the code checks if the user is currently signed-in to LinkedIn
-  * This is true if you supplied an Airtop [`Profile ID`](https://docs.airtop.ai/guides/how-to/saving-a-profile) that 
+  * This is true if you supplied an Airtop [`Profile`](https://docs.airtop.ai/guides/how-to/saving-a-profile) that 
     had previously signed-in to LinkedIn
 - If the user is not signed-in, the user will be prompted to sign in to LinkedIn
   * In the CLI, a URL to an Airtop [LiveView](https://docs.airtop.ai/guides/how-to/creating-a-live-view) will be printed
