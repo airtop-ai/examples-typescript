@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  profileId: z.string().optional(),
+  profileName: z.string().optional(),
   resultLimit: z.number().min(1).max(10),
   matchPrompt: z.string().min(3, { message: "Match prompt is required" }),
   replyPrompt: z.string().min(3, { message: "Reply prompt is required" }),
@@ -31,26 +31,26 @@ const formSchema = z.object({
 /**
  * StartForm Component
  * A form component that handles browser interactions initialization.
- * It collects an API key and profile ID from the user and makes a POST request
+ * It collects an API key and profile name from the user and makes a POST request
  * to start the interactions process.
  */
 export function StartForm() {
-  const profileId = useAppStore((state) => state.profileId);
-  const setProfileId = useAppStore((state) => state.setProfileId);
+  const profileName = useAppStore((state) => state.profileName);
+  const setProfileName = useAppStore((state) => state.setProfileName);
   const setTaskParams = useAppStore((state) => state.setTaskParams);
 
   const { startSession, isLoading } = useStartSession();
 
-  const saveProfileId = (profileId: string) => {
-    const id = (profileId || "").trim();
-    localStorage.setItem("AIRTOP_PROFILE_ID", id);
-    setProfileId(id);
+  const saveProfileName = (profileName: string) => {
+    const name = (profileName || "").trim();
+    localStorage.setItem("AIRTOP_PROFILE_NAME", name);
+    setProfileName(name);
   };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      profileId: localStorage.getItem("AIRTOP_PROFILE_ID") || profileId,
+      profileName: localStorage.getItem("AIRTOP_PROFILE_NAME") || profileName,
       resultLimit: 3,
       query: "",
       matchPrompt: "",
@@ -58,10 +58,10 @@ export function StartForm() {
     },
   });
 
-  const onSubmit = ({ profileId, ...rest }: z.infer<typeof formSchema>) => {
+  const onSubmit = ({ profileName, ...rest }: z.infer<typeof formSchema>) => {
     setTaskParams({ ...rest });
-    saveProfileId(profileId || "");
-    startSession({ profileId, ...rest });
+    saveProfileName(profileName || "");
+    startSession({ profileName: profileName, ...rest });
   };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -74,14 +74,14 @@ export function StartForm() {
       <form onSubmit={handleFormSubmit} className="space-y-6">
         <FormField
           control={form.control}
-          name="profileId"
+          name="profileName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Airtop Profile ID</FormLabel>
+              <FormLabel>Airtop Profile Name</FormLabel>
               <FormControl>
-                <Input placeholder="abcd-efg2-hij3-klm4" {...field} onBlur={(e) => saveProfileId(e.target.value)} />
+                <Input placeholder="my-airtop-profile" {...field} onBlur={(e) => saveProfileName(e.target.value)} />
               </FormControl>
-              <FormDescription>The ID of the Airtop profile to use for the session.</FormDescription>
+              <FormDescription>The name of the Airtop profile to use for the session.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
