@@ -7,12 +7,12 @@ import type { LogLayer } from "loglayer";
  * Parameters required for the start controller
  * @interface StartControllerParams
  * @property {string} apiKey - API key for Airtop SDK
- * @property {string} [profileId] - Optional profile ID for session management
+ * @property {string} [profileName] - Optional profile name for session management
  * @property {LogLayer} log - Logger instance for tracking operations
  */
 interface StartControllerParams {
   apiKey: string;
-  profileId?: string;
+  profileName?: string;
   log: LogLayer;
 }
 
@@ -21,12 +21,17 @@ interface StartControllerParams {
  * @param {StartControllerParams} params - Configuration parameters
  * @returns {Promise<StartResponse>} Response containing session info or extracted content
  */
-export async function startController({ apiKey, profileId, log }: StartControllerParams): Promise<StartResponse> {
+export async function startController({ apiKey, profileName, log }: StartControllerParams): Promise<StartResponse> {
   // Initialize the service
   const service = new FacebookCommenterService({ apiKey, log });
 
   // Start a new browser session and get window information
-  const { session, windowInfo } = await service.initializeSessionAndBrowser(profileId);
+  const { session, windowInfo } = await service.initializeSessionAndBrowser(profileName);
+
+  // Save profile on termination
+  if (profileName) {
+    await service.saveProfileOnTermination(session.id, profileName);
+  }
 
   // Check if the browser (client) is already authenticated in Facebook
   const isSignedIn = await service.checkIfSignedIntoWebsite({
@@ -44,7 +49,7 @@ export async function startController({ apiKey, profileId, log }: StartControlle
   return {
     sessionId: session.id,
     windowId: windowInfo.data.windowId,
-    profileId: session.profileId,
+    profileName,
     liveViewUrl: windowInfo.data.liveViewUrl,
     targetId: windowInfo.targetId as string,
     cdpWsUrl: session.cdpWsUrl,

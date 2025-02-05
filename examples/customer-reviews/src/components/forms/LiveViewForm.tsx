@@ -51,8 +51,8 @@ export function LiveViewForm() {
     <>
       {title && <CardTitle className="text-sm font-bold">{title}</CardTitle>}
       <div className="mt-8 space-y-2">
-        <h4 className="font-medium leading-none">Session's Profile ID</h4>
-        <p className="text-sm text-muted-foreground">{session.profileId}</p>
+        <h4 className="font-medium leading-none">Session's Profile</h4>
+        <p className="text-sm text-muted-foreground">{session.profileName}</p>
       </div>
       <div className="space-x-4">
         <Button type="button" onClick={onTerminateSession} variant="destructive">

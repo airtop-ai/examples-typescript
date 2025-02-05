@@ -164,8 +164,8 @@ importers:
   examples/customer-reviews:
     dependencies:
       '@airtop/sdk':
-        specifier: 0.1.6
-        version: 0.1.6(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
+        specifier: 0.1.14
+        version: 0.1.14(playwright@1.48.2)(puppeteer@23.7.1(typescript@5.7.2))(selenium-webdriver@4.26.0)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.53.2(react@19.0.0-rc-66855b96-20241106))
