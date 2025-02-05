@@ -64,6 +64,7 @@ async function cli() {
   } finally {
     if (sessionAndWindow?.session) {
       await service.terminateSession(sessionAndWindow.session.id);
+      log.info("Session terminated");
     }
   }
 }

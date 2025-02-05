@@ -144,12 +144,9 @@ export class LinkedInExtractorService {
 
     const formattedJson = JSON.stringify(JSON.parse(promptContentResponse.data.modelResponse), null, 2);
 
-    this.log.info("Closing window and terminating session");
+    this.log.info("Closing window");
 
     await this.client.windows.close(sessionId, windowId);
-    await this.client.sessions.terminate(sessionId);
-
-    this.log.info("Cleanup completed");
 
     return formattedJson;
   }
