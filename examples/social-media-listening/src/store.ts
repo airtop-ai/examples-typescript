@@ -24,7 +24,7 @@ export enum InProgressStatus {
 
 export type AppState = {
   apiKey: string;
-  profileId?: string;
+  profileName?: string;
   sessionContext: StartSessionResponse | null;
   userIsSignedIn: boolean;
   status: "start" | "in_progress" | "completed";
@@ -45,7 +45,7 @@ export type AppState = {
 
 type Actions = {
   setApiKey: (apiKey: string) => void;
-  setProfileId: (profileId: string) => void;
+  setProfileName: (profileName: string) => void;
   resetState: () => void;
   setStatus: (status: AppState["status"]) => void;
   setGeneratedReply: (generatedReply: AppState["generatedReply"]) => void;
@@ -59,7 +59,7 @@ type Actions = {
 
 const initialState: AppState = {
   apiKey: "",
-  profileId: "",
+  profileName: "",
   sessionContext: null,
   userIsSignedIn: false,
   status: "start",
@@ -86,9 +86,9 @@ export const useAppStore = create<AppState & Actions>()(
         state.apiKey = apiKey;
       });
     },
-    setProfileId: (profileId: string) => {
+    setProfileName: (profileName: string) => {
       set((state) => {
-        state.profileId = profileId;
+        state.profileName = profileName;
       });
     },
     resetState: () => {

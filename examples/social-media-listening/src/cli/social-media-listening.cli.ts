@@ -109,10 +109,10 @@ async function cli() {
         validate: (value) => (value.length > 0 ? true : "API key cannot be empty"),
       }));
 
-    const profileId =
-      process.env.AIRTOP_PROFILE_ID ||
+    const profileName =
+      process.env.AIRTOP_PROFILE_NAME ||
       (await input({
-        message: "(Optional) Enter Airtop Profile ID:",
+        message: "(Optional) Enter Airtop Profile Name:",
       }));
 
     const taskConfig = runningDefaultMode() ? DEFAULT_INPUTS : await getUserInputs();
@@ -133,7 +133,12 @@ async function cli() {
     process.on("SIGINT", cleanup);
     process.on("SIGTERM", cleanup);
 
-    sessionContext = await service.initializeSessionAndBrowser(profileId);
+    sessionContext = await service.initializeSessionAndBrowser(profileName);
+
+    if (profileName) {
+      await service.saveProfileOnTermination(sessionContext.session.id, profileName);
+    }
+
     await runSocialMediaMonitor(service, sessionContext, taskConfig);
   } catch (error) {
     if (error instanceof CliError) {

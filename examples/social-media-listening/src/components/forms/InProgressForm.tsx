@@ -28,7 +28,7 @@ const ALL_STEPS: IStep[] = [
     component: ({ appState }) => (
       <div className="text-sm text-muted-foreground">
         <p className="pb-2">Session ID: {appState.sessionContext?.session.id}</p>
-        <p>Profile ID: {appState.profileId || appState.sessionContext?.session?.profileId}</p>
+        <p>Profile Name: {appState.profileName}</p>
       </div>
     ),
   },

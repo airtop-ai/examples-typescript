@@ -11,7 +11,7 @@ import type { SendReplyResponse } from "./api/send-reply/send-reply.validation";
 import type { StartSessionResponse } from "./api/start-session/start.validation";
 
 interface SessionParams {
-  profileId?: string;
+  profileName?: string;
   query: string;
   matchPrompt: string;
   resultLimit: number;
@@ -28,10 +28,10 @@ interface ApiContext {
 const logger = getLogger();
 
 // API Requests
-export const startAirtopSession = async (apiKey: string, profileId?: string): Promise<StartSessionResponse> => {
+export const startAirtopSession = async (apiKey: string, profileName?: string): Promise<StartSessionResponse> => {
   const response = await fetch(`${getFetchBasePath()}/api/start-session`, {
     method: "POST",
-    body: JSON.stringify({ apiKey, profileId }),
+    body: JSON.stringify({ apiKey, profileName }),
   });
 
   const data = (await response.json()) as StartSessionResponse;
@@ -118,14 +118,14 @@ export const useStartSession = () => {
     setIsLoading(false);
   };
 
-  const startSession = async ({ profileId, query, matchPrompt, resultLimit, replyPrompt }: SessionParams) => {
+  const startSession = async ({ profileName, query, matchPrompt, resultLimit, replyPrompt }: SessionParams) => {
     try {
       setIsLoading(true);
       setStatus("in_progress");
 
       // Start session
       setInProgressStatus(InProgressStatus.CREATING_WINDOW);
-      const sessionCtx = await startAirtopSession(apiKey, profileId);
+      const sessionCtx = await startAirtopSession(apiKey, profileName);
       setSessionContext(sessionCtx);
 
       const apiContext: ApiContext = {
