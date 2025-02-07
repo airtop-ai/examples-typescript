@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 /**
  * StartForm Component
  * A form component that handles browser interactions initialization.
- * It collects an API key and profile ID from the user and makes a POST request
+ * It collects an API key and makes a POST request
  * to start the interactions process.
  */
 export function StartForm() {
