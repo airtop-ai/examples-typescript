@@ -39,6 +39,8 @@ export const enrichTherapistNode = async (
   state: typeof StateAnnotation.State,
   config: RunnableConfig<typeof ConfigurableAnnotation.State>,
 ) => {
+  const therapistsLiveViewUrls: string[] = [];
+
   const log = getLogger().withPrefix("[enrichTherapistNode]");
   log.debug("Enriching therapists");
 
@@ -57,6 +59,8 @@ export const enrichTherapistNode = async (
     .filter(Boolean) as BatchOperationUrl[];
 
   const enrichOperation = async (input: BatchOperationInput) => {
+    therapistsLiveViewUrls.push(input.liveViewUrl);
+
     const response = await client.windows.pageQuery(input.sessionId, input.windowId, {
       prompt: ENRICH_THERAPISTS_PROMPT,
       configuration: {
@@ -84,6 +88,7 @@ export const enrichTherapistNode = async (
   };
 
   const enrichedTherapists = await client.batchOperate(enrichmentInput, enrichOperation, { onError: handleError });
+  log.withMetadata({ therapistsLiveViewUrls }).debug("Enriched therapists successfully");
 
   return {
     ...state,

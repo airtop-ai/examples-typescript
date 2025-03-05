@@ -1,3 +1,4 @@
+import { useAppStore } from "@/store";
 import { Button, Card, CardContent, CardHeader, CardTitle } from "@local/ui";
 
 interface DisplayCsvContentProps {
@@ -5,6 +6,8 @@ interface DisplayCsvContentProps {
 }
 
 export function DisplayCsvContent({ content }: DisplayCsvContentProps) {
+  const resetResponse = useAppStore((state) => state.resetResponse);
+
   const handleDownload = () => {
     const blob = new Blob([content], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
@@ -26,7 +29,12 @@ export function DisplayCsvContent({ content }: DisplayCsvContentProps) {
         <div className="max-h-[400px] overflow-auto p-4 bg-muted rounded-md">
           <pre className="text-sm">{content}</pre>
         </div>
-        <Button onClick={handleDownload}>Download CSV</Button>
+        <div className="flex gap-4">
+          <Button onClick={handleDownload}>Download CSV</Button>
+          <Button variant="outline" onClick={resetResponse}>
+            Go back
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

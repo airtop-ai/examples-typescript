@@ -42,6 +42,8 @@ export const fetchTherapistsNode = async (
   state: typeof StateAnnotation.State,
   config: RunnableConfig<typeof ConfigurableAnnotation.State>,
 ) => {
+  const websiteLiveViewUrls: string[] = [];
+
   const log = getLogger().withPrefix("[fetchTherapistsNode]");
 
   const websiteLinks = state.urls.map((url) => ({ url: url.url }));
@@ -49,6 +51,9 @@ export const fetchTherapistsNode = async (
   const airtopClient = config.configurable!.airtopClient;
 
   const fetchTherapists = async (input: BatchOperationInput): Promise<BatchOperationResponse<TherapistState>> => {
+    // Add the live view URL to the list of live view URLs
+    websiteLiveViewUrls.push(input.liveViewUrl);
+
     const modelResponse = await airtopClient.windows.pageQuery(input.sessionId, input.windowId, {
       prompt: FETCH_THERAPISTS_PROMPT,
       configuration: {
@@ -76,6 +81,7 @@ export const fetchTherapistsNode = async (
   };
 
   const results = await airtopClient.batchOperate(websiteLinks, fetchTherapists, { onError: handleError });
+  log.withMetadata({ websiteLiveViewUrls }).debug("Fetched the website views successfully");
 
   log.withMetadata({ results }).debug("Fetched therapists successfully");
 
