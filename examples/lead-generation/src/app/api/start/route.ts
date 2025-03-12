@@ -1,44 +1,23 @@
-import { startController } from "@/app/api/start/start.controller";
-import { type StartRequest, type StartResponse, startRequestSchema } from "@/app/api/start/start.validation";
-import { getLogger, serializeErrors } from "@local/utils";
-import { type NextRequest, NextResponse } from "next/server";
+import { leadGenerationGraph } from "@/graph/graph";
+import { NextResponse } from "next/server";
+import { startRequestSchema } from "./start.validation";
 
-export const maxDuration = 300;
-
-/**
- * Initializes the Airtop session and start the process of extracting data from yCombinator and LinkedIn.
- * - Returns with a URL for the user to sign in via the live session if necessary
- * - Otherwise, will return with the extracted data
- */
-export async function POST(request: NextRequest) {
-  const log = getLogger().withPrefix("[api/start]").withMetadata({
-    url: request.url,
-    method: request.method,
-  });
-
-  log.info("Received start request");
-
+export async function POST(request: Request) {
   try {
-    const data = (await request.json()) as StartRequest;
-    log.withMetadata({ urls: data.urls }).debug("Request payload");
+    const body = await request.json();
+    const { apiKey, openAiKey, urls } = startRequestSchema.parse(body);
 
-    // Validate request data
-    try {
-      startRequestSchema.parse(data);
-    } catch (e) {
-      log.withError(e).error("Request validation failed");
-      return NextResponse.json(serializeErrors(e), { status: 400 });
-    }
-
-    // Execute controller
-    const controllerResponse = await startController({ ...data });
-    log.info("Request processed successfully");
-
-    return NextResponse.json<StartResponse>(controllerResponse);
-  } catch (e: any) {
-    log.withError(e).error("Failed to process request");
-    return NextResponse.json(serializeErrors(e), {
-      status: 500,
+    const result = await leadGenerationGraph(urls, {
+      apiKey,
+      openAiKey,
     });
+
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("Error in start endpoint:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "An unexpected error occurred" },
+      { status: 500 },
+    );
   }
 }

@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { leadGenerationGraph } from "@/graph/graph";
+import { leadGenerationGraph, leadGenerationGraphFinish } from "@/graph/graph";
 import { confirm, input } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
 
@@ -49,7 +49,11 @@ const main = async () => {
 
   // run the graph
   log.info("Running the graph...");
-  const result = await leadGenerationGraph(urls, { apiKey, openAiKey });
+  const firstGraphResult = await leadGenerationGraph(urls, { apiKey, openAiKey });
+
+  const therapists = firstGraphResult.therapists;
+
+  const result = await leadGenerationGraphFinish(therapists, { apiKey, openAiKey });
 
   if (result.csvContent) {
     const csvFileName = "lead-generation-results.csv";

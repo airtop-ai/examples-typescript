@@ -1,4 +1,5 @@
 import type { StartResponse } from "@/app/api/start/start.validation";
+import type { Therapist } from "@/graph/state";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -6,6 +7,7 @@ type State = {
   apiKey: string;
   openAiKey: string;
   urls: string[];
+  therapists?: Therapist[];
   csvContent?: string;
   error?: string;
 };
@@ -16,6 +18,7 @@ type Actions = {
   setOpenAiKey: (openAiKey: string) => void;
   setStartResponse: (response: StartResponse) => void;
   setUrls: (urls: string[]) => void;
+  setTherapists: (therapists: Therapist[]) => void;
   setCsvContent: (content: string) => void;
   setError: (error: string) => void;
 };
@@ -25,6 +28,7 @@ export const useAppStore = create<State & Actions>()(
     apiKey: "",
     openAiKey: "",
     urls: [],
+    therapists: undefined,
     csvContent: undefined,
     error: undefined,
 
@@ -32,6 +36,7 @@ export const useAppStore = create<State & Actions>()(
       set((state) => {
         state.csvContent = undefined;
         state.error = undefined;
+        state.therapists = undefined;
       });
     },
     setApiKey: (apiKey: string) => {
@@ -43,6 +48,9 @@ export const useAppStore = create<State & Actions>()(
       set((state) => {
         state.csvContent = response.csvContent;
         state.error = response.error;
+        if ("therapists" in response) {
+          state.therapists = response.therapists;
+        }
       });
     },
     setOpenAiKey: (openAiKey: string) => {
@@ -53,6 +61,11 @@ export const useAppStore = create<State & Actions>()(
     setUrls: (urls: string[]) => {
       set((state) => {
         state.urls = urls;
+      });
+    },
+    setTherapists: (therapists: Therapist[]) => {
+      set((state) => {
+        state.therapists = therapists;
       });
     },
     setCsvContent: (content: string) => {

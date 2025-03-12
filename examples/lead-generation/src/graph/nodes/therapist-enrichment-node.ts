@@ -1,6 +1,6 @@
-import { type ENRICHED_THERAPIST_SCHEMA, type StateAnnotation, THERAPIST_SCHEMA } from "@/graph/state";
 import type { ConfigurableAnnotation } from "@/graph/state";
-import type { BatchOperationError, BatchOperationInput, BatchOperationUrl } from "@airtop/sdk";
+import { type ENRICHED_THERAPIST_SCHEMA, type StateAnnotation, THERAPIST_SCHEMA } from "@/graph/state";
+import type { AirtopClient, BatchOperationError, BatchOperationInput, BatchOperationUrl } from "@airtop/sdk";
 import type { RunnableConfig } from "@langchain/core/runnables";
 import { getLogger } from "@local/utils";
 import type { z } from "zod";
@@ -34,7 +34,40 @@ If no errors are found, set the error field to an empty string.`;
  * @param state - The state of the therapist node.
  * @param config - The graph config containing the Airtop client
  * @returns The updated state of the therapist node.
+ *
+ *
  */
+
+const parallelEnrichment = async (client: AirtopClient, urls: string[]) => {
+  const session = await client.sessions.create();
+
+  const result = await Promise.all(
+    urls.map(async (url) => {
+      const window = await client.windows.create(session.data.id, { url });
+      const response = await client.windows.pageQuery(session.data.id, window.data.windowId, {
+        prompt: ENRICH_THERAPISTS_PROMPT,
+        configuration: {
+          outputSchema: ENRICHED_THERAPIST_JSON_SCHEMA,
+        },
+      });
+
+      if (!response.data.modelResponse || response.data.modelResponse === "") {
+        throw new Error("An error occurred while enriching the therapist");
+      }
+
+      const enrichedTherapist = JSON.parse(response.data.modelResponse) as z.infer<typeof ENRICHED_THERAPIST_SCHEMA>;
+
+      if (enrichedTherapist.error) {
+        throw new Error(enrichedTherapist.error);
+      }
+
+      return enrichedTherapist;
+    }),
+  );
+
+  return result;
+};
+
 export const enrichTherapistNode = async (
   state: typeof StateAnnotation.State,
   config: RunnableConfig<typeof ConfigurableAnnotation.State>,
@@ -88,7 +121,6 @@ export const enrichTherapistNode = async (
   };
 
   const enrichedTherapists = await client.batchOperate(enrichmentInput, enrichOperation, { onError: handleError });
-  log.withMetadata({ therapistsLiveViewUrls }).debug("Enriched therapists successfully");
 
   return {
     ...state,
