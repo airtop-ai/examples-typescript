@@ -4,7 +4,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   ...getHeadersConfig(),
   ...registerToHome(exampleListings.LEAD_GENERATION.dirName),
-  maxDuration: 300,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.

@@ -2,6 +2,10 @@ import { leadGenerationGraphPart1 } from "@/graph/graph";
 import { NextResponse } from "next/server";
 import { startRequestSchema } from "./start.validation";
 
+export const config = {
+  maxDuration: 300,
+};
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
