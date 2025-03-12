@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { leadGenerationGraph, leadGenerationGraphFinish } from "@/graph/graph";
+import { leadGenerationGraphPart1, leadGenerationGraphPart2 } from "@/graph/graph";
 import { confirm, input } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
 
@@ -13,7 +13,8 @@ const main = async () => {
   // Collect URls
   while (true) {
     const url = await input({
-      message: "Enter a URL (or press Enter with empty input to finish):",
+      message:
+        "Enter a URL (i.e. https://www.findapsychologist.org/cities/psychologists-in-san-francisco/ or press Enter with empty input to finish):",
     });
 
     if (!url) break;
@@ -49,11 +50,11 @@ const main = async () => {
 
   // run the graph
   log.info("Running the graph...");
-  const firstGraphResult = await leadGenerationGraph(urls, { apiKey, openAiKey });
+  const firstGraphResult = await leadGenerationGraphPart1(urls, { apiKey, openAiKey });
 
   const therapists = firstGraphResult.therapists;
 
-  const result = await leadGenerationGraphFinish(therapists, { apiKey, openAiKey });
+  const result = await leadGenerationGraphPart2(therapists, { apiKey, openAiKey });
 
   if (result.csvContent) {
     const csvFileName = "lead-generation-results.csv";

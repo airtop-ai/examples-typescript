@@ -1,4 +1,4 @@
-import { leadGenerationGraphFinish } from "@/graph/graph";
+import { leadGenerationGraphPart2 } from "@/graph/graph";
 import type { Therapist } from "@/graph/state";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { apiKey, openAiKey, therapists } = continueRequestSchema.parse(body);
 
-    const result = await leadGenerationGraphFinish(therapists as Therapist[], {
+    const result = await leadGenerationGraphPart2(therapists as Therapist[], {
       apiKey,
       openAiKey,
     });

@@ -23,7 +23,7 @@ export type LeadGenerationGraphResult = {
  * The output of this graph will later be passed to the second graph.
  *
  */
-export const leadGenerationGraph = async (
+export const leadGenerationGraphPart1 = async (
   graphInputs: string[],
   config: LeadGenerationGraphConfig,
 ): Promise<LeadGenerationGraphResult> => {
@@ -61,7 +61,7 @@ export const leadGenerationGraph = async (
  * It will enrich the therapists information with their personalized website (if any), generate a CSV file with the results, and handle any errors.
  *
  */
-export const leadGenerationGraphFinish = async (
+export const leadGenerationGraphPart2 = async (
   therapists: Therapist[],
   config: LeadGenerationGraphConfig,
 ): Promise<LeadGenerationGraphResult> => {
