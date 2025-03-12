@@ -14,8 +14,8 @@ async function cli() {
     required: true,
   });
 
-  const profileId = await input({
-    message: "(optional) Enter a browser profile ID to use:",
+  const profileName = await input({
+    message: "(optional) Enter a browser profile name to use:",
     required: false,
   });
 
@@ -27,10 +27,14 @@ async function cli() {
   let sessionAndWindow = undefined;
 
   try {
-    sessionAndWindow = await service.initializeSessionAndBrowser(profileId);
+    sessionAndWindow = await service.initializeSessionAndBrowser(profileName);
     const { session, windowInfo } = sessionAndWindow;
     const sessionId = session.id;
     const windowId = windowInfo.data.windowId;
+
+    if (profileName) {
+      await service.saveProfileOnTermination(sessionId, profileName);
+    }
 
     const isSignedIn = await service.checkIfSignedIntoWebsite({
       sessionId,

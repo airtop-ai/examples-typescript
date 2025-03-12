@@ -7,7 +7,7 @@ app routing and a CLI tool that demonstrates how to automate replying to posts o
 
 The application will require you to enter a few parameters before searching posts:
 
- - **Airtop Profile Id** (Optional): If there's a [Profile](https://docs.airtop.ai/guides/how-to/saving-a-profile) that you want to use for the session, you can provide it here.
+ - **Airtop Profile Name** (Optional): If there's a [Profile](https://docs.airtop.ai/guides/how-to/saving-a-profile) that you want to use for the session, you can provide it here.
  - **Query**: The query to use in X's search bar. E.g. _#ai #agents #langchain_.
  - **Match Prompt**: The criteria to use to find candidate posts to reply to. E.g. _The post mentions an AI framework or tool_.
  - **Reply Prompt**: The way in which the reply should be written. E.g. _Friendly response that casually mentions Airtop_.
@@ -55,7 +55,7 @@ The CLI requires certain environment variables to function correctly. You can se
 
 ```
 AIRTOP_API_KEY=your_airtop_api_key
-AIRTOP_PROFILE_ID=your_optional_profile_id
+AIRTOP_PROFILE_NAME=my-airtop-profile
 ```
 
 Alternatively, if environment variables are not set, the CLI will prompt you to enter the required information interactively.

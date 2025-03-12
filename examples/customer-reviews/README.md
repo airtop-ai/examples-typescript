@@ -5,7 +5,7 @@ app routing and a CLI tool that demonstrates how to use the Airtop SDK to automa
 in a Facebook page.
 
 - Given an Airtop API key, the code checks if the user is currently signed-in to Facebook
-  * This is true if you supplied an Airtop [`Profile ID`](https://docs.airtop.ai/guides/how-to/saving-a-profile) that 
+  * This is true if you supplied an Airtop [`Profile`](https://docs.airtop.ai/guides/how-to/saving-a-profile) that 
     had previously signed-in to Facebook.
 - If the user is not signed-in, the user will be prompted to sign in to Facebook
   * In the CLI, a URL to an Airtop [LiveView](https://docs.airtop.ai/guides/how-to/creating-a-live-view) will be printed

@@ -6,7 +6,7 @@ This is an example CLI tool that demonstrates LinkedIn data extraction using the
 
 ## Features
 
-- Checks LinkedIn sign-in status using your Airtop API key and [`Profile ID`](https://docs.airtop.ai/guides/how-to/saving-a-profile)
+- Checks LinkedIn sign-in status using your Airtop API key and [`Profile`](https://docs.airtop.ai/guides/how-to/saving-a-profile)
 - Handles user authentication:
   * If not signed in, provides an Airtop [LiveView](https://docs.airtop.ai/guides/how-to/creating-a-live-view) URL for browser-based sign-in
   * Once authenticated, extracts and displays LinkedIn profile data
