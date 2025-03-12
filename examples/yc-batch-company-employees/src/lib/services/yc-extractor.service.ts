@@ -48,6 +48,9 @@ export class YCExtractorService {
       url: YC_COMPANIES_URL,
     });
 
+    // Set a small wait time to ensure the page is loaded
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     this.log.info("Extracting YC batches");
     // Extract the batches from the YC Company Directory page
     const modelResponse = await this.airtop.client.windows.pageQuery(session.data.id, window.data.windowId, {
@@ -91,6 +94,9 @@ export class YCExtractorService {
     const window = await this.airtop.client.windows.create(session.data.id, {
       url: `${YC_COMPANIES_URL}?batch=${batch}`,
     });
+
+    // Set a small wait time to ensure the page is loaded
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     this.log.info(`Extracting companies in batch "${batch}"`);
     const modelResponse = await this.airtop.client.windows.pageQuery(session.data.id, window.data.windowId, {
