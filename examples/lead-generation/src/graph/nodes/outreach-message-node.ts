@@ -7,7 +7,7 @@ import { z } from "zod";
 
 const responseSchema = z.object({
   message: z.string().describe("The outreach message for the therapist"),
-  error: z.string().optional().describe("Error message if the request cannot be fulfilled"),
+  error: z.string().nullable().optional().describe("Error message if the request cannot be fulfilled"),
 });
 
 const outreachMessagePrompt = (therapist: Therapist) => {
