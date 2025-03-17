@@ -138,7 +138,7 @@ export class YCExtractorService {
       const modelResponse = await this.airtop.client.windows.pageQuery(input.sessionId, input.windowId, {
         prompt: GET_COMPANY_LINKEDIN_PROFILE_URL_PROMPT,
         configuration: {
-          outputSchema: GET_COMPANY_LINKEDIN_PROFILE_URL_OUTPUT_SCHEMA,
+          outputSchema: JSON.stringify(GET_COMPANY_LINKEDIN_PROFILE_URL_OUTPUT_SCHEMA),
         },
       });
 

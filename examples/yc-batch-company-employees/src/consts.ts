@@ -88,26 +88,17 @@ export type GetCompaniesInBatchResponse = z.infer<typeof GET_COMPANIES_IN_BATCH_
 
 export const GET_COMPANY_LINKEDIN_PROFILE_URL_PROMPT = `
 You are looking at a specific company's profile page on Y Combinator.
+
 Your task is to extract the company's official LinkedIn URL.
+The LinkedIn URL is typically found alongside information like year founded, team size, status, etc.
 
-Guidelines:
-1. The LinkedIn URL should be from the company information section alongside the company's name, founded year, team size, location, and other information.
-2. Valid formats include (but are not limited to):
-   - https://www.linkedin.com/company/[company-name]
-   - https://linkedin.com/company/[company-name]
-3. Do NOT extract:
-   - Personal LinkedIn profiles of founders/employees
-   - LinkedIn URLs from other sections of the page
-   - Malformed or partial LinkedIn URLs
-
-Return null if:
-- No LinkedIn URL is present
-- Only founder/employee LinkedIn profiles are found
-- The URL format is invalid or suspicious
+Important:
+- Be careful not to confuse the company's LinkedIn URL with the LinkedIn profile of a specific employee, or CEO/CTO.
+- The company LinkedIn URL can sometimes have the following format: https://www.linkedin.com/company/company-name/<company-name>. It is not limited to that format.
 `;
 
 const GET_COMPANY_LINKEDIN_PROFILE_URL_SCHEMA = baseSchema.extend({
-  linkedInProfileUrl: z.string().nullable().describe("The LinkedIn profile URL or null if not found"),
+  linkedInProfileUrl: z.string().describe("The LinkedIn profile URL or null if not found"),
 });
 
 export const GET_COMPANY_LINKEDIN_PROFILE_URL_OUTPUT_SCHEMA = zodToJsonSchema(GET_COMPANY_LINKEDIN_PROFILE_URL_SCHEMA);
