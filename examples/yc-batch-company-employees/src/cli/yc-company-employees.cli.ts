@@ -72,13 +72,8 @@ async function cli() {
       await airtop.terminateSession(ycSession.data.id);
     }
 
-    const employeesListUrls = await linkedInService.getEmployeesListUrls({
-      companyLinkedInProfileUrls: linkedInProfileUrls,
-      profileName,
-    });
-
     await linkedInService.getEmployeesProfileUrls({
-      employeesListUrls: employeesListUrls,
+      companyLinkedInProfileUrls: linkedInProfileUrls,
       profileName,
     });
 

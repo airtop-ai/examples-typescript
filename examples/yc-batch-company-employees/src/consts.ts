@@ -103,3 +103,19 @@ const GET_COMPANY_LINKEDIN_PROFILE_URL_SCHEMA = baseSchema.extend({
 
 export const GET_COMPANY_LINKEDIN_PROFILE_URL_OUTPUT_SCHEMA = zodToJsonSchema(GET_COMPANY_LINKEDIN_PROFILE_URL_SCHEMA);
 export type GetCompanyLinkedInProfileUrlResponse = z.infer<typeof GET_COMPANY_LINKEDIN_PROFILE_URL_SCHEMA>;
+
+export const GET_EMPLOYEES_PROFILES_PROMPT = `
+You are looking at a LinkedIn's people tab of a company.
+Extract the linkedIn profile urls of the employees you see of the company.
+
+The profile urls typically (but not limited to) have the format of linkedin.com/in/<identifier of the employee>. These are the kind of links you should extract and return.
+
+Do not return profile urls of people that are not from the company.
+`;
+
+export const GET_EMPLOYEES_PROFILES_SCHEMA = baseSchema.extend({
+  employees_profile_urls: z.array(z.string()),
+});
+
+export const GET_EMPLOYEES_PROFILES_OUTPUT_SCHEMA = zodToJsonSchema(GET_EMPLOYEES_PROFILES_SCHEMA);
+export type GetEmployeesProfilesResponse = z.infer<typeof GET_EMPLOYEES_PROFILES_SCHEMA>;

@@ -1,4 +1,12 @@
-import { IS_LOGGED_IN_OUTPUT_SCHEMA, IS_LOGGED_IN_PROMPT, type IsLoggedInResponse, LINKEDIN_FEED_URL } from "@/consts";
+import {
+  GET_EMPLOYEES_PROFILES_OUTPUT_SCHEMA,
+  GET_EMPLOYEES_PROFILES_PROMPT,
+  type GetEmployeesProfilesResponse,
+  IS_LOGGED_IN_OUTPUT_SCHEMA,
+  IS_LOGGED_IN_PROMPT,
+  type IsLoggedInResponse,
+  LINKEDIN_FEED_URL,
+} from "@/consts";
 import type { AirtopService } from "@/lib/services/airtop.service";
 import type { BatchOperationError, BatchOperationInput, BatchOperationResponse, BatchOperationUrl } from "@airtop/sdk";
 import type { LogLayer } from "loglayer";
@@ -141,33 +149,55 @@ export class LinkedInExtractorService {
 
   /**
    * Gets the LinkedIn employees profile URLs for a list of LinkedIn employees list URLs
-   * @param employeesListUrls - The list of LinkedIn employees list URLs
+   * @param companyLinkedInProfileUrls - The list of LinkedIn company urls in their people's tab
    * @param sessionId - The ID of the session
    * @returns The list of LinkedIn employees profile URLs
    */
   async getEmployeesProfileUrls({
-    employeesListUrls,
+    companyLinkedInProfileUrls,
     profileName,
-  }: { employeesListUrls: BatchOperationUrl[]; profileName: string }): Promise<string[]> {
+  }: { companyLinkedInProfileUrls: BatchOperationUrl[]; profileName: string }): Promise<string[]> {
     this.log.info("Initiating extraction of employee's profile URLs for the employees");
 
     const getEmployeeProfileUrl = async (input: BatchOperationInput): Promise<BatchOperationResponse<string[]>> => {
       this.log.info(`Scraping content for employee URL: ${input.operationUrl.url}`);
-      const scrapedContent = await this.airtop.client.windows.scrapeContent(input.sessionId, input.windowId);
 
-      const newUrls = this.extractEmployeeProfileUrls(scrapedContent.data.modelResponse.scrapedContent.text);
+      const modelResponse = await this.airtop.client.windows.pageQuery(input.sessionId, input.windowId, {
+        prompt: GET_EMPLOYEES_PROFILES_PROMPT,
+        configuration: {
+          outputSchema: JSON.stringify(GET_EMPLOYEES_PROFILES_OUTPUT_SCHEMA),
+        },
+      });
+
+      if (!modelResponse.data.modelResponse || modelResponse.data.modelResponse === "") {
+        throw new Error("No response from LinkedIn");
+      }
+
+      const response = JSON.parse(modelResponse.data.modelResponse) as GetEmployeesProfilesResponse;
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      if (!response.employees_profile_urls) {
+        throw new Error("No employees found");
+      }
 
       return {
-        data: newUrls,
+        data: response.employees_profile_urls,
       };
     };
 
     const employeesProfileUrls = (
-      await this.airtop.client.batchOperate(employeesListUrls, getEmployeeProfileUrl, {
-        sessionConfig: {
-          profileName,
+      await this.airtop.client.batchOperate(
+        companyLinkedInProfileUrls.map((url) => ({ url: `${url.url}/people/` })),
+        getEmployeeProfileUrl,
+        {
+          sessionConfig: {
+            profileName,
+          },
         },
-      })
+      )
     ).flat();
 
     this.log

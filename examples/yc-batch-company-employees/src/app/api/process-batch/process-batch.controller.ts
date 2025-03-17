@@ -25,15 +25,9 @@ export async function processBatchController({
     // At this point we should be logged in, so we terminate the session to persist profile
     await airtop.terminateSession(sessionId);
 
-    // Get employee list url for each company
-    const employeesListUrls = await linkedin.getEmployeesListUrls({
-      companyLinkedInProfileUrls: linkedInProfileUrls,
-      profileName,
-    });
-
-    // Get employee's Profile Urls for each employee list url
+    // Get employee's Profile Urls for each company
     const employeesProfileUrls = await linkedin.getEmployeesProfileUrls({
-      employeesListUrls: employeesListUrls,
+      companyLinkedInProfileUrls: linkedInProfileUrls,
       profileName,
     });
 
