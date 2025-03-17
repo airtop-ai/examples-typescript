@@ -110,7 +110,7 @@ Extract the linkedIn profile urls of the employees you see of the company.
 
 The profile urls typically (but not limited to) have the format of linkedin.com/in/<identifier of the employee>. These are the kind of links you should extract and return.
 
-Do not return profile urls of people that are not from the company.
+Do not return profile urls of people that are not from the company. Only return profile urls of employees found in the 'People you may know' section.
 `;
 
 export const GET_EMPLOYEES_PROFILES_SCHEMA = baseSchema.extend({
