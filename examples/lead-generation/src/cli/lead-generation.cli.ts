@@ -1,7 +1,7 @@
+import fs from "node:fs";
 import { LeadGenerationEnrichmentGraph, LeadGenerationSourcingGraph } from "@/graph/graph";
 import { confirm, input } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
-import fs from "node:fs";
 
 const log = getLogger();
 
