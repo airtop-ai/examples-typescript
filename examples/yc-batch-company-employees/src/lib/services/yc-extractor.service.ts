@@ -48,6 +48,9 @@ export class YCExtractorService {
       url: YC_COMPANIES_URL,
     });
 
+    // Set a small wait time to ensure the page is loaded
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     this.log.info("Extracting YC batches");
     // Extract the batches from the YC Company Directory page
     const modelResponse = await this.airtop.client.windows.pageQuery(session.data.id, window.data.windowId, {
@@ -92,6 +95,9 @@ export class YCExtractorService {
       url: `${YC_COMPANIES_URL}?batch=${batch}`,
     });
 
+    // Set a small wait time to ensure the page is loaded
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     this.log.info(`Extracting companies in batch "${batch}"`);
     const modelResponse = await this.airtop.client.windows.pageQuery(session.data.id, window.data.windowId, {
       prompt: GET_COMPANIES_IN_BATCH_PROMPT,
@@ -132,7 +138,7 @@ export class YCExtractorService {
       const modelResponse = await this.airtop.client.windows.pageQuery(input.sessionId, input.windowId, {
         prompt: GET_COMPANY_LINKEDIN_PROFILE_URL_PROMPT,
         configuration: {
-          outputSchema: GET_COMPANY_LINKEDIN_PROFILE_URL_OUTPUT_SCHEMA,
+          outputSchema: JSON.stringify(GET_COMPANY_LINKEDIN_PROFILE_URL_OUTPUT_SCHEMA),
         },
       });
 
