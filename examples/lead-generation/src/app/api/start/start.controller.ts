@@ -1,5 +1,5 @@
 import type { StartResponse } from "@/app/api/start/start.validation";
-import { leadGenerationGraphPart1 } from "@/graph/graph";
+import { LeadGenerationSourcingGraph } from "@/graph/graph";
 
 interface StartControllerParams {
   apiKey: string;
@@ -9,7 +9,7 @@ interface StartControllerParams {
 
 export async function startController({ urls, apiKey, openAiKey }: StartControllerParams): Promise<StartResponse> {
   // Execute the graph
-  const result = await leadGenerationGraphPart1(urls, { apiKey, openAiKey });
+  const result = await LeadGenerationSourcingGraph(urls, { apiKey, openAiKey });
 
   return {
     csvContent: result.csvContent,

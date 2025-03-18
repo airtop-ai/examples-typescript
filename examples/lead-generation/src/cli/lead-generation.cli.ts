@@ -1,7 +1,7 @@
-import fs from "node:fs";
-import { leadGenerationGraphPart1, leadGenerationGraphPart2 } from "@/graph/graph";
+import { LeadGenerationEnrichmentGraph, LeadGenerationSourcingGraph } from "@/graph/graph";
 import { confirm, input } from "@inquirer/prompts";
 import { getLogger } from "@local/utils";
+import fs from "node:fs";
 
 const log = getLogger();
 
@@ -50,11 +50,11 @@ const main = async () => {
 
   // run the graph
   log.info("Running the graph...");
-  const firstGraphResult = await leadGenerationGraphPart1(urls, { apiKey, openAiKey });
+  const firstGraphResult = await LeadGenerationSourcingGraph(urls, { apiKey, openAiKey });
 
   const therapists = firstGraphResult.therapists;
 
-  const result = await leadGenerationGraphPart2(therapists, { apiKey, openAiKey });
+  const result = await LeadGenerationEnrichmentGraph(therapists, { apiKey, openAiKey });
 
   if (result.csvContent) {
     const csvFileName = "lead-generation-results.csv";

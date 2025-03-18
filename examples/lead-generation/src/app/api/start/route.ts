@@ -1,4 +1,4 @@
-import { leadGenerationGraphPart1 } from "@/graph/graph";
+import { LeadGenerationSourcingGraph } from "@/graph/graph";
 import { NextResponse } from "next/server";
 import { startRequestSchema } from "./start.validation";
 
@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { apiKey, openAiKey, urls } = startRequestSchema.parse(body);
 
-    const result = await leadGenerationGraphPart1(urls, {
+    const result = await LeadGenerationSourcingGraph(urls, {
       apiKey,
       openAiKey,
     });
