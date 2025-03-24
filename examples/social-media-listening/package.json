@@ -15,7 +15,7 @@
     "postinstall": "copy-files-from-to"
   },
   "dependencies": {
-    "@airtop/sdk": "0.1.14",
+    "@airtop/sdk": "0.1.31",
     "@hookform/resolvers": "3.9.1",
     "@inquirer/prompts": "7.1.0",
     "@internal/home-config": "workspace:*",
@@ -25,7 +25,7 @@
     "immer": "10.1.1",
     "loglayer": "4.8.0",
     "lucide-react": "0.462.0",
-    "next": "15.0.3",
+    "next": "15.2.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-hook-form": "7.53.2",
@@ -36,14 +36,14 @@
   "devDependencies": {
     "@local/tailwind-config": "workspace:*",
     "@local/typescript-config": "workspace:*",
-    "@types/node": "22.10.0",
+    "@types/node": "22.13.13",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "copy-files-from-to": "3.12.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "16.4.7",
     "postcss": "8.4.49",
     "tailwindcss": "3.4.15",
     "tsx": "4.19.2",
-    "typescript": "5.7.2"
+    "typescript": "5.8.2"
   }
 }

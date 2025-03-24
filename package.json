@@ -31,8 +31,8 @@
     "husky": "9.1.7",
     "prettier": "3.4.1",
     "syncpack": "13.0.0",
-    "turbo": "2.3.3",
-    "typescript": "5.7.2"
+    "turbo": "2.4.4",
+    "typescript": "5.8.2"
   },
   "engines": {
     "node": ">=20"

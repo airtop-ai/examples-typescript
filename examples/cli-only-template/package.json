@@ -11,7 +11,7 @@
     "verify-types": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@airtop/sdk": "0.1.16",
+    "@airtop/sdk": "0.1.31",
     "@inquirer/prompts": "7.1.0",
     "@local/utils": "workspace:*",
     "chalk": "5.3.0",
@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@local/typescript-config": "workspace:*",
-    "@types/node": "22.10.0",
+    "@types/node": "22.13.13",
     "tsx": "4.19.2",
-    "typescript": "5.7.2"
+    "typescript": "5.8.2"
   }
 }
