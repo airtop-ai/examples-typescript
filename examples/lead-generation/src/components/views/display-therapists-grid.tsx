@@ -67,7 +67,8 @@ export function DisplayTherapistsGrid({ therapists }: DisplayTherapistsGridProps
                 src={therapist.website}
                 title={therapist.name || "Therapist website"}
                 className="w-full h-full border-0"
-                sandbox="allow-same-origin allow-scripts"
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
+                onError={(e) => console.error("Failed to load iframe:", e)}
               />
             </Card>
           ))}

@@ -1,6 +1,6 @@
+import { handleOptions, withCorsHeaders } from "@/app/api/shared/cors";
 import { LeadGenerationEnrichmentGraph } from "@/graph/graph";
 import type { Therapist } from "@/graph/state";
-import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const continueRequestSchema = z.object({
@@ -21,6 +21,8 @@ const continueRequestSchema = z.object({
 
 export const maxDuration = 300;
 
+export const OPTIONS = handleOptions;
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -31,12 +33,9 @@ export async function POST(request: Request) {
       openAiKey,
     });
 
-    return NextResponse.json(result);
+    return withCorsHeaders(result);
   } catch (error) {
     console.error("Error in continue endpoint:", error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "An unexpected error occurred" },
-      { status: 500 },
-    );
+    return withCorsHeaders({ error: error instanceof Error ? error.message : "An unexpected error occurred" }, 500);
   }
 }
