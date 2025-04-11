@@ -67,7 +67,7 @@ export function StartForm() {
     [form],
   );
 
-  // Form submission handlers
+  // Form submission handlers.
   const onSubmit = useCallback(
     async (data: FormData) => {
       try {
