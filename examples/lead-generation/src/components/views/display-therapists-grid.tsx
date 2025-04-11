@@ -1,6 +1,7 @@
 import type { Therapist } from "@/graph/state";
 import { useAppStore } from "@/store";
 import { Card, CardContent, CardHeader, CardTitle, ElapsedTime } from "@local/ui";
+import { getFetchBasePath } from "@local/utils";
 import { useEffect, useState } from "react";
 
 interface DisplayTherapistsGridProps {
@@ -17,7 +18,7 @@ export function DisplayTherapistsGrid({ therapists }: DisplayTherapistsGridProps
     const continueProcessing = async () => {
       setIsProcessing(true);
       try {
-        const response = await fetch("/api/continue", {
+        const response = await fetch(`${getFetchBasePath()}/api/continue`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
